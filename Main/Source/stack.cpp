@@ -1311,3 +1311,11 @@ const character* stack::FindCarrier() const
 {
   return MotherEntity ? MotherEntity->FindCarrier() : 0;
 }
+
+truth stackiterator::HasItem() const
+{ 
+  if(Slot == 0)
+    return 0;
+  else
+    return 1;
+}

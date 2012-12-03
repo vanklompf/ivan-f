@@ -1193,7 +1193,10 @@ void door::BeDestroyed()
 
 truth fountain::IsFountainWithWater() const
 {
-  return truth(GetSecondaryMaterial());
+  if(GetSecondaryMaterial() == 0)
+    return 0;
+  else
+    return 1;
 }
 
 void liquidterrain::SurviveEffect(character* Survivor)

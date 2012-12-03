@@ -4947,3 +4947,11 @@ const char* humanoid::GetNormalDeathMessage() const
   else
     return "killed @k";
 }
+
+truth humanoid::HasHead() const
+{
+  if(GetHead() == 0)
+    return 0;
+  else
+    return 1;
+}

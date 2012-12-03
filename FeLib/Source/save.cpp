@@ -18,14 +18,17 @@
 outputfile::outputfile(const festring& FileName, truth AbortOnErr)
 : Buffer(fopen(FileName.CStr(), "wb")), FileName(FileName)
 {
-  if(AbortOnErr && !IsOpen())
+  if(AbortOnErr && !Buffer)
     ABORT("Can't open %s for output!", FileName.CStr());
 }
 
 outputfile::~outputfile()
 {
   if(Buffer)
+  {
     fclose(Buffer);
+    Buffer = 0;
+  }
 }
 
 void outputfile::ReOpen()
@@ -34,20 +37,39 @@ void outputfile::ReOpen()
   Buffer = fopen(FileName.CStr(), "ab");
 }
 
+int outputfile::IsOpen()
+{
+  if(Buffer)
+    return 1;
+  else
+    return 0;
+}
+
 inputfile::inputfile(const festring& FileName,
 		     const valuemap* ValueMap,
 		     truth AbortOnErr)
 : Buffer(fopen(FileName.CStr(), "rb")),
   FileName(FileName), ValueMap(ValueMap)
 {
-  if(AbortOnErr && !IsOpen())
+  if(AbortOnErr && !Buffer)
     ABORT("File %s not found!", FileName.CStr());
 }
 
 inputfile::~inputfile()
 {
   if(Buffer)
+  {
     fclose(Buffer);
+    Buffer = 0;
+  }
+}
+
+truth inputfile::IsOpen()
+{
+  if(Buffer)
+    return 1;
+  else
+    return 0;
 }
 
 festring inputfile::ReadWord(truth AbortOnEOF)

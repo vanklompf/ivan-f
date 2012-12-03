@@ -9559,3 +9559,11 @@ void character::ForcePutNear(v2 Pos)
 
   PutTo(NewPos);
 }
+
+truth character::IsStuck() const
+{ 
+  if(TrapData == 0)
+    return 0;
+  else
+    return 1;
+}

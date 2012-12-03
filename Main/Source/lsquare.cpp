@@ -1585,8 +1585,13 @@ truth lsquare::Duplicate(const beamdata& Beam)
   character* Character = GetCharacter();
 
   if(Character)
-    DuplicatedSomething = truth(Character->DuplicateToNearestSquare(Beam.Owner, Beam.SpecialParameters));
-
+  {
+    if(Character->DuplicateToNearestSquare(Beam.Owner, Beam.SpecialParameters) == 0)
+      DuplicatedSomething = 0;
+    else
+      DuplicatedSomething = 1;
+  }
+  
   if(GetStack()->Duplicate(DuplicatedSomething ? 4 : 5, Beam.SpecialParameters))
     DuplicatedSomething = true;
 
@@ -2797,4 +2802,20 @@ truth lsquare::VomitingIsDangerous(const character* Char) const
   return ((OLTerrain && OLTerrain->VomitingIsDangerous(Char))
 	  || (Character && Character->GetTeam() != Char->GetTeam()
 	      && Character->GetRelation(Char) != HOSTILE));
+}
+
+truth lsquare::HasEngravings() const
+{ 
+  if(Engraved == 0)
+    return 0;
+  else
+    return 1;
+}
+
+truth lsquare::HasBeenSeen() const
+{
+  if(Memorized == 0)
+    return 0;
+  else
+    return 1;
 }

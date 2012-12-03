@@ -881,7 +881,7 @@ void bitmap::DrawLine(int OrigFromX, int OrigFromY, int OrigToX, int OrigToY, co
     const int Y2 = OrigToY + PointY[c];
     const int DeltaX = abs(X2 - X1);
     const int DeltaY = abs(Y2 - Y1);
-    int x, c;
+    int x;
     int XChange, PtrXChange, PtrYChange;
     int DoubleDeltaX, DoubleDeltaY, End;
 

@@ -56,7 +56,6 @@ set( MAIN_LIST
 include_directories( ${FELIB_DIR}/Include ${MAIN_DIR}/Include )
 
 find_package( SDL REQUIRED )
-message( ${SDL_INCLUDE_DIR} )
 include_directories( ${SDL_INCLUDE_DIR} )
 
 add_library( FeLib ${FELIB_LIST} )
@@ -66,8 +65,8 @@ set_property( TARGET FeLib APPEND PROPERTY COMPILE_DEFINITIONS LINUX USE_SDL
 	DATADIR=\"${CMAKE_SOURCE_DIR}/\" )
 
 
-add_executable( Ivan ${SDL_LIBRARY} ${MAIN_LIST} )
-target_link_libraries( Ivan  FeLib )
+add_executable( Ivan ${MAIN_LIST} )
+target_link_libraries( Ivan  FeLib ${SDL_LIBRARY} )
 set_property( TARGET Ivan APPEND PROPERTY COMPILE_DEFINITIONS LINUX USE_SDL
 	GCC LOCAL_STATE_DIR=\"${CMAKE_BINARY_DIR}/var/\"
 	DATADIR=\"${CMAKE_SOURCE_DIR}/\" )

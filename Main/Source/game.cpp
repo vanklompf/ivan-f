@@ -2234,7 +2234,7 @@ festring game::GetSaveDir()
 festring game::GetGameDir()
 {
 #ifdef LINUX
-  return DATADIR "/ivan/";
+  return DATADIR;
 #endif
 
 #if defined(WIN32) || defined(__DJGPP__)

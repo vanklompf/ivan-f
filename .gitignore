@@ -11,3 +11,12 @@
 *.lai
 *.la
 *.a
+
+# kdev4 files
+*.kdev4
+
+# CMake build dir
+build/
+
+# Backup files
+*~

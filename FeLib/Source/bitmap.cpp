@@ -2047,10 +2047,10 @@ void cachedfont::PrintCharacter(const blitdata B) const
 
   for(; SrcLine != EndLine; ++SrcLine, ++SrcMaskLine, ++DestLine)
   {
-    const ulong* FontPtr = reinterpret_cast<const ulong*>(*SrcLine + B.Src.X);
-    const ulong* EndPtr = FontPtr + 5;
-    const ulong* MaskPtr = reinterpret_cast<const ulong*>(*SrcMaskLine + B.Src.X);
-    ulong* DestPtr = reinterpret_cast<ulong*>(*DestLine + B.Dest.X);
+    const uint* FontPtr = reinterpret_cast<const uint*>(*SrcLine + B.Src.X);
+    const uint* EndPtr = FontPtr + 5;
+    const uint* MaskPtr = reinterpret_cast<const uint*>(*SrcMaskLine + B.Src.X);
+    uint* DestPtr = reinterpret_cast<uint*>(*DestLine + B.Dest.X);
 
     for(; FontPtr != EndPtr; ++DestPtr, ++MaskPtr, ++FontPtr)
       *DestPtr = *DestPtr & *MaskPtr | *FontPtr;

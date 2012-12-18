@@ -26,7 +26,7 @@ class festring;
 
 /* memcmp doesn't like alignment of structure members */
 
-#ifdef VC
+#ifdef _MSC_VER
 #pragma pack(1)
 #endif
 
@@ -54,7 +54,7 @@ struct graphicid
   uchar WobbleData NO_ALIGNMENT;
 };
 
-#ifdef VC
+#ifdef _MSC_VER
 #pragma pack()
 #endif
 

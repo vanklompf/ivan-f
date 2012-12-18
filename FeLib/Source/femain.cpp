@@ -40,18 +40,14 @@ int main(int argc, char* argv[])
   catch(...)
   {
     const char* Msg = "Fatal Error: Unknown exception thrown.";
-#ifdef WIN32
+#ifdef _WIN32
     ShowWindow(GetActiveWindow(), SW_HIDE);
     char Buffer[256];
     strcpy(Buffer, Msg);
     strcat(Buffer, globalerrorhandler::GetBugMsg());
     MessageBox(NULL, Buffer, "Program aborted!", MB_OK|MB_ICONEXCLAMATION);
 #endif
-#ifdef LINUX
-    std::cout << Msg << globalerrorhandler::GetBugMsg() << std::endl;
-#endif
-#ifdef __DJGPP__
-    graphics::DeInit();
+#ifdef __UNIX__
     std::cout << Msg << globalerrorhandler::GetBugMsg() << std::endl;
 #endif
     exit(3);

@@ -14,7 +14,7 @@
 #define __GRAPHICS_H__
 
 #ifdef USE_SDL
-#include "SDL.h"
+#include <SDL.h>
 #endif
 
 #include "v2.h"

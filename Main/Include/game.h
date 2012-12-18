@@ -66,7 +66,7 @@ struct homedata
 outputfile& operator<<(outputfile&, const homedata*);
 inputfile& operator>>(inputfile&, homedata*&);
 
-#ifdef VC
+#ifdef _MSC_VER
 #pragma pack(1)
 #endif
 
@@ -79,7 +79,7 @@ struct configid
   int Config NO_ALIGNMENT;
 };
 
-#ifdef VC
+#ifdef _MSC_VER
 #pragma pack()
 #endif
 

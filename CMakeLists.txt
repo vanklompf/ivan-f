@@ -5,6 +5,38 @@ cmake_minimum_required(VERSION 2.8)
 
 project( Ivan_f C CXX )
 
+# Check whether the compiler is x86 or x86_64
+if( APPLE )
+  # CMAKE_SYSTEM_PROCESSOR always returns i386 for x86 and x86_64 on Mac
+  if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+    set( BUILD_ARCH "x86_64" )
+  elseif( CMAKE_SIZEOF_VOID_P EQUAL 4 AND CMAKE_SYSTEM_PROCESSOR STREQUAL "i386" )
+    set( BUILD_ARCH "i386" )
+  elseif( CMAKE_SIZEOF_VOID_P EQUAL 4 AND CMAKE_SYSTEM_PROCESSOR STREQUAL "ppc" )
+    set( BUILD_ARCH "ppc" )
+  else()
+    set( BUILD_ARCH "Unknown" )
+  endif()
+elseif( WIN32 )
+  # CMAKE_SYSTEM_PROCESSOR is not reliable under windows
+  if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+    set( BUILD_ARCH "x86_64" )
+  elseif( CMAKE_SIZEOF_VOID_P EQUAL 4 )
+    set( BUILD_ARCH "i386" )
+  endif()
+else()
+  # CMAKE_SYSTEM_PROCESSOR is reliable for *nix
+  if( CMAKE_SYSTEM_PROCESSOR MATCHES "i.86" )
+    set( BUILD_ARCH "i386" )
+  elseif( CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set( BUILD_ARCH "x86_64" )
+  elseif( CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" AND CMAKE_SIZEOF_VOID_P EQUAL 4 )
+    set( BUILD_ARCH "x32" )
+  else()
+    set( BUILD_ARCH ${CMAKE_SYSTEM_PROCESSOR} )
+  endif()
+endif()
+
 set( FELIB_DIR ${CMAKE_SOURCE_DIR}/FeLib/ )
 set( MAIN_DIR ${CMAKE_SOURCE_DIR}/Main/ )
 
@@ -55,18 +87,29 @@ set( MAIN_LIST
 
 include_directories( ${FELIB_DIR}/Include ${MAIN_DIR}/Include )
 
-find_package( SDL REQUIRED )
-include_directories( ${SDL_INCLUDE_DIR} )
+if( WIN32 )
+  set( SDL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/SDL-VC/ )
+  include_directories( ${SDL_PATH}/include )
+  
+  if( ${BUILD_ARCH} STREQUAL "i386" )
+	  set( SDL_LIBRARY ${SDL_PATH}/x86/SDL.lib ${SDL_PATH}/x86/SDLmain.lib )
+  else()
+	  set( SDL_LIBRARY ${SDL_PATH}/x64/SDL.lib ${SDL_PATH}/x64/SDLmain.lib )
+  endif()
+else()
+  find_package( SDL REQUIRED )
+  include_directories( ${SDL_INCLUDE_DIR} )
+endif()
 
 add_library( FeLib ${FELIB_LIST} )
 target_link_libraries( FeLib ${SDL_LIBRARY} )
-set_property( TARGET FeLib APPEND PROPERTY COMPILE_DEFINITIONS LINUX USE_SDL
-	GCC LOCAL_STATE_DIR=\"${CMAKE_BINARY_DIR}/var/\"
-	DATADIR=\"${CMAKE_SOURCE_DIR}/\" )
+set_property( TARGET FeLib APPEND PROPERTY COMPILE_DEFINITIONS USE_SDL
+	LOCAL_STATE_DIR=\"${CMAKE_BINARY_DIR}/var/\"
+	IVAN_DATADIR=\"${CMAKE_SOURCE_DIR}/\" )
 
 
 add_executable( Ivan ${MAIN_LIST} )
 target_link_libraries( Ivan  FeLib ${SDL_LIBRARY} )
-set_property( TARGET Ivan APPEND PROPERTY COMPILE_DEFINITIONS LINUX USE_SDL
-	GCC LOCAL_STATE_DIR=\"${CMAKE_BINARY_DIR}/var/\"
-	DATADIR=\"${CMAKE_SOURCE_DIR}/\" )
+set_property( TARGET Ivan APPEND PROPERTY COMPILE_DEFINITIONS USE_SDL
+	LOCAL_STATE_DIR=\"${CMAKE_BINARY_DIR}/var/\"
+	IVAN_DATADIR=\"${CMAKE_SOURCE_DIR}/\" )

@@ -110,7 +110,7 @@ template <class type> inline scriptmember<type>& scriptmember<type>::operator=(c
   return *this;
 }
 
-#ifdef VC
+#ifdef _MSC_VER
 #pragma pack(1)
 #endif
 
@@ -125,7 +125,7 @@ template <class type> struct fastscriptmember : public scriptmemberbase
   type Member NO_ALIGNMENT;
 };
 
-#ifdef VC
+#ifdef _MSC_VER
 #pragma pack()
 #endif
 

@@ -16,7 +16,7 @@
 #include <cstring>
 #include <cmath>
 
-#ifdef VC
+#ifdef _MSC_VER
 #pragma warning(disable : 4786 4146)
 //#pragma optimize("g", on)
 #pragma intrinsic(abs, fabs, labs, memcmp, memcpy, memset)

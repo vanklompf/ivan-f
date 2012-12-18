@@ -15,20 +15,14 @@
 #include <cstdlib>
 #include <cstdio>
 
-#ifdef __DJGPP__
-#include <conio.h>
-#include <csignal>
-#include "graphics.h"
-#endif
-
-#ifdef WIN32
+#ifdef _WIN32
 #include "SDL.h"
 #include <windows.h>
 #else
 #include <iostream>
 #endif
 
-#ifdef VC
+#ifdef _MSC_VER
 #include <new.h>
 #define set_new_handler _set_new_handler
 #else
@@ -45,16 +39,10 @@ const char* globalerrorhandler::BugMsg
 "including a brief description of what you did, what version\n"
 "you are running and which kind of system you are using.";
 
-#ifdef VC
+#ifdef _MSC_VER
 int (*globalerrorhandler::OldNewHandler)(size_t) = 0;
 #else
 void (*globalerrorhandler::OldNewHandler)() = 0;
-#endif
-
-#ifdef __DJGPP__
-void (*globalerrorhandler::OldSignal[SIGNALS])(int);
-int globalerrorhandler::Signal[SIGNALS]
-= { SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGTERM, SIGINT, SIGKILL, SIGQUIT };
 #endif
 
 void globalerrorhandler::Install()
@@ -96,23 +84,19 @@ void globalerrorhandler::Abort(const char* Format, ...)
 
   strcat(Buffer, BugMsg);
 
-#ifdef WIN32
+#ifdef _WIN32
   ShowWindow(GetActiveWindow(), SW_HIDE);
   MessageBox(NULL, Buffer, "Program aborted!",
 	     MB_OK|MB_ICONEXCLAMATION|MB_TASKMODAL);
 #endif
-#ifdef LINUX
-  std::cout << Buffer << std::endl;
-#endif
-#ifdef __DJGPP__
-  graphics::DeInit();
+#ifdef __UNIX__
   std::cout << Buffer << std::endl;
 #endif
 
   exit(4);
 }
 
-#ifdef VC
+#ifdef _MSC_VER
 int globalerrorhandler::NewHandler(size_t)
 #else
   void globalerrorhandler::NewHandler()
@@ -120,21 +104,17 @@ int globalerrorhandler::NewHandler(size_t)
 {
   const char* Msg = "Fatal Error: Memory depleted.\n"
 		    "Get more RAM and hard disk space.";
-#ifdef WIN32
+#ifdef _WIN32
   ShowWindow(GetActiveWindow(), SW_HIDE);
   MessageBox(NULL, Msg, "Program aborted!", MB_OK|MB_ICONEXCLAMATION);
 #endif
-#ifdef LINUX
-  std::cout << Msg << std::endl;
-#endif
-#ifdef __DJGPP__
-  graphics::DeInit();
+#ifdef __UNIX__
   std::cout << Msg << std::endl;
 #endif
 
   exit(1);
 
-#ifdef VC
+#ifdef _MSC_VER
   return 0;
 #endif
 }

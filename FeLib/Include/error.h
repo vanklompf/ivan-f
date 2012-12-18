@@ -30,7 +30,7 @@ class globalerrorhandler
   static const char* GetBugMsg() { return BugMsg; }
  private:
   static const char* BugMsg;
-#ifdef VC
+#ifdef _MSC_VER
   static int NewHandler(size_t);
   static int (*OldNewHandler)(size_t);
 #else

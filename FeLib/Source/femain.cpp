@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     strcat(Buffer, globalerrorhandler::GetBugMsg());
     MessageBox(NULL, Buffer, "Program aborted!", MB_OK|MB_ICONEXCLAMATION);
 #endif
-#ifdef __UNIX__
+#ifdef __unix__
     std::cout << Msg << globalerrorhandler::GetBugMsg() << std::endl;
 #endif
     exit(3);

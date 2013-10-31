@@ -18,12 +18,10 @@
 
 #include "festring.h"
 
-#ifdef __unix__
-#define HIGH_SCORE_FILENAME LOCAL_STATE_DIR "/ivan-highscore.scores"
-#endif
-
 #ifdef _WIN32
 #define HIGH_SCORE_FILENAME CONST_S("HScore.dat")
+#else
+#define HIGH_SCORE_FILENAME LOCAL_STATE_DIR "/ivan-highscore.scores"
 #endif
 
 class festring;

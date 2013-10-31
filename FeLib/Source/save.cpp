@@ -321,25 +321,25 @@ long inputfile::ReadNumber(int CallLevel, truth PreserveTerminator)
     {
       if(First == ';' || First == ',' || First == ':')
       {
-	if(CallLevel != HIGHEST || PreserveTerminator)
-	  ungetc(First, Buffer);
+          if(CallLevel != HIGHEST || PreserveTerminator)
+              ungetc(First, Buffer);
 
-	return Value;
+          return Value;
       }
 
       if(First == ')')
       {
-	if((CallLevel != HIGHEST && CallLevel != 4) || PreserveTerminator)
-	  ungetc(')', Buffer);
+          if((CallLevel != HIGHEST && CallLevel != 4) || PreserveTerminator)
+              ungetc(')', Buffer);
 
-	return Value;
+          return Value;
       }
 
       if(First == '~')
       {
-	Value = ~ReadNumber(4);
-	NumberCorrect = true;
-	continue;
+          Value = ~ReadNumber(4);
+          NumberCorrect = true;
+          continue;
       }
 
       /* Convert this into an inline function! */
@@ -364,66 +364,72 @@ long inputfile::ReadNumber(int CallLevel, truth PreserveTerminator)
 
       if(First == '<')
       {
-	char Next = Get();
+          char Next = Get();
 
-	if(Next == '<')
-	  if(1 < CallLevel)
-	  {
-	    Value <<= ReadNumber(1);
-	    NumberCorrect = true;
-	    continue;
-	  }
-	  else
-	  {
-	    ungetc('<', Buffer);
-	    ungetc('<', Buffer);
-	    return Value;
-	  }
-	else
-	  ungetc(Next, Buffer);
-      }
+          if(Next == '<')
+          {
+              if(1 < CallLevel)
+              {
+                  Value <<= ReadNumber(1);
+                  NumberCorrect = true;
+                  continue;
+              }
+              else
+              {
+                  ungetc('<', Buffer);
+                  ungetc('<', Buffer);
+                  return Value;
+              }
+          }
+          else
+              ungetc(Next, Buffer);
+        }
 
       if(First == '>')
       {
-	char Next = Get();
+          char Next = Get();
 
-	if(Next == '>')
-	  if(1 < CallLevel)
-	  {
-	    Value >>= ReadNumber(1);
-	    NumberCorrect = true;
-	    continue;
-	  }
-	  else
-	  {
-	    ungetc('>', Buffer);
-	    ungetc('>', Buffer);
-	    return Value;
-	  }
-	else
-	  ungetc(Next, Buffer);
+          if(Next == '>')
+          {
+              if(1 < CallLevel)
+              {
+                  Value >>= ReadNumber(1);
+                  NumberCorrect = true;
+                  continue;
+              }
+              else
+              {
+                  ungetc('>', Buffer);
+                  ungetc('>', Buffer);
+                  return Value;
+              }
+          }
+          else
+              ungetc(Next, Buffer);
       }
 
-      if(First == '(')
-	if(NumberCorrect)
-	{
-	  ungetc('(', Buffer);
-	  return Value;
-	}
-	else
-	{
-	  Value = ReadNumber(4);
-	  NumberCorrect = false;
-	  continue;
-	}
+        if(First == '(')
+        {
+            if(NumberCorrect)
+            {
+                ungetc('(', Buffer);
+                return Value;
+            }
+            else
+            {
+                Value = ReadNumber(4);
+                NumberCorrect = false;
+                continue;
+            }
+        }
 
       if(First == '=' && CallLevel == HIGHEST)
-	continue;
+          continue;
 
       if(First == '#') // for #defines
       {
-	ungetc('#', Buffer);
-	return Value;
+          ungetc('#', Buffer);
+          return Value;
       }
     }
 
@@ -433,21 +439,21 @@ long inputfile::ReadNumber(int CallLevel, truth PreserveTerminator)
 
       if(Bits == 16)
       {
-	int Red = ReadNumber();
-	int Green = ReadNumber();
-	int Blue = ReadNumber();
-	Value = MakeRGB16(Red, Green, Blue);
+          int Red = ReadNumber();
+          int Green = ReadNumber();
+          int Blue = ReadNumber();
+          Value = MakeRGB16(Red, Green, Blue);
       }
       else if(Bits == 24)
       {
-	int Red = ReadNumber();
-	int Green = ReadNumber();
-	int Blue = ReadNumber();
-	Value = MakeRGB24(Red, Green, Blue);
+          int Red = ReadNumber();
+          int Green = ReadNumber();
+          int Blue = ReadNumber();
+          Value = MakeRGB24(Red, Green, Blue);
       }
       else
-	ABORT("Illegal RGB bit size %d in file %s, line %ld!",
-	      Bits, FileName.CStr(), TellLine());
+          ABORT("Illegal RGB bit size %d in file %s, line %ld!",
+                Bits, FileName.CStr(), TellLine());
 
       NumberCorrect = true;
       continue;

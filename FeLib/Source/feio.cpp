@@ -319,8 +319,8 @@ int iosystem::StringQuestion(festring& Input,
 
       if(StringKeyHandler != 0 && StringKeyHandler(LastKey, Input))
       {
-	LastKey = 0;
-	break;
+          LastKey = 0;
+          break;
       }
     }
 
@@ -333,23 +333,30 @@ int iosystem::StringQuestion(festring& Input,
     if(LastKey == KEY_BACK_SPACE)
     {
       if(!Input.IsEmpty())
-	Input.Resize(Input.GetSize() - 1);
+      {
+          Input.Resize(Input.GetSize() - 1);
+      }
 
       continue;
     }
 
     if(LastKey == KEY_ENTER)
+    {
       if(Input.GetSize() >= MinLetters)
-	break;
-      else
       {
-	TooShort = true;
-	continue;
+          break;
       }
+    }
+    else
+    {
+        TooShort = true;
+        continue;
+    }
 
-    if(LastKey >= 0x20 && Input.GetSize() < MaxLetters
-       && (LastKey != ' ' || !Input.IsEmpty()))
-      Input << char(LastKey);
+    if(LastKey >= 0x20 && Input.GetSize() < MaxLetters && (LastKey != ' ' || !Input.IsEmpty()))
+    {
+        Input << char(LastKey);
+    }
   }
 
   /* Delete all the trailing spaces */

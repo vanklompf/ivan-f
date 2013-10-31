@@ -16,7 +16,8 @@
 *.kdev4
 
 # CMake build dir
-build/
+build*/
 
 # Backup files
 *~
+*.swp

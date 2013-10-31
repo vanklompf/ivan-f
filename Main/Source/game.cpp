@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <cstdarg>
 
-#ifdef __unix__
+#if defined __unix__ || defined __APPLE__
 #include <sys/stat.h>
 #endif
 
@@ -239,7 +239,7 @@ truth game::Init(const festring& Name)
   _mkdir("Save");
 #endif
 
-#ifdef __unix__
+#if defined __unix__ || defined __APPLE__
   mkdir(GetSaveDir().CStr(), S_IRWXU|S_IRWXG);
 #endif
 
@@ -2199,7 +2199,7 @@ inputfile& operator>>(inputfile& SaveFile, dangerid& Value)
 
 festring game::GetHomeDir()
 {
-#ifdef __unix__
+#if defined __unix__ || defined __APPLE__
   festring Dir;
   Dir << getenv("HOME") << '/';
   return Dir;
@@ -2212,7 +2212,7 @@ festring game::GetHomeDir()
 
 festring game::GetSaveDir()
 {
-#ifdef __unix__
+#if defined __unix__ || defined __APPLE__
   festring Dir;
   Dir << getenv("HOME") << "/IvanSave/";
   return Dir;
@@ -2225,7 +2225,7 @@ festring game::GetSaveDir()
 
 festring game::GetGameDir()
 {
-#ifdef __unix__
+#if defined __unix__ || defined __APPLE__
   return IVAN_DATADIR;
 #endif
 
@@ -2236,7 +2236,7 @@ festring game::GetGameDir()
 
 festring game::GetBoneDir()
 {
-#ifdef __unix__
+#if defined __unix__ || defined __APPLE__
   return LOCAL_STATE_DIR "/Bones/";
 #endif
 

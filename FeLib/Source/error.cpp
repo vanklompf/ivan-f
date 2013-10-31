@@ -89,7 +89,7 @@ void globalerrorhandler::Abort(const char* Format, ...)
   MessageBox(NULL, Buffer, "Program aborted!",
 	     MB_OK|MB_ICONEXCLAMATION|MB_TASKMODAL);
 #endif
-#ifdef __unix__
+#if defined __unix__ || defined __APPLE__
   std::cout << Buffer << std::endl;
 #endif
 
@@ -108,7 +108,7 @@ int globalerrorhandler::NewHandler(size_t)
   ShowWindow(GetActiveWindow(), SW_HIDE);
   MessageBox(NULL, Msg, "Program aborted!", MB_OK|MB_ICONEXCLAMATION);
 #endif
-#ifdef __unix__
+#if defined __unix__ || defined __APPLE__
   std::cout << Msg << std::endl;
 #endif
 

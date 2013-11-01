@@ -346,13 +346,12 @@ int iosystem::StringQuestion(festring& Input,
       {
           break;
       }
+      else
+      {
+          TooShort = true;
+          continue;
+      }
     }
-    else
-    {
-        TooShort = true;
-        continue;
-    }
-
     if(LastKey >= 0x20 && Input.GetSize() < MaxLetters && (LastKey != ' ' || !Input.IsEmpty()))
     {
         Input << char(LastKey);

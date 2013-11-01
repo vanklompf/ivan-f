@@ -29,7 +29,7 @@ void shop::Enter(character* Customer)
 
 /* item* ForSale can also be in chest or other container, so don't assume anything else in this function */
 
-truth shop::PickupItem(character* Customer, item* ForSale, int Amount)
+bool shop::PickupItem(character* Customer, item* ForSale, int Amount)
 {
   if(!MasterIsActive() || Customer == GetMaster() || GetMaster()->GetRelation(Customer) == HOSTILE)
     return true;
@@ -122,7 +122,7 @@ truth shop::PickupItem(character* Customer, item* ForSale, int Amount)
       return false;
 }
 
-truth shop::DropItem(character* Customer, item* ForSale, int Amount)
+bool shop::DropItem(character* Customer, item* ForSale, int Amount)
 {
   if(!MasterIsActive() || Customer == GetMaster() || GetMaster()->GetRelation(Customer) == HOSTILE)
     return true;
@@ -203,7 +203,7 @@ void shop::KickSquare(character* Infidel, lsquare* Square)
   }
 }
 
-truth shop::ConsumeItem(character* Customer, item*, int)
+bool shop::ConsumeItem(character* Customer, item*, int)
 {
   if(!MasterIsActive() || GetMaster()->GetRelation(Customer) == HOSTILE)
     return true;
@@ -237,7 +237,7 @@ void cathedral::Enter(character* Visitor)
 
 /* Item can also be in a chest, so don't assume anything else... */
 
-truth cathedral::PickupItem(character* Visitor, item* Item, int)
+bool cathedral::PickupItem(character* Visitor, item* Item, int)
 {
   if(game::GetStoryState() == 2 || game::GetTeam(ATTNAM_TEAM)->GetRelation(Visitor->GetTeam()) == HOSTILE)
     return true;
@@ -259,7 +259,7 @@ truth cathedral::PickupItem(character* Visitor, item* Item, int)
   return false;
 }
 
-truth cathedral::DropItem(character* Visitor, item* Item, int)
+bool cathedral::DropItem(character* Visitor, item* Item, int)
 {
   if(game::GetStoryState() == 2 || game::GetTeam(ATTNAM_TEAM)->GetRelation(Visitor->GetTeam()) == HOSTILE)
     return true;
@@ -288,7 +288,7 @@ void cathedral::KickSquare(character* Kicker, lsquare* Square)
   }
 }
 
-truth cathedral::ConsumeItem(character* HungryMan, item*, int)
+bool cathedral::ConsumeItem(character* HungryMan, item*, int)
 {
   if(game::GetStoryState() == 2 || game::GetTeam(ATTNAM_TEAM)->GetRelation(HungryMan->GetTeam()) == HOSTILE)
     return true;
@@ -319,7 +319,7 @@ void cathedral::Load(inputfile& SaveFile)
   SaveFile >> Entered;
 }
 
-truth cathedral::Drink(character* Thirsty) const
+bool cathedral::Drink(character* Thirsty) const
 {
   if(game::GetStoryState() == 2 || game::GetTeam(ATTNAM_TEAM)->GetRelation(Thirsty->GetTeam()) == HOSTILE)
     return game::TruthQuestion(CONST_S("Do you want to drink? [y/N]"));
@@ -359,7 +359,7 @@ void cathedral::TeleportSquare(character* Teleporter, lsquare* Square)
   }
 }
 
-truth cathedral::Dip(character* Thirsty) const
+bool cathedral::Dip(character* Thirsty) const
 {
   if(game::GetStoryState() == 2 || game::GetTeam(ATTNAM_TEAM)->GetRelation(Thirsty->GetTeam()) == HOSTILE)
     return true;
@@ -400,7 +400,7 @@ void library::Enter(character* Customer)
       ADD_MESSAGE("The library appears to be deserted.");
 }
 
-truth library::PickupItem(character* Customer, item* ForSale, int Amount)
+bool library::PickupItem(character* Customer, item* ForSale, int Amount)
 {
   if(!MasterIsActive() || Customer == GetMaster() || GetMaster()->GetRelation(Customer) == HOSTILE)
     return true;
@@ -478,7 +478,7 @@ truth library::PickupItem(character* Customer, item* ForSale, int Amount)
       return false;
 }
 
-truth library::DropItem(character* Customer, item* ForSale, int Amount)
+bool library::DropItem(character* Customer, item* ForSale, int Amount)
 {
   if(!MasterIsActive() || Customer == GetMaster() || GetMaster()->GetRelation(Customer) == HOSTILE)
     return true;
@@ -553,7 +553,7 @@ void library::KickSquare(character* Infidel, lsquare* Square)
   }
 }
 
-truth library::ConsumeItem(character*, item*, int)
+bool library::ConsumeItem(character*, item*, int)
 {
   return true;
 }
@@ -567,7 +567,7 @@ void library::TeleportSquare(character* Infidel, lsquare* Square)
   }
 }
 
-truth bananadroparea::PickupItem(character* Hungry, item* Item, int)
+bool bananadroparea::PickupItem(character* Hungry, item* Item, int)
 {
   if(game::GetTeam(NEW_ATTNAM_TEAM)->GetRelation(Hungry->GetTeam()) == HOSTILE)
     return true;
@@ -589,7 +589,7 @@ truth bananadroparea::PickupItem(character* Hungry, item* Item, int)
   return false;
 }
 
-truth bananadroparea::DropItem(character* Dropper, item* Item, int)
+bool bananadroparea::DropItem(character* Dropper, item* Item, int)
 {
   return game::GetTeam(NEW_ATTNAM_TEAM)->GetRelation(Dropper->GetTeam()) == HOSTILE || (Dropper->IsPlayer() && ((!Item->IsBanana() && !Item->IsLanternOnWall()) || game::TruthQuestion(CONST_S("Do you wish to donate this item to the town? [y/N]"))));
 }
@@ -608,7 +608,7 @@ void bananadroparea::KickSquare(character* Kicker, lsquare* Square)
   }
 }
 
-truth bananadroparea::ConsumeItem(character* HungryMan, item* Item, int)
+bool bananadroparea::ConsumeItem(character* HungryMan, item* Item, int)
 {
   if(game::GetTeam(NEW_ATTNAM_TEAM)->GetRelation(HungryMan->GetTeam()) == HOSTILE)
     return true;
@@ -643,28 +643,28 @@ void bananadroparea::TeleportSquare(character* Infidel, lsquare* Square)
     }
 }
 
-truth shop::AllowSpoil(const item* Item) const
+bool shop::AllowSpoil(const item* Item) const
 {
   character* Master = GetMaster();
   return !Master || !Master->IsEnabled() || !Item->HasPrice();
 }
 
-truth shop::AllowKick(const character* Char, const lsquare* LSquare) const // gum solution
+bool shop::AllowKick(const character* Char, const lsquare* LSquare) const // gum solution
 {
   return !LSquare->GetStack()->GetItems() || !MasterIsActive() || Char == GetMaster() || GetMaster()->GetRelation(Char) == HOSTILE || !LSquare->CanBeSeenBy(GetMaster());
 }
 
-truth cathedral::AllowKick(const character* Char, const lsquare* LSquare) const
+bool cathedral::AllowKick(const character* Char, const lsquare* LSquare) const
 {
   return game::GetTeam(ATTNAM_TEAM)->GetRelation(Char->GetTeam()) == HOSTILE || !LSquare->GetStack()->GetItems();
 }
 
-truth library::AllowKick(const character* Char, const lsquare* LSquare) const
+bool library::AllowKick(const character* Char, const lsquare* LSquare) const
 {
   return !LSquare->GetStack()->GetItems() || !MasterIsActive() || Char == GetMaster() || GetMaster()->GetRelation(Char) == HOSTILE || LSquare->CanBeSeenBy(GetMaster());
 }
 
-truth bananadroparea::AllowKick(const character* Char, const lsquare*) const
+bool bananadroparea::AllowKick(const character* Char, const lsquare*) const
 {
   return !Char->IsPlayer() || (game::GetTeam(NEW_ATTNAM_TEAM)->GetRelation(Char->GetTeam()) == HOSTILE);
 }
@@ -711,7 +711,7 @@ void sumoarena::HostileAction(character* Guilty) const
     Guilty->GetTeam()->Hostility(game::GetTeam(NEW_ATTNAM_TEAM));
 }
 
-truth sumoarena::CheckDestroyTerrain(character* Infidel)
+bool sumoarena::CheckDestroyTerrain(character* Infidel)
 {
   if(Infidel->GetTeam()->GetRelation(game::GetTeam(NEW_ATTNAM_TEAM)) == HOSTILE)
     return true;
@@ -741,7 +741,7 @@ void cathedral::AddItemEffect(item* Dropped)
   if(!Dropped->IsExplosive())
     return;
 
-  truth SeenBeforeTeleport = Dropped->CanBeSeenByPlayer();
+  bool SeenBeforeTeleport = Dropped->CanBeSeenByPlayer();
   character* KamikazeDwarf = FindRandomExplosiveReceiver();
 
   if(KamikazeDwarf)

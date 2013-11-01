@@ -162,7 +162,7 @@ bitmap::bitmap(const festring& FileName)
     }
 }
 
-bitmap::bitmap(const bitmap* Bitmap, int Flags, truth CopyAlpha)
+bitmap::bitmap(const bitmap* Bitmap, int Flags, bool CopyAlpha)
 : Size(Bitmap->Size), XSizeTimesYSize(Bitmap->XSizeTimesYSize),
   FastFlag(0), PriorityMap(0), RandMap(0)
 {
@@ -851,11 +851,11 @@ void bitmap::AlphaMaskedBlit(const blitdata& BlitData) const
   }
 }
 
-void bitmap::DrawLine(v2 From, int ToX, int ToY, col16 Color, truth Wide) { DrawLine(From.X, From.Y, ToX, ToY, Color, Wide); }
-void bitmap::DrawLine(int FromX, int FromY, v2 To, col16 Color, truth Wide) { DrawLine(FromX, FromY, To.X, To.Y, Color, Wide); }
-void bitmap::DrawLine(v2 From, v2 To, col16 Color, truth Wide) { DrawLine(From.X, From.Y, To.X, To.Y, Color, Wide); }
+void bitmap::DrawLine(v2 From, int ToX, int ToY, col16 Color, bool Wide) { DrawLine(From.X, From.Y, ToX, ToY, Color, Wide); }
+void bitmap::DrawLine(int FromX, int FromY, v2 To, col16 Color, bool Wide) { DrawLine(FromX, FromY, To.X, To.Y, Color, Wide); }
+void bitmap::DrawLine(v2 From, v2 To, col16 Color, bool Wide) { DrawLine(From.X, From.Y, To.X, To.Y, Color, Wide); }
 
-void bitmap::DrawLine(int OrigFromX, int OrigFromY, int OrigToX, int OrigToY, col16 Color, truth Wide)
+void bitmap::DrawLine(int OrigFromX, int OrigFromY, int OrigToX, int OrigToY, col16 Color, bool Wide)
 {
   if(OrigFromY == OrigToY)
   {
@@ -927,7 +927,7 @@ void bitmap::DrawLine(int OrigFromX, int OrigFromY, int OrigToX, int OrigToY, co
   }
 }
 
-void bitmap::DrawVerticalLine(int OrigX, int OrigFromY, int OrigToY, col16 Color, truth Wide)
+void bitmap::DrawVerticalLine(int OrigX, int OrigFromY, int OrigToY, col16 Color, bool Wide)
 {
   static const int PointX[] = { 0, -1, 1 };
   const int Times = Wide ? 3 : 1;
@@ -959,7 +959,7 @@ void bitmap::DrawVerticalLine(int OrigX, int OrigFromY, int OrigToY, col16 Color
   }
 }
 
-void bitmap::DrawHorizontalLine(int OrigFromX, int OrigToX, int OrigY, col16 Color, truth Wide)
+void bitmap::DrawHorizontalLine(int OrigFromX, int OrigToX, int OrigY, col16 Color, bool Wide)
 {
   static const int PointY[] = { 0, -1, 1 };
   const int Times = Wide ? 3 : 1;
@@ -991,7 +991,7 @@ void bitmap::DrawHorizontalLine(int OrigFromX, int OrigToX, int OrigY, col16 Col
   }
 }
 
-void bitmap::DrawPolygon(int CenterX, int CenterY, int Radius, int NumberOfSides, col16 Color, truth DrawSides, truth DrawDiameters, double Rotation)
+void bitmap::DrawPolygon(int CenterX, int CenterY, int Radius, int NumberOfSides, col16 Color, bool DrawSides, bool DrawDiameters, double Rotation)
 {
   if(!DrawSides && !DrawDiameters)
     return;
@@ -1043,12 +1043,12 @@ void bitmap::CreateAlphaMap(alpha InitialValue)
   memset(AlphaMap[0], InitialValue, XSizeTimesYSize);
 }
 
-truth bitmap::Fade(long& AlphaSum, packalpha& AlphaAverage, int Amount)
+bool bitmap::Fade(long& AlphaSum, packalpha& AlphaAverage, int Amount)
 {
   if(!AlphaMap)
     ABORT("No alpha map to fade.");
 
-  truth Changes = false;
+  bool Changes = false;
   long Alphas = 0;
   long NewAlphaSum = 0;
   long Size = XSizeTimesYSize;
@@ -1274,11 +1274,11 @@ inputfile& operator>>(inputfile& SaveFile, bitmap*& Bitmap)
   return SaveFile;
 }
 
-void bitmap::DrawRectangle(v2 TopLeft, int Right, int Bottom, col16 Color, truth Wide) { DrawRectangle(TopLeft.X, TopLeft.Y, Right, Bottom, Color, Wide); }
-void bitmap::DrawRectangle(int Left, int Top, v2 BottomRight, col16 Color, truth Wide) { DrawRectangle(Left, Top, BottomRight.X, BottomRight.Y, Color, Wide); }
-void bitmap::DrawRectangle(v2 TopLeft, v2 BottomRight, col16 Color, truth Wide) { DrawRectangle(TopLeft.X, TopLeft.Y, BottomRight.X, BottomRight.Y, Color, Wide); }
+void bitmap::DrawRectangle(v2 TopLeft, int Right, int Bottom, col16 Color, bool Wide) { DrawRectangle(TopLeft.X, TopLeft.Y, Right, Bottom, Color, Wide); }
+void bitmap::DrawRectangle(int Left, int Top, v2 BottomRight, col16 Color, bool Wide) { DrawRectangle(Left, Top, BottomRight.X, BottomRight.Y, Color, Wide); }
+void bitmap::DrawRectangle(v2 TopLeft, v2 BottomRight, col16 Color, bool Wide) { DrawRectangle(TopLeft.X, TopLeft.Y, BottomRight.X, BottomRight.Y, Color, Wide); }
 
-void bitmap::DrawRectangle(int Left, int Top, int Right, int Bottom, col16 Color, truth Wide)
+void bitmap::DrawRectangle(int Left, int Top, int Right, int Bottom, col16 Color, bool Wide)
 {
   DrawHorizontalLine(Left, Right, Top, Color, Wide);
   DrawHorizontalLine(Left, Right, Bottom, Color, Wide);
@@ -1497,7 +1497,7 @@ void bitmap::CreateLightning(ulong Seed, col16 Color)
 
 struct pixelvectorcontroller
 {
-  static truth Handler(int x, int y)
+  static bool Handler(int x, int y)
   {
     if(CurrentSprite->GetPixel(x, y) == TRANSPARENT_COLOR)
     {
@@ -1514,7 +1514,7 @@ struct pixelvectorcontroller
 std::vector<v2> pixelvectorcontroller::PixelVector;
 bitmap* pixelvectorcontroller::CurrentSprite;
 
-truth bitmap::CreateLightning(v2 StartPos, v2 Direction, int MaxLength, col16 Color)
+bool bitmap::CreateLightning(v2 StartPos, v2 Direction, int MaxLength, col16 Color)
 {
   pixelvectorcontroller::CurrentSprite = this;
   std::vector<v2>& PixelVector = pixelvectorcontroller::PixelVector;
@@ -1931,7 +1931,7 @@ void bitmap::FastBlitAndCopyAlpha(bitmap* Bitmap) const
   memcpy(Bitmap->AlphaMap[0], AlphaMap[0], XSizeTimesYSize * sizeof(packalpha));
 }
 
-void bitmap::UpdateRandMap(long Index, truth Value)
+void bitmap::UpdateRandMap(long Index, bool Value)
 {
   long c1 = XSizeTimesYSize + Index;
   RandMap[c1] = Value;
@@ -1950,9 +1950,9 @@ void bitmap::UpdateRandMap(long Index, truth Value)
 void bitmap::InitRandMap()
 {
   if(!RandMap)
-    RandMap = new truth[XSizeTimesYSize << 1];
+    RandMap = new bool[XSizeTimesYSize << 1];
 
-  memset(RandMap, 0, (XSizeTimesYSize << 1) * sizeof(truth));
+  memset(RandMap, 0, (XSizeTimesYSize << 1) * sizeof(bool));
 }
 
 v2 bitmap::RandomizePixel() const
@@ -2075,7 +2075,7 @@ void cachedfont::CreateMaskMap()
 
 const int WaveDelta[] = { 1, 2, 2, 2, 1, 0, -1, -2, -2, -2, -1 };
 
-void bitmap::Wobble(int Frame, int SpeedShift, truth Horizontally)
+void bitmap::Wobble(int Frame, int SpeedShift, bool Horizontally)
 {
   int WavePos = (Frame << SpeedShift >> 1) - 14;
 

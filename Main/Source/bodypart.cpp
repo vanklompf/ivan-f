@@ -14,17 +14,17 @@
 
 int bodypart::GetGraphicsContainerIndex() const { return GR_HUMANOID; }
 int bodypart::GetArticleMode() const { return IsUnique() ? FORCE_THE : 0; }
-truth bodypart::IsAlive() const { return MainMaterial->GetBodyFlags() & IS_ALIVE; }
+bool bodypart::IsAlive() const { return MainMaterial->GetBodyFlags() & IS_ALIVE; }
 int bodypart::GetSpecialFlags() const { return SpecialFlags|ST_OTHER_BODYPART; }
 col16 bodypart::GetMaterialColorA(int) const { return GetMainMaterial()->GetSkinColor(); }
-truth bodypart::IsWarm() const { return MainMaterial->GetBodyFlags() & IS_WARM; }
-truth bodypart::UseMaterialAttributes() const { return MainMaterial->GetBodyFlags() & USE_MATERIAL_ATTRIBUTES || !Master || Master->AlwaysUseMaterialAttributes(); }
-truth bodypart::CanRegenerate() const { return MainMaterial->GetBodyFlags() & CAN_REGENERATE; }
+bool bodypart::IsWarm() const { return MainMaterial->GetBodyFlags() & IS_WARM; }
+bool bodypart::UseMaterialAttributes() const { return MainMaterial->GetBodyFlags() & USE_MATERIAL_ATTRIBUTES || !Master || Master->AlwaysUseMaterialAttributes(); }
+bool bodypart::CanRegenerate() const { return MainMaterial->GetBodyFlags() & CAN_REGENERATE; }
 square* bodypart::GetSquareUnder(int I) const { return Master ? Slot[0]->GetSquareUnder(I) : Slot[I]->GetSquareUnder(); }
 lsquare* bodypart::GetLSquareUnder(int I) const { return static_cast<lsquare*>(Master ? Slot[0]->GetSquareUnder(I) : Slot[I]->GetSquareUnder()); }
 item* bodypart::GetExternalBodyArmor() const { return GetHumanoidMaster()->GetBodyArmor(); }
 item* bodypart::GetExternalCloak() const { return GetHumanoidMaster()->GetCloak(); }
-truth bodypart::AllowFluidBe() const { return !Master || !Master->IsPolymorphed(); }
+bool bodypart::AllowFluidBe() const { return !Master || !Master->IsPolymorphed(); }
 
 int head::GetBodyPartIndex() const { return HEAD_INDEX; }
 int head::GetBiteMinDamage() const { return int(BiteDamage * 0.75); }
@@ -59,7 +59,7 @@ int leftleg::GetSpecialFlags() const { return SpecialFlags|ST_LEFT_LEG; }
 v2 eddytorso::GetBitmapPos(int Frame) const { return torso::GetBitmapPos(Frame) + v2((Frame&0x6) << 3, 0); }
 
 head* corpse::Behead() { return Deceased->Behead(); }
-truth corpse::CanBeCloned() const { return GetDeceased()->CanBeCloned(); }
+bool corpse::CanBeCloned() const { return GetDeceased()->CanBeCloned(); }
 int corpse::GetAttachedGod() const { return GetDeceased()->GetTorso()->GetAttachedGod(); }
 
 v2 ennerhead::GetBitmapPos(int Frame) const { return Frame & 16 ? head::GetBitmapPos(Frame) : head::GetBitmapPos(Frame) + v2(16, 0); }
@@ -244,7 +244,7 @@ void leg::Load(inputfile& SaveFile)
   SaveFile >> BootSlot;
 }
 
-truth bodypart::ReceiveDamage(character* Damager, int Damage, int Type, int)
+bool bodypart::ReceiveDamage(character* Damager, int Damage, int Type, int)
 {
   if(Master)
   {
@@ -265,7 +265,7 @@ truth bodypart::ReceiveDamage(character* Damager, int Damage, int Type, int)
       for(int c = 0; c < Damage; ++c)
 	Damager->HealHitPoint();
 
-    truth WasBadlyHurt = IsBadlyHurt();
+    bool WasBadlyHurt = IsBadlyHurt();
 
     if(HP <= 0)
       return true;
@@ -297,7 +297,7 @@ truth bodypart::ReceiveDamage(character* Damager, int Damage, int Type, int)
   return false;
 }
 
-truth bodypart::CanBeSevered(int Type) const
+bool bodypart::CanBeSevered(int Type) const
 {
   if((HP == MaxHP && HP != 1 && !Master->IsExtraFragile())
      || (Type & (POISON|SOUND) && GetBodyPartIndex() != TORSO_INDEX))
@@ -392,7 +392,7 @@ void arm::CalculateAPCost()
     APCost = 100;
 }
 
-truth arm::PairArmAllowsMelee() const
+bool arm::PairArmAllowsMelee() const
 {
   const arm* PairArm = GetPairArm();
   return !PairArm || !PairArm->IsUsable() || !PairArm->GetWielded()
@@ -588,7 +588,7 @@ double corpse::GetWeaponStrength() const
   return GetFormModifier() * GetDeceased()->GetTorso()->GetMainMaterial()->GetStrengthValue() * sqrt(GetDeceased()->GetTorso()->GetMainMaterial()->GetWeight());
 }
 
-truth corpse::CanBeEatenByAI(const character* Eater) const
+bool corpse::CanBeEatenByAI(const character* Eater) const
 {
   for(int c = 0; c < GetDeceased()->GetBodyParts(); ++c)
   {
@@ -776,7 +776,7 @@ leg::~leg()
   delete GetBoot();
 }
 
-truth corpse::IsDestroyable(const character* Char) const
+bool corpse::IsDestroyable(const character* Char) const
 {
   for(int c = 0; c < GetDeceased()->GetBodyParts(); ++c)
   {
@@ -815,7 +815,7 @@ int bodypart::GetSparkleFlags() const
     | (Flags >> BODYPART_SPARKLE_SHIFT & (SPARKLING_B|SPARKLING_C|SPARKLING_D));
 }
 
-truth corpse::RaiseTheDead(character* Summoner)
+bool corpse::RaiseTheDead(character* Summoner)
 {
   if(Summoner && Summoner->IsPlayer())
     game::DoEvilDeed(50);
@@ -881,10 +881,10 @@ leftleg::leftleg()
   BootSlot.Init(this, LEFT_BOOT_INDEX);
 }
 
-void arm::Hit(character* Enemy, v2 HitPos, int Direction, truth ForceHit)
+void arm::Hit(character* Enemy, v2 HitPos, int Direction, bool ForceHit)
 {
   long StrExp = 50, DexExp = 50;
-  truth THW = false;
+  bool THW = false;
   item* Wielded = GetWielded();
 
   if(Wielded)
@@ -914,7 +914,7 @@ void arm::Hit(character* Enemy, v2 HitPos, int Direction, truth ForceHit)
   }
 }
 
-int arm::GetAttribute(int Identifier, truth AllowBonus) const
+int arm::GetAttribute(int Identifier, bool AllowBonus) const
 {
   if(Identifier == ARM_STRENGTH)
   {
@@ -945,7 +945,7 @@ int arm::GetAttribute(int Identifier, truth AllowBonus) const
   }
 }
 
-truth arm::EditAttribute(int Identifier, int Value)
+bool arm::EditAttribute(int Identifier, int Value)
 {
   if(!Master)
     return false;
@@ -1028,7 +1028,7 @@ void arm::EditExperience(int Identifier, double Value, double Speed)
     ABORT("Illegal arm attribute %d experience edit request!", Identifier);
 }
 
-int leg::GetAttribute(int Identifier, truth AllowBonus) const
+int leg::GetAttribute(int Identifier, bool AllowBonus) const
 {
   if(Identifier == LEG_STRENGTH)
   {
@@ -1059,7 +1059,7 @@ int leg::GetAttribute(int Identifier, truth AllowBonus) const
   }
 }
 
-truth leg::EditAttribute(int Identifier, int Value)
+bool leg::EditAttribute(int Identifier, int Value)
 {
   if(!Master)
     return false;
@@ -1455,7 +1455,7 @@ void bodypart::CalculateAttackInfo()
   CalculateAPCost();
 }
 
-truth arm::TwoHandWieldIsActive() const
+bool arm::TwoHandWieldIsActive() const
 {
   const item* Wielded = GetWielded();
 
@@ -1468,7 +1468,7 @@ truth arm::TwoHandWieldIsActive() const
     return false;
 }
 
-double bodypart::GetTimeToDie(int Damage, double ToHitValue, double DodgeValue, truth AttackIsBlockable, truth UseMaxHP) const
+double bodypart::GetTimeToDie(int Damage, double ToHitValue, double DodgeValue, bool AttackIsBlockable, bool UseMaxHP) const
 {
   double Durability;
   int TotalResistance = GetTotalResistance(PHYSICAL_DAMAGE);
@@ -1655,13 +1655,13 @@ void corpse::SignalDisappearance()
   GetDeceased()->Disappear(this, "disappear", &item::IsVeryCloseToDisappearance);
 }
 
-truth bodypart::CanBePiledWith(const item* Item, const character* Viewer) const
+bool bodypart::CanBePiledWith(const item* Item, const character* Viewer) const
 {
   return item::CanBePiledWith(Item, Viewer)
     && OwnerDescription == static_cast<const bodypart*>(Item)->OwnerDescription;
 }
 
-truth corpse::CanBePiledWith(const item* Item, const character* Viewer) const
+bool corpse::CanBePiledWith(const item* Item, const character* Viewer) const
 {
   if(GetType() != Item->GetType()
      || GetConfig() != Item->GetConfig()
@@ -1967,7 +1967,7 @@ void bodypart::SignalSpoilLevelChange(material* Material)
     item::SignalSpoilLevelChange(Material);
 }
 
-truth head::DamageArmor(character* Damager, int Damage, int Type)
+bool head::DamageArmor(character* Damager, int Damage, int Type)
 {
   long AV[3] = { 0, 0, 0 }, AVSum = 0;
   item* Armor[3];
@@ -1984,7 +1984,7 @@ truth head::DamageArmor(character* Damager, int Damage, int Type)
   return AVSum ? Armor[femath::WeightedRand(AV, AVSum)]->ReceiveDamage(Damager, Damage, Type) : false;
 }
 
-truth humanoidtorso::DamageArmor(character* Damager, int Damage, int Type)
+bool humanoidtorso::DamageArmor(character* Damager, int Damage, int Type)
 {
   long AV[3] = { 0, 0, 0 }, AVSum = 0;
   item* Armor[3];
@@ -2001,7 +2001,7 @@ truth humanoidtorso::DamageArmor(character* Damager, int Damage, int Type)
   return AVSum ? Armor[femath::WeightedRand(AV, AVSum)]->ReceiveDamage(Damager, Damage, Type) : false;
 }
 
-truth arm::DamageArmor(character* Damager, int Damage, int Type)
+bool arm::DamageArmor(character* Damager, int Damage, int Type)
 {
   long AV[3] = { 0, 0, 0 }, AVSum = 0;
   item* Armor[3];
@@ -2018,12 +2018,12 @@ truth arm::DamageArmor(character* Damager, int Damage, int Type)
   return AVSum ? Armor[femath::WeightedRand(AV, AVSum)]->ReceiveDamage(Damager, Damage, Type) : false;
 }
 
-truth groin::DamageArmor(character* Damager, int Damage, int Type)
+bool groin::DamageArmor(character* Damager, int Damage, int Type)
 {
   return Master->GetTorso()->DamageArmor(Damager, Damage, Type);
 }
 
-truth leg::DamageArmor(character* Damager, int Damage, int Type)
+bool leg::DamageArmor(character* Damager, int Damage, int Type)
 {
   long AV[3] = { 0, 0, 0 }, AVSum = 0;
   item* Armor[3];
@@ -2040,7 +2040,7 @@ truth leg::DamageArmor(character* Damager, int Damage, int Type)
   return AVSum ? Armor[femath::WeightedRand(AV, AVSum)]->ReceiveDamage(Damager, Damage, Type) : false;
 }
 
-truth bodypart::CanBeEatenByAI(const character* Who) const
+bool bodypart::CanBeEatenByAI(const character* Who) const
 {
   return item::CanBeEatenByAI(Who) && !(Who->IsPet() && PLAYER->HasHadBodyPart(this));
 }
@@ -2059,7 +2059,7 @@ int bodypart::GetConditionColorIndex() const
     return 4;
 }
 
-truth arm::CheckIfWeaponTooHeavy(const char* WeaponDescription) const
+bool arm::CheckIfWeaponTooHeavy(const char* WeaponDescription) const
 {
   if(!IsUsable())
   {
@@ -2131,7 +2131,7 @@ head* head::Behead()
   return this;
 }
 
-truth arm::EditAllAttributes(int Amount)
+bool arm::EditAllAttributes(int Amount)
 {
   LimitRef(StrengthExperience += Amount * EXP_MULTIPLIER, MIN_EXP, MAX_EXP);
   LimitRef(DexterityExperience += Amount * EXP_MULTIPLIER, MIN_EXP, MAX_EXP);
@@ -2141,7 +2141,7 @@ truth arm::EditAllAttributes(int Amount)
 	&& (StrengthExperience != MAX_EXP || DexterityExperience != MAX_EXP));
 }
 
-truth leg::EditAllAttributes(int Amount)
+bool leg::EditAllAttributes(int Amount)
 {
   LimitRef(StrengthExperience += Amount * EXP_MULTIPLIER, MIN_EXP, MAX_EXP);
   LimitRef(AgilityExperience += Amount * EXP_MULTIPLIER, MIN_EXP, MAX_EXP);
@@ -2204,7 +2204,7 @@ void arm::UpdateWieldedPicture()
 {
   if(!Master || !Master->PictureUpdatesAreForbidden())
   {
-    truth WasAnimated = MasterIsAnimated();
+    bool WasAnimated = MasterIsAnimated();
     item* Wielded = GetWielded();
 
     if(Wielded && Master)
@@ -2299,12 +2299,12 @@ void corpse::FinalProcessForBone()
   Deceased->FinalProcessForBone();
 }
 
-truth bodypart::IsRepairable(const character*) const
+bool bodypart::IsRepairable(const character*) const
 {
   return !CanRegenerate() && (GetHP() < GetMaxHP() || IsRusted());
 }
 
-truth corpse::SuckSoul(character* Soul, character* Summoner)
+bool corpse::SuckSoul(character* Soul, character* Summoner)
 {
   v2 Pos = Soul->GetPos();
 
@@ -2347,7 +2347,7 @@ void largecorpse::Draw(blitdata& BlitData) const
   LargeDraw(BlitData);
 }
 
-void largetorso::SignalStackAdd(stackslot* StackSlot, void (stack::*AddHandler)(item*, truth))
+void largetorso::SignalStackAdd(stackslot* StackSlot, void (stack::*AddHandler)(item*, bool))
 {
   if(!Slot[0])
   {
@@ -2373,7 +2373,7 @@ int largetorso::GetSquareIndex(v2 Pos) const
   return RelativePos.X + (RelativePos.Y << 1);
 }
 
-void largecorpse::SignalStackAdd(stackslot* StackSlot, void (stack::*AddHandler)(item*, truth))
+void largecorpse::SignalStackAdd(stackslot* StackSlot, void (stack::*AddHandler)(item*, bool))
 {
   if(!Slot[0])
   {
@@ -2420,7 +2420,7 @@ character* corpse::TryNecromancy(character* Summoner)
   return 0;
 }
 
-item* head::GetArmorToReceiveFluid(truth) const
+item* head::GetArmorToReceiveFluid(bool) const
 {
   item* Helmet = GetHelmet();
 
@@ -2430,7 +2430,7 @@ item* head::GetArmorToReceiveFluid(truth) const
     return 0;
 }
 
-item* humanoidtorso::GetArmorToReceiveFluid(truth) const
+item* humanoidtorso::GetArmorToReceiveFluid(bool) const
 {
   item* Cloak = GetCloak();
 
@@ -2446,7 +2446,7 @@ item* humanoidtorso::GetArmorToReceiveFluid(truth) const
   return BodyArmor ? BodyArmor : 0;
 }
 
-item* arm::GetArmorToReceiveFluid(truth) const
+item* arm::GetArmorToReceiveFluid(bool) const
 {
   item* Cloak = GetExternalCloak();
 
@@ -2467,7 +2467,7 @@ item* arm::GetArmorToReceiveFluid(truth) const
   return BodyArmor ? BodyArmor : 0;
 }
 
-item* groin::GetArmorToReceiveFluid(truth) const
+item* groin::GetArmorToReceiveFluid(bool) const
 {
   item* Cloak = GetExternalCloak();
 
@@ -2478,7 +2478,7 @@ item* groin::GetArmorToReceiveFluid(truth) const
   return BodyArmor ? BodyArmor : 0;
 }
 
-item* leg::GetArmorToReceiveFluid(truth SteppedOn) const
+item* leg::GetArmorToReceiveFluid(bool SteppedOn) const
 {
   if(SteppedOn)
   {
@@ -2542,7 +2542,7 @@ int corpse::GetRustDataA() const
   return Deceased->GetTorso()->GetMainMaterial()->GetRustData();
 }
 
-void bodypart::UpdateArmorPicture(graphicdata& GData, item* Armor, int SpecialFlags, v2 (item::*Retriever)(int) const, truth BodyArmor) const
+void bodypart::UpdateArmorPicture(graphicdata& GData, item* Armor, int SpecialFlags, v2 (item::*Retriever)(int) const, bool BodyArmor) const
 {
   if(Armor && Master)
   {
@@ -2558,13 +2558,13 @@ void bodypart::UpdateArmorPicture(graphicdata& GData, item* Armor, int SpecialFl
     GData.Retire();
 }
 
-truth playerkindhead::UpdateArmorPictures()
+bool playerkindhead::UpdateArmorPictures()
 {
   UpdateHeadArmorPictures(HelmetGraphicData);
   return true;
 }
 
-truth playerkindtorso::UpdateArmorPictures()
+bool playerkindtorso::UpdateArmorPictures()
 {
   UpdateTorsoArmorPictures(TorsoArmorGraphicData,
 			   CloakGraphicData,
@@ -2572,7 +2572,7 @@ truth playerkindtorso::UpdateArmorPictures()
   return true;
 }
 
-truth playerkindrightarm::UpdateArmorPictures()
+bool playerkindrightarm::UpdateArmorPictures()
 {
   UpdateArmArmorPictures(ArmArmorGraphicData,
 			 GauntletGraphicData,
@@ -2580,7 +2580,7 @@ truth playerkindrightarm::UpdateArmorPictures()
   return true;
 }
 
-truth playerkindleftarm::UpdateArmorPictures()
+bool playerkindleftarm::UpdateArmorPictures()
 {
   UpdateArmArmorPictures(ArmArmorGraphicData,
 			 GauntletGraphicData,
@@ -2588,13 +2588,13 @@ truth playerkindleftarm::UpdateArmorPictures()
   return true;
 }
 
-truth playerkindgroin::UpdateArmorPictures()
+bool playerkindgroin::UpdateArmorPictures()
 {
   UpdateGroinArmorPictures(GroinArmorGraphicData);
   return true;
 }
 
-truth playerkindrightleg::UpdateArmorPictures()
+bool playerkindrightleg::UpdateArmorPictures()
 {
   UpdateLegArmorPictures(LegArmorGraphicData,
 			 BootGraphicData,
@@ -2602,7 +2602,7 @@ truth playerkindrightleg::UpdateArmorPictures()
   return true;
 }
 
-truth playerkindleftleg::UpdateArmorPictures()
+bool playerkindleftleg::UpdateArmorPictures()
 {
   UpdateLegArmorPictures(LegArmorGraphicData,
 			 BootGraphicData,
@@ -2866,14 +2866,14 @@ void playerkindleftleg::Load(inputfile& SaveFile)
   SaveFile >> LegArmorGraphicData >> BootGraphicData;
 }
 
-truth bodypart::MasterIsAnimated() const
+bool bodypart::MasterIsAnimated() const
 {
   return Master && !Master->IsInitializing() && Master->IsAnimated();
 }
 
 void bodypart::UpdatePictures()
 {
-  truth WasAnimated = MasterIsAnimated();
+  bool WasAnimated = MasterIsAnimated();
 
   item::UpdatePictures();
   UpdateArmorPictures();
@@ -3004,7 +3004,7 @@ void leg::CopyAttributes(const bodypart* BodyPart)
   AgilityExperience = Leg->AgilityExperience;
 }
 
-truth corpse::DetectMaterial(const material* Material) const
+bool corpse::DetectMaterial(const material* Material) const
 {
   return GetDeceased()->DetectMaterial(Material);
 }
@@ -3103,7 +3103,7 @@ void bodypart::SpecialEatEffect(character* Eater, int Amount)
   }
 }
 
-truth corpse::IsValuable() const
+bool corpse::IsValuable() const
 {
   for(int c = 0; c < Deceased->GetBodyParts(); ++c)
   {
@@ -3116,7 +3116,7 @@ truth corpse::IsValuable() const
   return false;
 }
 
-truth corpse::Necromancy(character* Necromancer)
+bool corpse::Necromancy(character* Necromancer)
 {
   if(Necromancer && Necromancer->IsPlayer())
     game::DoEvilDeed(50);
@@ -3255,7 +3255,7 @@ void bodypart::RestoreHP()
   Master->CalculateHP();
 }
 
-void bodypart::SetIsUnique(truth What)
+void bodypart::SetIsUnique(bool What)
 {
   if(What)
     Flags |= UNIQUE;
@@ -3263,7 +3263,7 @@ void bodypart::SetIsUnique(truth What)
     Flags &=  ~UNIQUE;
 }
 
-void bodypart::SetIsInfectedByLeprosy(truth What)
+void bodypart::SetIsInfectedByLeprosy(bool What)
 {
   MainMaterial->SetIsInfectedByLeprosy(What);
 }
@@ -3274,12 +3274,12 @@ void bodypart::SetSparkleFlags(int What)
   Flags = Flags & ~(S << BODYPART_SPARKLE_SHIFT) | ((What & S) << BODYPART_SPARKLE_SHIFT);
 }
 
-truth arm::IsAnimated() const
+bool arm::IsAnimated() const
 {
   return WieldedGraphicData.AnimationFrames > 1;
 }
 
-void bodypart::SignalAnimationStateChange(truth WasAnimated)
+void bodypart::SignalAnimationStateChange(bool WasAnimated)
 {
   if(WasAnimated)
   {
@@ -3303,12 +3303,12 @@ void bodypart::SignalAnimationStateChange(truth WasAnimated)
   }
 }
 
-truth bodypart::MaterialIsChangeable(const character*) const
+bool bodypart::MaterialIsChangeable(const character*) const
 {
   return !Master || !Master->BodyPartIsVital(GetBodyPartIndex()) || UseMaterialAttributes();
 }
 
-truth bodypart::AddAdjective(festring& String, truth Articled) const
+bool bodypart::AddAdjective(festring& String, bool Articled) const
 {
   if(!Master)
   {
@@ -3333,13 +3333,13 @@ long bodypart::GetFixPrice() const
   return GetMaxHP() - GetHP() + GetMainMaterial()->GetRustLevel() * 25;
 }
 
-truth bodypart::IsFixableBySmith(const character*) const
+bool bodypart::IsFixableBySmith(const character*) const
 {
   return (GetMainMaterial()->GetCategoryFlags() & IS_METAL
 	  && (GetHP() < GetMaxHP() || IsRusted()));
 }
 
-truth bodypart::IsFixableByTailor(const character*) const
+bool bodypart::IsFixableByTailor(const character*) const
 {
   return (GetMainMaterial()->GetCategoryFlags() & CAN_BE_TAILORED
 	  && GetHP() < GetMaxHP());
@@ -3357,7 +3357,7 @@ void bodypart::SignalMaterialChange()
     RestoreHP();
 }
 
-truth bodypart::ShowMaterial() const
+bool bodypart::ShowMaterial() const
 {
   return MainMaterial->GetConfig() != NormalMaterial;
 }
@@ -3369,7 +3369,7 @@ col16 lobhsetorso::GetMaterialColorD(int Frame) const
   return MakeRGB16(220 - (Modifier >> 2), 220 - (Modifier >> 1), 0);
 }
 
-truth bodypart::IsDestroyable(const character*) const
+bool bodypart::IsDestroyable(const character*) const
 {
   return !Master || !Master->BodyPartIsVital(GetBodyPartIndex());
 }

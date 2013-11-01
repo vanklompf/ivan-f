@@ -123,7 +123,7 @@ festring god::GetCompleteDescription() const
   return Desc;
 }
 
-void god::AdjustRelation(god* Competitor, int Multiplier, truth Good)
+void god::AdjustRelation(god* Competitor, int Multiplier, bool Good)
 {
   int Adjustment = (Multiplier << 1) - abs(GetAlignment() - Competitor->GetAlignment()) * Multiplier;
 
@@ -160,7 +160,7 @@ void god::AdjustTimer(long Amount)
     Timer = 1000000000;
 }
 
-truth god::PlayerVomitedOnAltar(liquid* Liquid)
+bool god::PlayerVomitedOnAltar(liquid* Liquid)
 {
   if(PLAYER->GetVirtualHead())
   {
@@ -258,7 +258,7 @@ void god::PrintRelation() const
   ADD_MESSAGE("%s %s", GetName(), VerbalRelation);
 }
 
-truth god::ReceiveOffer(item* Sacrifice)
+bool god::ReceiveOffer(item* Sacrifice)
 {
   int OfferValue = Sacrifice->GetOfferValue(GetType());
 
@@ -336,7 +336,7 @@ void god::ApplyDivineTick()
     --Timer;
 }
 
-truth god::LikesMaterial(const materialdatabase* MDB, const character*) const
+bool god::LikesMaterial(const materialdatabase* MDB, const character*) const
 {
   return MDB->AttachedGod == GetType();
 }
@@ -344,14 +344,14 @@ truth god::LikesMaterial(const materialdatabase* MDB, const character*) const
 struct materialsorter
 {
   materialsorter(const item* Item) : Item(Item) { }
-  truth operator()(const material* M1, const material* M2) const
+  bool operator()(const material* M1, const material* M2) const
   {
     return M1->GetHardenModifier(Item) > M2->GetHardenModifier(Item);
   }
   const item* Item;
 };
 
-truth god::TryToAttachBodyPart(character* Char)
+bool god::TryToAttachBodyPart(character* Char)
 {
   msgsystem::EnterBigMessageMode();
 
@@ -406,7 +406,7 @@ truth god::TryToAttachBodyPart(character* Char)
 	ADD_MESSAGE("It seems somehow different.");
       }
 
-      truth Heal = !BodyPart->CanRegenerate() || HealRegeneratingBodyParts();
+      bool Heal = !BodyPart->CanRegenerate() || HealRegeneratingBodyParts();
       BodyPart->SetHP(Heal ? BodyPart->GetMaxHP() : 1);
       msgsystem::LeaveBigMessageMode();
       return true;
@@ -417,7 +417,7 @@ truth god::TryToAttachBodyPart(character* Char)
   return false;
 }
 
-truth god::TryToHardenBodyPart(character* Char)
+bool god::TryToHardenBodyPart(character* Char)
 {
   bodypart* PossibleBodyPart[MAX_BODYPARTS];
   uint c, Index = 0;
@@ -439,7 +439,7 @@ truth god::TryToHardenBodyPart(character* Char)
   materialvector MaterialVector;
   protosystem::CreateEveryMaterial(MaterialVector, this, Char);
   std::sort(MaterialVector.begin(), MaterialVector.end(), materialsorter(BodyPart));
-  truth Changed = false;
+  bool Changed = false;
 
   for(c = 0; c < MaterialVector.size(); ++c)
     if(MaterialVector[c]->GetCommonFlags() & CAN_BE_WISHED)

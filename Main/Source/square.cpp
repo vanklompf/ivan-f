@@ -103,7 +103,7 @@ const char* square::ScoreEntry(character* Char) const
     return GetGTerrain()->ScoreEntry();
 }
 
-truth square::IsFatalToStay() const
+bool square::IsFatalToStay() const
 {
   return GetGTerrain()->IsFatalToStay() || (GetOTerrain() && GetOTerrain()->IsFatalToStay());
 }
@@ -118,7 +118,7 @@ int square::GetRestModifier() const
   return GetOTerrain() ? GetOTerrain()->GetRestModifier() : 1;
 }
 
-truth square::CanBeSeenBy(const character* Who, truth IgnoreDarkness) const
+bool square::CanBeSeenBy(const character* Who, bool IgnoreDarkness) const
 {
   if(Who->IsPlayer())
     return CanBeSeenByPlayer(IgnoreDarkness);

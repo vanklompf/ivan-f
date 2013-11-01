@@ -47,7 +47,7 @@ class femath
   static int WeightedRand(const std::vector<long>&, long);
   static double CalculateAngle(v2);
   static void CalculateEnvironmentRectangle(rect&, const rect&, v2, int);
-  static truth Clip(int&, int&, int&, int&, int&, int&, int, int, int, int);
+  static bool Clip(int&, int&, int&, int&, int&, int&, int, int, int, int);
   static void SaveSeed();
   static void LoadSeed();
   static long SumArray(const fearray<long>&);
@@ -86,13 +86,13 @@ inputfile& operator>>(inputfile&, region&);
 template <class controller> class mapmath
 {
  public:
-  static truth DoLine(int, int, int, int, int = 0);
+  static bool DoLine(int, int, int, int, int = 0);
   static void DoArea();
   static void DoQuadriArea(int, int, int, int, int);
 };
 
 template <class controller>
-inline truth mapmath<controller>::DoLine(int X1, int Y1,
+inline bool mapmath<controller>::DoLine(int X1, int Y1,
 					 int X2, int Y2, int Flags)
 {
   if(!(Flags & SKIP_FIRST))
@@ -158,13 +158,13 @@ struct basequadricontroller
   static int StartX, StartY;
   static int XSize, YSize;
   static int RadiusSquare;
-  static truth SectorCompletelyClear;
+  static bool SectorCompletelyClear;
 };
 
 template <class controller>
 struct quadricontroller : public basequadricontroller
 {
-  static truth Handler(int, int);
+  static bool Handler(int, int);
   static int GetStartX(int I)
   {
     SectorCompletelyClear = true;
@@ -177,7 +177,7 @@ struct quadricontroller : public basequadricontroller
 };
 
 template <class controller>
-truth quadricontroller<controller>::Handler(int x, int y)
+bool quadricontroller<controller>::Handler(int x, int y)
 {
   const int HalfX = x >> 1, HalfY = y >> 1;
 
@@ -309,7 +309,7 @@ template <class type>
 struct pointercomparer
 {
   pointercomparer(const type* Element) : Element(Element) { }
-  truth operator()(const type* E) const { return E == Element; }
+  bool operator()(const type* E) const { return E == Element; }
   const type* Element;
 };
 

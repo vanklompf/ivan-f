@@ -22,14 +22,14 @@ lsquare* lterrain::GetNearLSquare(int x, int y) const { return LSquareUnder->Get
 room* lterrain::GetRoom() const { return GetLSquareUnder()->GetRoom(); }
 void lterrain::SetMainMaterial(material* NewMaterial, int SpecialFlags) { SetMaterial(MainMaterial, NewMaterial, 0, SpecialFlags); }
 void lterrain::ChangeMainMaterial(material* NewMaterial, int SpecialFlags) { ChangeMaterial(MainMaterial, NewMaterial, 0, SpecialFlags); }
-void lterrain::InitMaterials(const materialscript* M, const materialscript*, truth CUP) { InitMaterials(M->Instantiate(), CUP); }
+void lterrain::InitMaterials(const materialscript* M, const materialscript*, bool CUP) { InitMaterials(M->Instantiate(), CUP); }
 
 void glterrain::InstallDataBase(int NewConfig) { databasecreator<glterrain>::InstallDataBase(this, NewConfig); }
 void olterrain::InstallDataBase(int NewConfig) { databasecreator<olterrain>::InstallDataBase(this, NewConfig); }
 int glterrain::GetGraphicsContainerIndex() const { return GR_GLTERRAIN; }
 int olterrain::GetGraphicsContainerIndex() const { return GR_OLTERRAIN; }
 
-truth olterraindatabase::AllowRandomInstantiation() const { return !(Config & S_LOCK_ID); }
+bool olterraindatabase::AllowRandomInstantiation() const { return !(Config & S_LOCK_ID); }
 
 festring olterrain::GetText() const { return ""; }
 
@@ -72,7 +72,7 @@ v2 lterrain::GetPos() const
   return LSquareUnder->GetPos();
 }
 
-truth lterrain::SitOn(character* Sitter)
+bool lterrain::SitOn(character* Sitter)
 {
   if(GetSitMessage().GetSize())
   {
@@ -155,12 +155,12 @@ void lterrain::Initialize(int NewConfig, int SpecialFlags)
   }
 }
 
-truth lterrain::CanBeSeenByPlayer() const
+bool lterrain::CanBeSeenByPlayer() const
 {
   return LSquareUnder->CanBeSeenByPlayer();
 }
 
-truth lterrain::CanBeSeenBy(character* Who) const
+bool lterrain::CanBeSeenBy(character* Who) const
 {
   if(Who->IsPlayer())
     return CanBeSeenByPlayer();
@@ -197,7 +197,7 @@ void lterrain::SignalEmitationDecrease(col24 EmitationUpdate)
   }
 }
 
-truth olterrain::Enter(truth DirectionUp) const
+bool olterrain::Enter(bool DirectionUp) const
 {
   if(DirectionUp)
     ADD_MESSAGE("You can't go up.");
@@ -286,7 +286,7 @@ god* olterrain::GetMasterGod() const
   return game::GetGod(GetConfig());
 }
 
-truth olterrain::CanBeDestroyed() const
+bool olterrain::CanBeDestroyed() const
 {
   return DataBase->CanBeDestroyed && ((GetPos().X && GetPos().Y && GetPos().X != GetLevel()->GetXSize() - 1 && GetPos().Y != GetLevel()->GetYSize() - 1) || GetLevel()->IsOnGround());
 }
@@ -354,7 +354,7 @@ int olterrainprototype::CreateSpecialConfigurations(olterraindatabase** TempConf
   return Configs;
 }
 
-truth olterrain::IsTransparent() const
+bool olterrain::IsTransparent() const
 {
   return IsAlwaysTransparent() || MainMaterial->IsTransparent();
 }
@@ -504,7 +504,7 @@ void olterrain::ReceiveAcid(material*, long Modifier)
   }
 }
 
-void lterrain::InitMaterials(material* FirstMaterial, truth CallUpdatePictures)
+void lterrain::InitMaterials(material* FirstMaterial, bool CallUpdatePictures)
 {
   InitMaterial(MainMaterial, FirstMaterial, 0);
   SignalVolumeAndWeightChange();
@@ -536,12 +536,12 @@ void olterraindatabase::InitDefaults(const olterrainprototype* NewProtoType, int
   Config = NewConfig;
 }
 
-truth olterrain::ShowThingsUnder() const
+bool olterrain::ShowThingsUnder() const
 {
   return DataBase->ShowThingsUnder || IsTransparent();
 }
 
-truth olterrain::WillBeDestroyedBy(const character* Char) const
+bool olterrain::WillBeDestroyedBy(const character* Char) const
 {
   return IsWall() && CanBeDestroyed() && MainMaterial->GetStrengthValue() <= (Char->GetAttribute(ARM_STRENGTH) * 3);
 }
@@ -556,12 +556,12 @@ v2 olterrain::GetBitmapPos(int I) const
   return GetBorderBitmapPos(DataBase->BitmapPos, I);
 }
 
-truth glterrain::IsAnimated() const
+bool glterrain::IsAnimated() const
 {
   return GraphicData.AnimationFrames > (UseBorderTiles() ? 9 : 1);
 }
 
-truth olterrain::IsAnimated() const
+bool olterrain::IsAnimated() const
 {
   return GraphicData.AnimationFrames > (UseBorderTiles() ? 9 : 1);
 }

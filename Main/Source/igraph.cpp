@@ -44,7 +44,7 @@ int igraph::CurrentColorType = -1;
 
 void igraph::Init()
 {
-  static truth AlreadyInstalled = false;
+  static bool AlreadyInstalled = false;
 
   if(!AlreadyInstalled)
   {

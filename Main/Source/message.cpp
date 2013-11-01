@@ -27,9 +27,9 @@ festring msgsystem::LastMessage;
 festring msgsystem::BigMessage;
 int msgsystem::Times;
 v2 msgsystem::Begin, msgsystem::End;
-truth msgsystem::Enabled = true;
-truth msgsystem::BigMessageMode = false;
-truth msgsystem::MessagesChanged = true;
+bool msgsystem::Enabled = true;
+bool msgsystem::BigMessageMode = false;
+bool msgsystem::MessagesChanged = true;
 bitmap* msgsystem::QuickDrawCache = 0;
 int msgsystem::LastMessageLines;
 
@@ -127,7 +127,7 @@ void msgsystem::AddMessage(const char* Format, ...)
 
 void msgsystem::Draw()
 {
-  truth WasInBigMessageMode = BigMessageMode;
+  bool WasInBigMessageMode = BigMessageMode;
   LeaveBigMessageMode();
 
   if(MessagesChanged)

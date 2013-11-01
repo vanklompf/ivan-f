@@ -47,9 +47,9 @@ class msgsystem
   static festring BigMessage;
   static int Times;
   static v2 Begin, End;
-  static truth Enabled;
-  static truth BigMessageMode;
-  static truth MessagesChanged;
+  static bool Enabled;
+  static bool BigMessageMode;
+  static bool MessagesChanged;
   static bitmap* QuickDrawCache;
   static int LastMessageLines;
 };

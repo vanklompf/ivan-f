@@ -30,19 +30,19 @@ class id
   const char* GetArticle() const { return UsesLongArticle() ? "an" : "a"; }
  protected:
   virtual const festring& GetNameSingular() const = 0;
-  virtual void AddNameSingular(festring&, truth) const;
+  virtual void AddNameSingular(festring&, bool) const;
   virtual const festring& GetNamePlural() const = 0;
-  virtual truth UsesLongArticle() const = 0;
-  virtual truth AddRustLevelDescription(festring&, truth) const { return false; }
-  virtual truth AddAdjective(festring&, truth) const;
+  virtual bool UsesLongArticle() const = 0;
+  virtual bool AddRustLevelDescription(festring&, bool) const { return false; }
+  virtual bool AddAdjective(festring&, bool) const;
   virtual const festring& GetAdjective() const = 0;
-  virtual truth UsesLongAdjectiveArticle() const = 0;
-  virtual truth AddMaterialDescription(festring&, truth) const { return false; }
+  virtual bool UsesLongAdjectiveArticle() const = 0;
+  virtual bool AddMaterialDescription(festring&, bool) const { return false; }
   virtual const festring& GetPostFix() const = 0;
   virtual void AddPostFix(festring&) const;
   virtual int GetArticleMode() const { return 0; }
-  virtual truth ShowMaterial() const { return false; }
-  virtual truth AddActiveAdjective(festring&, truth) const;
+  virtual bool ShowMaterial() const { return false; }
+  virtual bool AddActiveAdjective(festring&, bool) const;
 };
 
 #endif

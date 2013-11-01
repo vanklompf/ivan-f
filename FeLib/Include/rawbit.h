@@ -46,20 +46,20 @@ class rawbitmap
   bitmap* Colorize(v2, v2, v2,
 		   const packcol16*, alpha = 255,
 		   const packalpha* = 0,
-		   const uchar* = 0, truth = true) const;
+		   const uchar* = 0, bool = true) const;
   v2 GetSize() const { return Size; }
 
-  void AlterGradient(v2, v2, int, int, truth);
+  void AlterGradient(v2, v2, int, int, bool);
   void SwapColors(v2, v2, int, int);
   void Roll(v2, v2, v2, paletteindex*);
 
   void CreateFontCache(packcol16);
-  static truth IsMaterialColor(int Color) { return Color >= 192; }
+  static bool IsMaterialColor(int Color) { return Color >= 192; }
   static int GetMaterialColorIndex(int Color) { return Color - 192 >> 4; }
   int GetMaterialColorIndex(int X, int Y) const
   { return PaletteBuffer[Y][X] - 192 >> 4; }
-  truth IsTransparent(v2) const;
-  truth IsMaterialColor1(v2) const;
+  bool IsTransparent(v2) const;
+  bool IsMaterialColor1(v2) const;
   v2 RandomizeSparklePos(const v2*, v2*, v2,
 			       v2, int, int) const;
   void CopyPaletteFrom(rawbitmap*);

@@ -23,15 +23,15 @@ class ivanconfig
   static const festring& GetDefaultPetName() { return DefaultPetName.Value; }
   static long GetAutoSaveInterval() { return AutoSaveInterval.Value; }
   static long GetContrast() { return Contrast.Value; }
-  static truth GetWarnAboutDanger() { return WarnAboutDanger.Value; }
-  static truth GetAutoDropLeftOvers() { return AutoDropLeftOvers.Value; }
-  static truth GetLookZoom() { return LookZoom.Value; }
-  static truth GetUseAlternativeKeys() { return UseAlternativeKeys.Value; }
+  static bool GetWarnAboutDanger() { return WarnAboutDanger.Value; }
+  static bool GetAutoDropLeftOvers() { return AutoDropLeftOvers.Value; }
+  static bool GetLookZoom() { return LookZoom.Value; }
+  static bool GetUseAlternativeKeys() { return UseAlternativeKeys.Value; }
 #ifndef __DJGPP__
-  static truth GetFullScreenMode() { return FullScreenMode.Value; }
+  static bool GetFullScreenMode() { return FullScreenMode.Value; }
   static void SwitchModeHandler();
 #else
-  static truth GetFullScreenMode() { return true; }
+  static bool GetFullScreenMode() { return true; }
 #endif
   static long ApplyContrastTo(long);
   static void Save() { configsystem::Save(); }
@@ -44,14 +44,14 @@ class ivanconfig
   static v2 GetQuestionPos();
   static void AutoSaveIntervalDisplayer(const numberoption*, festring&);
   static void ContrastDisplayer(const numberoption*, festring&);
-  static truth DefaultNameChangeInterface(stringoption*);
-  static truth DefaultPetNameChangeInterface(stringoption*);
-  static truth AutoSaveIntervalChangeInterface(numberoption*);
-  static truth ContrastChangeInterface(numberoption*);
+  static bool DefaultNameChangeInterface(stringoption*);
+  static bool DefaultPetNameChangeInterface(stringoption*);
+  static bool AutoSaveIntervalChangeInterface(numberoption*);
+  static bool ContrastChangeInterface(numberoption*);
   static void AutoSaveIntervalChanger(numberoption*, long);
   static void ContrastChanger(numberoption*, long);
 #ifndef __DJGPP__
-  static void FullScreenModeChanger(truthoption*, truth);
+  static void FullScreenModeChanger(truthoption*, bool);
 #endif
   static void ContrastHandler(long);
   static void BackGroundDrawer();

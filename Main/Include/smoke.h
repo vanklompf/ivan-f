@@ -40,12 +40,12 @@ class smoke : public entity
   lsquare* GetLSquareUnder() const { return LSquareUnder; }
   void Save(outputfile&) const;
   void Load(inputfile&);
-  virtual truth IsOnGround() const { return true; }
+  virtual bool IsOnGround() const { return true; }
   void AddBreatheMessage() const;
   void Merge(gas*);
   const material* GetGas() const { return Gas; }
-  truth IsDangerousToBreathe(const character*) const;
-  truth IsScaryToBreathe(const character*) const;
+  bool IsDangerousToBreathe(const character*) const;
+  bool IsScaryToBreathe(const character*) const;
  protected:
   material* Gas;
   std::vector<bitmap*> Picture;

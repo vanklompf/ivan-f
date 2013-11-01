@@ -116,7 +116,7 @@ void wsquare::SetOWTerrain(owterrain* What)
   }
 }
 
-void wsquare::UpdateMemorizedDescription(truth Cheat)
+void wsquare::UpdateMemorizedDescription(bool Cheat)
 {
   if(Flags & DESCRIPTION_CHANGE || Cheat)
   {
@@ -158,7 +158,7 @@ oterrain* wsquare::GetOTerrain() const
   return OWTerrain;
 }
 
-truth wsquare::SignalSeen()
+bool wsquare::SignalSeen()
 {
   UpdateMemorizedDescription();
   LastSeen = 1;
@@ -179,12 +179,12 @@ int wsquare::GetWalkability() const
 	  : GWTerrain->GetWalkability());
 }
 
-truth wsquare::CanBeSeenByPlayer(truth) const
+bool wsquare::CanBeSeenByPlayer(bool) const
 {
   return LastSeen;
 }
 
-truth wsquare::CanBeSeenFrom(v2 FromPos, long MaxDistance, truth) const
+bool wsquare::CanBeSeenFrom(v2 FromPos, long MaxDistance, bool) const
 {
   return (Pos - FromPos).GetLengthSquare() <= MaxDistance;
 }

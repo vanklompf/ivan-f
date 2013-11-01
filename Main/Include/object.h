@@ -46,7 +46,7 @@ class object : public entity, public id
   void SetVisualEffects(int What) { VisualEffects = What; }
   virtual int GetForcedVisualEffects() const { return 0; }
   int GetAnimationFrames() const { return GraphicData.AnimationFrames; }
-  virtual truth IsAnimated() const { return GraphicData.AnimationFrames > 1; }
+  virtual bool IsAnimated() const { return GraphicData.AnimationFrames > 1; }
   virtual void CalculateEmitation();
   void LoadMaterial(inputfile&, material*&);
   virtual const fearray<long>& GetMaterialConfigChances() const = 0;
@@ -58,15 +58,15 @@ class object : public entity, public id
   static void InitSparkleValidityArrays();
   void UpdatePictures(graphicdata&, v2, int, alpha, int, bposretriever) const;
   void InitMaterial(material*&, material*, long);
-  virtual truth DetectMaterial(const material*) const;
+  virtual bool DetectMaterial(const material*) const;
   virtual int GetSparkleFlags() const;
   virtual void SignalMaterialChange() { }
  protected:
   void CopyMaterial(material* const&, material*&);
-  void ObjectInitMaterials(material*&, material*, long, material*&, material*, long, truth);
+  void ObjectInitMaterials(material*&, material*, long, material*&, material*, long, bool);
   material* SetMaterial(material*&, material*, long, int);
   void ChangeMaterial(material*&, material*, long, int);
-  virtual truth CalculateHasBe() const;
+  virtual bool CalculateHasBe() const;
   virtual int GetGraphicsContainerIndex() const = 0;
   virtual col16 GetMaterialColorA(int) const;
   virtual col16 GetMaterialColorB(int) const { return 0; }
@@ -79,13 +79,13 @@ class object : public entity, public id
   virtual alpha GetAlphaD(int) const { return 255; }
   virtual col16 GetOutlineColor(int) const;
   virtual alpha GetOutlineAlpha(int) const { return 255; }
-  virtual truth AddRustLevelDescription(festring&, truth) const;
-  virtual truth AddMaterialDescription(festring&, truth) const;
+  virtual bool AddRustLevelDescription(festring&, bool) const;
+  virtual bool AddMaterialDescription(festring&, bool) const;
   int RandomizeMaterialConfiguration();
   virtual int GetClassAnimationFrames() const { return 1; }
   void AddContainerPostFix(festring&) const;
   void AddLumpyPostFix(festring&) const;
-  truth AddEmptyAdjective(festring&, truth) const;
+  bool AddEmptyAdjective(festring&, bool) const;
   virtual v2 GetBitmapPos(int) const = 0;
   void RandomizeVisualEffects();
   virtual void ModifyAnimationFrames(int&) const { }
@@ -94,10 +94,10 @@ class object : public entity, public id
   virtual int GetRustDataC() const { return NOT_RUSTED; }
   virtual int GetRustDataD() const { return NOT_RUSTED; }
   virtual col16 GetDripColor() const { return 0; }
-  virtual truth AllowSparkling() const { return true; }
-  virtual truth AllowRegularColors() const { return true; }
+  virtual bool AllowSparkling() const { return true; }
+  virtual bool AllowRegularColors() const { return true; }
   virtual int GetWobbleData() const { return 0; }
-  truth RandomizeSparklePos(v2&, v2, int&, ulong, int, int) const;
+  bool RandomizeSparklePos(v2&, v2, int&, ulong, int, int) const;
   graphicdata GraphicData;
   material* MainMaterial;
   int VisualEffects;

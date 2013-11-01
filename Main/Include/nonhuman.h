@@ -44,24 +44,24 @@ CHARACTER(nonhumanoid, character)
   long GetUnarmedAPCost() const { return UnarmedAPCost; }
   long GetKickAPCost() const { return KickAPCost; }
   long GetBiteAPCost() const { return BiteAPCost; }
-  virtual void Kick(lsquare*, int, truth = false);
-  virtual truth Hit(character*, v2, int, truth = false);
-  virtual void UnarmedHit(character*, v2, int, truth = false);
+  virtual void Kick(lsquare*, int, bool = false);
+  virtual bool Hit(character*, v2, int, bool = false);
+  virtual void UnarmedHit(character*, v2, int, bool = false);
   virtual void InitSpecialAttributes();
-  virtual double GetTimeToKill(const character*, truth) const;
-  virtual int GetAttribute(int, truth = true) const;
-  virtual truth EditAttribute(int, int);
+  virtual double GetTimeToKill(const character*, bool) const;
+  virtual int GetAttribute(int, bool = true) const;
+  virtual bool EditAttribute(int, int);
   virtual void EditExperience(int, double, double);
-  virtual int DrawStats(truth) const;
-  virtual void Bite(character*, v2, int, truth = false);
+  virtual int DrawStats(bool) const;
+  virtual void Bite(character*, v2, int, bool = false);
   virtual int GetCarryingStrength() const;
   virtual void CalculateBattleInfo();
   void CalculateUnarmedAttackInfo();
   void CalculateKickAttackInfo();
   void CalculateBiteAttackInfo();
-  virtual truth UseMaterialAttributes() const;
+  virtual bool UseMaterialAttributes() const;
   virtual void AddSpecialStethoscopeInfo(felist&) const;
-  virtual truth EditAllAttributes(int);
+  virtual bool EditAllAttributes(int);
   virtual void AddAttributeInfo(festring&) const;
   virtual void AddAttackInfo(felist&) const;
  protected:
@@ -81,7 +81,7 @@ CHARACTER(nonhumanoid, character)
 CHARACTER(frog, nonhumanoid)
 {
  public:
-  virtual truth MoveRandomly() { return MoveRandomlyInRoom(); }
+  virtual bool MoveRandomly() { return MoveRandomlyInRoom(); }
 };
 
 CHARACTER(billswill, nonhumanoid)
@@ -92,17 +92,17 @@ CHARACTER(billswill, nonhumanoid)
   virtual const char* FirstPersonCriticalBiteVerb() const;
   virtual const char* ThirdPersonBiteVerb() const;
   virtual const char* ThirdPersonCriticalBiteVerb() const;
-  virtual truth AttackIsBlockable(int) const { return false; }
-  virtual truth AttackMayDamageArmor() const { return false; }
+  virtual bool AttackIsBlockable(int) const { return false; }
+  virtual bool AttackMayDamageArmor() const { return false; }
 };
 
 CHARACTER(mommo, nonhumanoid)
 {
  protected:
   virtual int GetBodyPartWobbleData(int) const;
-  virtual truth CanVomit() const { return true; }
+  virtual bool CanVomit() const { return true; }
   virtual void CreateCorpse(lsquare*);
-  virtual truth Hit(character*, v2, int, truth);
+  virtual bool Hit(character*, v2, int, bool);
   virtual void GetAICommand();
 };
 
@@ -119,7 +119,7 @@ CHARACTER(wolf, canine)
 CHARACTER(dog, canine)
 {
  public:
-  virtual truth Catches(item*);
+  virtual bool Catches(item*);
   virtual void BeTalkedTo();
  protected:
   virtual bodypart* MakeBodyPart(int) const;
@@ -129,7 +129,7 @@ CHARACTER(dog, canine)
 CHARACTER(spider, nonhumanoid)
 {
  public:
-  virtual truth SpecialBiteEffect(character*, v2, int, int, truth);
+  virtual bool SpecialBiteEffect(character*, v2, int, int, bool);
   virtual void GetAICommand();
 };
 
@@ -162,7 +162,7 @@ CHARACTER(largecat, nonhumanoid)
   largecat() : Lives(7) { }
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
-  virtual truth SpecialSaveLife();
+  virtual bool SpecialSaveLife();
  protected:
   int Lives;
 };
@@ -178,8 +178,8 @@ CHARACTER(mammoth, nonhumanoid)
 CHARACTER(unicorn, nonhumanoid)
 {
  public:
-  virtual int TakeHit(character*, item*, bodypart*, v2, double, double, int, int, int, truth, truth);
-  virtual truth SpecialEnemySightedReaction(character*);
+  virtual int TakeHit(character*, item*, bodypart*, v2, double, double, int, int, int, bool, bool);
+  virtual bool SpecialEnemySightedReaction(character*);
  protected:
   void MonsterTeleport(const char*);
 };
@@ -203,7 +203,7 @@ CHARACTER(buffalo, nonhumanoid)
 CHARACTER(snake, nonhumanoid)
 {
  protected:
-  virtual truth SpecialBiteEffect(character*, v2, int, int, truth);
+  virtual bool SpecialBiteEffect(character*, v2, int, int, bool);
 };
 
 CHARACTER(ostrich, nonhumanoid)
@@ -213,16 +213,16 @@ CHARACTER(ostrich, nonhumanoid)
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
  protected:
-  virtual truth HandleCharacterBlockingTheWay(character*, v2, int);
+  virtual bool HandleCharacterBlockingTheWay(character*, v2, int);
   virtual void GetAICommand();
-  truth HasDroppedBananas;
+  bool HasDroppedBananas;
 };
 
 CHARACTER(chameleon, nonhumanoid)
 {
  public:
-  virtual int TakeHit(character*, item*, bodypart*, v2, double, double, int, int, int, truth, truth);
-  virtual truth SpecialEnemySightedReaction(character*);
+  virtual int TakeHit(character*, item*, bodypart*, v2, double, double, int, int, int, bool, bool);
+  virtual bool SpecialEnemySightedReaction(character*);
  protected:
   virtual col16 GetSkinColor() const;
   virtual void SpecialTurnHandler() { UpdatePictures(); }
@@ -232,13 +232,13 @@ CHARACTER(floatingeye, nonhumanoid)
 {
  public:
   floatingeye() : NextWayPoint(0) { }
-  virtual truth Hit(character*, v2, int, truth);
-  virtual int TakeHit(character*, item*, bodypart*, v2, double, double, int, int, int, truth, truth);
+  virtual bool Hit(character*, v2, int, bool);
+  virtual int TakeHit(character*, item*, bodypart*, v2, double, double, int, int, int, bool, bool);
   virtual void SetWayPoints(const fearray<packv2>&);
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
-  virtual truth IsSpy() const { return true; }
-  virtual truth CanAttack() const { return false; }
+  virtual bool IsSpy() const { return true; }
+  virtual bool CanAttack() const { return false; }
  protected:
   virtual void GetAICommand();
   std::vector<v2> WayPoints;
@@ -248,7 +248,7 @@ CHARACTER(floatingeye, nonhumanoid)
 CHARACTER(eddy, nonhumanoid)
 {
  public:
-  virtual truth Hit(character*, v2, int, truth = false);
+  virtual bool Hit(character*, v2, int, bool = false);
  protected:
   virtual int GetBodyPartWobbleData(int) const;
   virtual bodypart* MakeBodyPart(int) const;
@@ -262,7 +262,7 @@ CHARACTER(mushroom, nonhumanoid)
   virtual void Load(inputfile&);
   void SetSpecies(int);
   int GetSpecies() const { return Species; }
-  virtual truth IsMushroom() const { return true; }
+  virtual bool IsMushroom() const { return true; }
  protected:
   virtual void PostConstruct();
   virtual void GetAICommand();
@@ -285,36 +285,36 @@ CHARACTER(ghost, nonhumanoid)
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
   void SetOwnerSoul(const festring& What) { OwnerSoul = What; }
-  virtual truth IsNameable() const { return OwnerSoul.IsEmpty(); }
-  virtual truth RaiseTheDead(character*);
-  virtual int ReceiveBodyPartDamage(character*, int, int, int, int = 8, truth = false, truth = false, truth = true, truth = false);
-  virtual truth SpecialEnemySightedReaction(character*);
-  void SetIsActive(truth What) { Active = What; }
-  virtual truth IsPolymorphable() const { return MaxHP < 100; }
+  virtual bool IsNameable() const { return OwnerSoul.IsEmpty(); }
+  virtual bool RaiseTheDead(character*);
+  virtual int ReceiveBodyPartDamage(character*, int, int, int, int = 8, bool = false, bool = false, bool = true, bool = false);
+  virtual bool SpecialEnemySightedReaction(character*);
+  void SetIsActive(bool What) { Active = What; }
+  virtual bool IsPolymorphable() const { return MaxHP < 100; }
  protected:
   virtual int GetBodyPartWobbleData(int) const;
   virtual const char* FirstPersonBiteVerb() const;
   virtual const char* FirstPersonCriticalBiteVerb() const;
   virtual const char* ThirdPersonBiteVerb() const;
   virtual const char* ThirdPersonCriticalBiteVerb() const;
-  virtual truth AttackIsBlockable(int) const { return false; }
-  virtual truth AttackMayDamageArmor() const { return false; }
+  virtual bool AttackIsBlockable(int) const { return false; }
+  virtual bool AttackMayDamageArmor() const { return false; }
   virtual void GetAICommand();
   festring OwnerSoul;
-  truth Active;
+  bool Active;
 };
 
 CHARACTER(twoheadedmoose, nonhumanoid)
 {
  public:
-  virtual truth Hit(character*, v2, int, truth = false);
+  virtual bool Hit(character*, v2, int, bool = false);
 };
 
 CHARACTER(magpie, nonhumanoid)
 {
  public:
   virtual void GetAICommand();
-  virtual truth IsRetreating() const;
+  virtual bool IsRetreating() const;
  protected:
   virtual const char* FirstPersonBiteVerb() const;
   virtual const char* FirstPersonCriticalBiteVerb() const;
@@ -343,18 +343,18 @@ CHARACTER(largecreature, nonhumanoid)
   virtual lsquare* GetNeighbourLSquare(int) const;
   virtual wsquare* GetNeighbourWSquare(int) const;
   virtual int CalculateNewSquaresUnder(lsquare**, v2) const;
-  virtual truth IsFreeForMe(square*) const;
-  virtual truth CanMoveOn(const lsquare*) const;
-  virtual truth CanMoveOn(const square*) const;
+  virtual bool IsFreeForMe(square*) const;
+  virtual bool CanMoveOn(const lsquare*) const;
+  virtual bool CanMoveOn(const square*) const;
   virtual void PutTo(v2);
   virtual void Remove();
-  virtual truth CreateRoute();
-  virtual truth CanTheoreticallyMoveOn(const lsquare*) const;
+  virtual bool CreateRoute();
+  virtual bool CanTheoreticallyMoveOn(const lsquare*) const;
   virtual int GetFlySymbolSquareIndex() const { return 1; }
   virtual int GetSwimmingSymbolSquareIndex() const { return 3; }
   virtual int GetUnconsciousSymbolSquareIndex() const { return 2; }
-  virtual truth PlaceIsIllegal(v2, v2) const;
-  truth PartCanMoveOn(const lsquare*) const;
+  virtual bool PlaceIsIllegal(v2, v2) const;
+  bool PartCanMoveOn(const lsquare*) const;
  protected:
   virtual bodypart* MakeBodyPart(int) const;
   virtual void CreateCorpse(lsquare*);
@@ -367,15 +367,15 @@ CHARACTER(elpuri, largecreature)
   elpuri() : Active(false) { }
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
-  virtual truth Hit(character*, v2, int, truth = false);
-  virtual int ReceiveBodyPartDamage(character*, int, int, int, int = 8, truth = false, truth = false, truth = true, truth = false);
-  virtual truth SpecialEnemySightedReaction(character*);
-  virtual truth MustBeRemovedFromBone() const;
-  virtual truth TryToRiseFromTheDead();
+  virtual bool Hit(character*, v2, int, bool = false);
+  virtual int ReceiveBodyPartDamage(character*, int, int, int, int = 8, bool = false, bool = false, bool = true, bool = false);
+  virtual bool SpecialEnemySightedReaction(character*);
+  virtual bool MustBeRemovedFromBone() const;
+  virtual bool TryToRiseFromTheDead();
  protected:
   virtual void GetAICommand();
   virtual void CreateCorpse(lsquare*);
-  truth Active;
+  bool Active;
 };
 
 CHARACTER(genetrixvesana, largecreature)
@@ -388,7 +388,7 @@ CHARACTER(genetrixvesana, largecreature)
  protected:
   virtual void GetAICommand();
   virtual void CreateCorpse(lsquare*);
-  virtual truth MustBeRemovedFromBone() const;
+  virtual bool MustBeRemovedFromBone() const;
   long TurnsExisted;
 };
 
@@ -401,19 +401,19 @@ CHARACTER(hedgehog, nonhumanoid)
 CHARACTER(bunny, nonhumanoid)
 {
  public:
-  virtual truth CheckIfSatiated() { return GetNP() > BLOATED_LEVEL; }
+  virtual bool CheckIfSatiated() { return GetNP() > BLOATED_LEVEL; }
   virtual void SignalNaturalGeneration();
-  virtual truth IsBunny() const { return true; }
-  virtual truth Catches(item*);
+  virtual bool IsBunny() const { return true; }
+  virtual bool Catches(item*);
  protected:
-  truth CheckForMatePartner();
+  bool CheckForMatePartner();
   virtual void GetAICommand();
 };
 
 CHARACTER(vladimir, largecreature)
 {
  public:
-  virtual truth MustBeRemovedFromBone() const;
+  virtual bool MustBeRemovedFromBone() const;
   virtual col16 GetSkinColor() const;
   virtual void SpecialTurnHandler() { UpdatePictures(); }
 };
@@ -421,7 +421,7 @@ CHARACTER(vladimir, largecreature)
 CHARACTER(hattifattener, nonhumanoid)
 {
  public:
-  truth Hit(character*, v2, int, truth) { return false; }
+  bool Hit(character*, v2, int, bool) { return false; }
  protected:
   virtual int GetBodyPartWobbleData(int) const;
   virtual int GetSpecialBodyPartFlags(int) const;
@@ -435,12 +435,12 @@ CHARACTER(blinkdog, dog)
   blinkdog();
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
-  virtual int TakeHit(character*, item*, bodypart*, v2, double, double, int, int, int, truth, truth);
-  virtual truth SpecialEnemySightedReaction(character*);
+  virtual int TakeHit(character*, item*, bodypart*, v2, double, double, int, int, int, bool, bool);
+  virtual bool SpecialEnemySightedReaction(character*);
  protected:
   virtual bodypart* MakeBodyPart(int) const;
   void MonsterTeleport(const char*);
-  truth SummonFriend();
+  bool SummonFriend();
   int SummonModifier;
 };
 
@@ -457,10 +457,10 @@ CHARACTER(mysticfrog, frog)
 CHARACTER(lobhse, largecreature)
 {
  protected:
-  virtual truth SpecialBiteEffect(character*, v2, int, int, truth);
+  virtual bool SpecialBiteEffect(character*, v2, int, int, bool);
   virtual void GetAICommand();
   virtual void CreateCorpse(lsquare*);
-  virtual truth MustBeRemovedFromBone() const;
+  virtual bool MustBeRemovedFromBone() const;
   virtual bodypart* MakeBodyPart(int) const;
 };
 

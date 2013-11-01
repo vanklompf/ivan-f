@@ -28,8 +28,8 @@ class dungeon
   dungeon();
   dungeon(int);
   ~dungeon();
-  truth PrepareLevel(int, truth = true);
-  void SaveLevel(const festring&, int, truth = true);
+  bool PrepareLevel(int, bool = true);
+  void SaveLevel(const festring&, int, bool = true);
   level* LoadLevel(const festring&, int);
   level* GetLevel(int I) const { return Level[I]; }
   int GetLevels() const;
@@ -43,15 +43,15 @@ class dungeon
   festring GetLevelDescription(int);
   festring GetShortLevelDescription(int);
   level* LoadLevel(inputfile&, int);
-  truth IsGenerated(int I) const { return Generated[I]; }
-  void SetIsGenerated(int I, truth What) { Generated[I] = What; }
+  bool IsGenerated(int I) const { return Generated[I]; }
+  void SetIsGenerated(int I, bool What) { Generated[I] = What; }
   int GetLevelTeleportDestination(int) const;
  private:
   void Initialize();
   const dungeonscript* DungeonScript;
   level** Level;
   int Index;
-  truth* Generated;
+  bool* Generated;
   v2 WorldMapPos;
 };
 

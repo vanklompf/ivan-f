@@ -47,7 +47,7 @@ void (*globalerrorhandler::OldNewHandler)() = 0;
 
 void globalerrorhandler::Install()
 {
-  static truth AlreadyInstalled = false;
+  static bool AlreadyInstalled = false;
 
   if(!AlreadyInstalled)
   {
@@ -123,7 +123,7 @@ int globalerrorhandler::NewHandler(size_t)
 
 void globalerrorhandler::SignalHandler(int Signal)
 {
-  static truth AlreadySignalled = false;
+  static bool AlreadySignalled = false;
 
   if(!AlreadySignalled)
   {

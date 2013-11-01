@@ -51,7 +51,7 @@ class olterrain;
 struct explosion;
 
 typedef std::map<festring, long> valuemap;
-typedef truth (*stringkeyhandler)(int, festring&);
+typedef bool (*stringkeyhandler)(int, festring&);
 typedef v2 (*positionkeyhandler)(v2, int);
 typedef void (*positionhandler)(v2);
 
@@ -167,7 +167,7 @@ class areachangerequest { };
 class game
 {
  public:
-  static truth Init(const festring& = CONST_S(""));
+  static bool Init(const festring& = CONST_S(""));
   static void DeInit();
   static void Run();
   static int GetMoveCommandKey(int);
@@ -183,29 +183,29 @@ class game
   static v2 GetCamera() { return Camera; }
   static void UpdateCameraX();
   static void UpdateCameraY();
-  static truth IsLoading() { return Loading; }
-  static void SetIsLoading(truth What) { Loading = What; }
-  static truth ForceJumpToPlayerBe() { return JumpToPlayerBe; }
-  static void SetForceJumpToPlayerBe(truth What) { JumpToPlayerBe = What; }
+  static bool IsLoading() { return Loading; }
+  static void SetIsLoading(bool What) { Loading = What; }
+  static bool ForceJumpToPlayerBe() { return JumpToPlayerBe; }
+  static void SetForceJumpToPlayerBe(bool What) { JumpToPlayerBe = What; }
   static level* GetLevel(int);
   static void InitLuxTable();
   static void DeInitLuxTable();
   static const char* Insult();
-  static truth TruthQuestion(const festring&, int = 0, int = 0);
+  static bool TruthQuestion(const festring&, int = 0, int = 0);
   static void DrawEverything();
-  static truth Save(const festring& = SaveName(""));
+  static bool Save(const festring& = SaveName(""));
   static int Load(const festring& = SaveName(""));
-  static truth IsRunning() { return Running; }
-  static void SetIsRunning(truth What) { Running = What; }
+  static bool IsRunning() { return Running; }
+  static void SetIsRunning(bool What) { Running = What; }
   static void UpdateCameraX(int);
   static void UpdateCameraY(int);
   static int GetCurrentLevelIndex() { return CurrentLevelIndex; }
   static int GetMoveCommandKeyBetweenPoints(v2, v2);
-  static void DrawEverythingNoBlit(truth = false);
+  static void DrawEverythingNoBlit(bool = false);
   static god* GetGod(int I) { return God[I]; }
   static const char* GetAlignment(int I) { return Alignment[I]; }
   static void ApplyDivineTick();
-  static void ApplyDivineAlignmentBonuses(god*, int, truth);
+  static void ApplyDivineAlignmentBonuses(god*, int, bool);
   static v2 GetDirectionVectorForKey(int);
   static festring SaveName(const festring& = CONST_S(""));
   static void ShowLevelMessage();
@@ -215,10 +215,10 @@ class game
   static void IncreaseTick() { ++Tick; }
   static ulong GetTick() { return Tick; }
   static festring GetAutoSaveFileName() { return AutoSaveFileName; }
-  static int DirectionQuestion(const festring&, truth = true, truth = false);
-  static void RemoveSaves(truth = true);
-  static truth IsInWilderness() { return InWilderness; }
-  static void SetIsInWilderness(truth What) { InWilderness = What; }
+  static int DirectionQuestion(const festring&, bool = true, bool = false);
+  static void RemoveSaves(bool = true);
+  static bool IsInWilderness() { return InWilderness; }
+  static void SetIsInWilderness(bool What) { InWilderness = What; }
   static worldmap* GetWorldMap() { return WorldMap; }
   static void SetAreaInLoad(area* What) { AreaInLoad = What; }
   static void SetSquareInLoad(square* What) { SquareInLoad = What; }
@@ -229,9 +229,9 @@ class game
   static dungeon* GetDungeon(int I) { return Dungeon[I]; }
   static int GetCurrentDungeonIndex() { return CurrentDungeonIndex; }
   static void InitDungeons();
-  static truth OnScreen(v2);
+  static bool OnScreen(v2);
   static void DoEvilDeed(int);
-  static void SaveWorldMap(const festring& = SaveName(""), truth = true);
+  static void SaveWorldMap(const festring& = SaveName(""), bool = true);
   static worldmap* LoadWorldMap(const festring& = SaveName(""));
   static void UpdateCamera();
   static ulong CreateNewCharacterID(character*);
@@ -241,15 +241,15 @@ class game
   static int GetTeams() { return Teams; }
   static void Hostility(team*, team*);
   static void CreateTeams();
-  static festring StringQuestion(const festring&, col16, festring::sizetype, festring::sizetype, truth, stringkeyhandler = 0);
-  static long NumberQuestion(const festring&, int, truth = false);
+  static festring StringQuestion(const festring&, col16, festring::sizetype, festring::sizetype, bool, stringkeyhandler = 0);
+  static long NumberQuestion(const festring&, int, bool = false);
   static ulong IncreaseLOSTick();
   static ulong GetLOSTick() { return LOSTick; }
   static void SendLOSUpdateRequest() { LOSUpdateRequested = true; }
   static void RemoveLOSUpdateRequest() { LOSUpdateRequested = false; }
   static character* GetPetrus() { return Petrus; }
   static void SetPetrus(character* What) { Petrus = What; }
-  static truth HandleQuitMessage();
+  static bool HandleQuitMessage();
   static int GetDirectionForVector(v2);
   static const char* GetVerbalPlayerAlignment();
   static void CreateGods();
@@ -258,38 +258,38 @@ class game
   static v2 CalculateScreenCoordinates(v2);
   static void BusyAnimation();
   static void BusyAnimation(bitmap*);
-  static v2 PositionQuestion(const festring&, v2, positionhandler = 0, positionkeyhandler = 0, truth = true);
+  static v2 PositionQuestion(const festring&, v2, positionhandler = 0, positionkeyhandler = 0, bool = true);
   static void LookHandler(v2);
   static int AskForKeyPress(const festring&);
-  static truth AnimationController();
+  static bool AnimationController();
   static gamescript* GetGameScript() { return GameScript; }
   static void InitScript();
   static valuemap& GetGlobalValueMap() { return GlobalValueMap; }
   static void InitGlobalValueMap();
-  static void TextScreen(const festring&, col16 = 0xFFFF, truth = true, void (*)(bitmap*) = 0);
+  static void TextScreen(const festring&, col16 = 0xFFFF, bool = true, void (*)(bitmap*) = 0);
   static void SetCursorPos(v2 What) { CursorPos = What; }
-  static truth DoZoom() { return Zoom; }
-  static void SetDoZoom(truth What) { Zoom = What; }
+  static bool DoZoom() { return Zoom; }
+  static void SetDoZoom(bool What) { Zoom = What; }
   static int KeyQuestion(const festring&, int, int, ...);
   static v2 LookKeyHandler(v2, int);
   static v2 NameKeyHandler(v2, int);
-  static void End(festring, truth = true, truth = true);
+  static void End(festring, bool = true, bool = true);
   static int CalculateRoughDirection(v2);
   static long ScrollBarQuestion(const festring&, long, long, long, long, long, col16, col16, col16, void (*)(long) = 0);
-  static truth IsGenerating() { return Generating; }
-  static void SetIsGenerating(truth What) { Generating = What; }
+  static bool IsGenerating() { return Generating; }
+  static void SetIsGenerating(bool What) { Generating = What; }
   static void CalculateNextDanger();
   static int Menu(bitmap*, v2, const festring&, const festring&, col16, const festring& = "", const festring& = "");
   static void InitDangerMap();
   static const dangermap& GetDangerMap();
-  static truth TryTravel(int, int, int, truth = false, truth = true);
-  static truth LeaveArea(charactervector&, truth, truth);
+  static bool TryTravel(int, int, int, bool = false, bool = true);
+  static bool LeaveArea(charactervector&, bool, bool);
   static void EnterArea(charactervector&, int, int);
   static int CompareLights(col24, col24);
   static int CompareLightToInt(col24, col24);
   static void CombineLights(col24&, col24);
   static col24 CombineConstLights(col24, col24);
-  static truth IsDark(col24);
+  static bool IsDark(col24);
   static void SetStandardListAttributes(felist&);
   static double GetAveragePlayerArmStrengthExperience() { return AveragePlayerArmStrengthExperience; }
   static double GetAveragePlayerLegStrengthExperience() { return AveragePlayerLegStrengthExperience; }
@@ -311,14 +311,14 @@ class game
   static void UpdateTrapID(entity*, ulong);
   static int GetStoryState() { return StoryState; }
   static void SetStoryState(int What) { StoryState = What; }
-  static void SetIsInGetCommand(truth What) { InGetCommand = What; }
-  static truth IsInGetCommand() { return InGetCommand; }
+  static void SetIsInGetCommand(bool What) { InGetCommand = What; }
+  static bool IsInGetCommand() { return InGetCommand; }
   static festring GetHomeDir();
   static festring GetSaveDir();
   static festring GetGameDir();
   static festring GetBoneDir();
-  static truth PlayerWasHurtByExplosion() { return PlayerHurtByExplosion; }
-  static void SetPlayerWasHurtByExplosion(truth What) { PlayerHurtByExplosion = What; }
+  static bool PlayerWasHurtByExplosion() { return PlayerHurtByExplosion; }
+  static void SetPlayerWasHurtByExplosion(bool What) { PlayerHurtByExplosion = What; }
   static void SetCurrentArea(area* What) { CurrentArea = What; }
   static void SetCurrentLevel(level* What) { CurrentLevel = What; }
   static void SetCurrentWSquareMap(wsquare*** What) { CurrentWSquareMap = What; }
@@ -330,36 +330,36 @@ class game
   static void SignalDeath(const character*, const character*, festring);
   static void DisplayMassacreLists();
   static void DisplayMassacreList(const massacremap&, const char*, long);
-  static truth MassacreListsEmpty();
+  static bool MassacreListsEmpty();
 #ifdef WIZARD
   static void ActivateWizardMode() { WizardMode = true; }
-  static truth WizardModeIsActive() { return WizardMode; }
+  static bool WizardModeIsActive() { return WizardMode; }
   static void SeeWholeMap();
   static int GetSeeWholeMapCheatMode() { return SeeWholeMapCheatMode; }
-  static truth GoThroughWallsCheatIsActive() { return GoThroughWallsCheat; }
+  static bool GoThroughWallsCheatIsActive() { return GoThroughWallsCheat; }
   static void GoThroughWalls() { GoThroughWallsCheat = !GoThroughWallsCheat; }
 #else
-  static truth WizardModeIsActive() { return false; }
+  static bool WizardModeIsActive() { return false; }
   static int GetSeeWholeMapCheatMode() { return 0; }
-  static truth GoThroughWallsCheatIsActive() { return false; }
+  static bool GoThroughWallsCheatIsActive() { return false; }
 #endif
-  static truth WizardModeIsReallyActive() { return WizardMode; }
+  static bool WizardModeIsReallyActive() { return WizardMode; }
   static void CreateBone();
   static int GetQuestMonstersFound() { return QuestMonstersFound; }
   static void SignalQuestMonsterFound() { ++QuestMonstersFound; }
   static void SetQuestMonstersFound(int What) { QuestMonstersFound = What; }
-  static truth PrepareRandomBone(int);
+  static bool PrepareRandomBone(int);
   static boneidmap& GetBoneItemIDMap() { return BoneItemIDMap; }
   static boneidmap& GetBoneCharacterIDMap() { return BoneCharacterIDMap; }
   static double CalculateAverageDanger(const charactervector&, character*);
   static double CalculateAverageDangerOfAllNormalEnemies();
   static character* CreateGhost();
-  static truth TooGreatDangerFound() { return TooGreatDangerFoundTruth; }
-  static void SetTooGreatDangerFound(truth What) { TooGreatDangerFoundTruth = What; }
+  static bool TooGreatDangerFound() { return TooGreatDangerFoundTruth; }
+  static void SetTooGreatDangerFound(bool What) { TooGreatDangerFoundTruth = What; }
   static void CreateBusyAnimationCache();
   static long GetScore();
-  static truth TweraifIsFree();
-  static truth IsXMas();
+  static bool TweraifIsFree();
+  static bool IsXMas();
   static int AddToItemDrawVector(const itemvector&);
   static void ClearItemDrawVector();
   static void ItemEntryDrawer(bitmap*, v2, uint);
@@ -369,19 +369,19 @@ class game
   static void GodEntryDrawer(bitmap*, v2, uint);
   static itemvectorvector& GetItemDrawVector() { return ItemDrawVector; }
   static charactervector& GetCharacterDrawVector() { return CharacterDrawVector; }
-  static truth IsSumoWrestling() { return SumoWrestling; }
-  static void SetIsSumoWrestling(truth What) { SumoWrestling = What; }
-  static truth AllowHostilities() { return !SumoWrestling; }
-  static truth AllBodyPartsVanish() { return SumoWrestling; }
-  static truth TryToEnterSumoArena();
-  static truth TryToExitSumoArena();
-  static truth EndSumoWrestling(int);
+  static bool IsSumoWrestling() { return SumoWrestling; }
+  static void SetIsSumoWrestling(bool What) { SumoWrestling = What; }
+  static bool AllowHostilities() { return !SumoWrestling; }
+  static bool AllBodyPartsVanish() { return SumoWrestling; }
+  static bool TryToEnterSumoArena();
+  static bool TryToExitSumoArena();
+  static bool EndSumoWrestling(int);
   static character* GetSumo();
   static const festring& GetPlayerName() { return PlayerName; }
   static rain* ConstructGlobalRain();
   static void SetGlobalRainLiquid(liquid* What) { GlobalRainLiquid = What; }
   static void SetGlobalRainSpeed(v2 What) { GlobalRainSpeed = What; }
-  static truth PlayerIsSumoChampion() { return PlayerSumoChampion; }
+  static bool PlayerIsSumoChampion() { return PlayerSumoChampion; }
   static v2 GetSunLightDirectionVector();
   static int CalculateMinimumEmitationRadius(col24);
   static ulong IncreaseSquarePartEmitationTicks();
@@ -392,16 +392,16 @@ class game
   static long GetTurn() { return Turn; }
   static void IncreaseTurn() { ++Turn; }
   static int GetTotalMinutes() { return Tick * 60 / 2000; }
-  static truth PolymorphControlKeyHandler(int, festring&);
+  static bool PolymorphControlKeyHandler(int, festring&);
   static ulong* GetEquipmentMemory() { return EquipmentMemory; }
-  static truth PlayerIsRunning();
-  static void SetPlayerIsRunning(truth What) { PlayerRunning = What; }
-  static truth FillPetVector(const char*);
-  static truth CommandQuestion();
+  static bool PlayerIsRunning();
+  static void SetPlayerIsRunning(bool What) { PlayerRunning = What; }
+  static bool FillPetVector(const char*);
+  static bool CommandQuestion();
   static void NameQuestion();
   static v2 CommandKeyHandler(v2, int);
   static void CommandScreen(const festring&, ulong, ulong, ulong&, ulong&);
-  static truth CommandAll();
+  static bool CommandAll();
   static double GetDangerFound() { return DangerFound; }
   static void SetDangerFound(double What) { DangerFound = What; }
   static col16 GetAttributeColor(int);
@@ -409,12 +409,12 @@ class game
   static void InitAttributeMemory();
   static void TeleportHandler(v2);
   static void PetHandler(v2);
-  static truth SelectPet(int);
+  static bool SelectPet(int);
   static double GetGameSituationDanger();
   static olterrain* GetMonsterPortal() { return MonsterPortal; }
   static void SetMonsterPortal(olterrain* What) { MonsterPortal = What; }
-  static truth GetCausePanicFlag() { return CausePanicFlag; }
-  static void SetCausePanicFlag(truth What) { CausePanicFlag = What; }
+  static bool GetCausePanicFlag() { return CausePanicFlag; }
+  static void SetCausePanicFlag(bool What) { CausePanicFlag = What; }
   static long GetTimeSpent();
  private:
   static void UpdateCameraCoordinate(int&, int, int, int);
@@ -429,12 +429,12 @@ class game
   static const v2 BasicMoveVector[];
   static const v2 LargeMoveVector[];
   static uchar*** LuxTable;
-  static truth Running;
+  static bool Running;
   static character* Player;
   static v2 Camera;
   static ulong Tick;
   static festring AutoSaveFileName;
-  static truth InWilderness;
+  static bool InWilderness;
   static worldmap* WorldMap;
   static area* AreaInLoad;
   static square* SquareInLoad;
@@ -444,15 +444,15 @@ class game
   static ulong NextTrapID;
   static team** Team;
   static ulong LOSTick;
-  static truth LOSUpdateRequested;
+  static bool LOSUpdateRequested;
   static character* Petrus;
-  static truth Loading;
-  static truth JumpToPlayerBe;
+  static bool Loading;
+  static bool JumpToPlayerBe;
   static gamescript* GameScript;
   static valuemap GlobalValueMap;
   static v2 CursorPos;
-  static truth Zoom;
-  static truth Generating;
+  static bool Zoom;
+  static bool Generating;
   static dangermap DangerMap;
   static int NextDangerIDType;
   static int NextDangerIDConfigIndex;
@@ -466,8 +466,8 @@ class game
   static int Teams;
   static int Dungeons;
   static int StoryState;
-  static truth InGetCommand;
-  static truth PlayerHurtByExplosion;
+  static bool InGetCommand;
+  static bool PlayerHurtByExplosion;
   static area* CurrentArea;
   static level* CurrentLevel;
   static wsquare*** CurrentWSquareMap;
@@ -483,27 +483,27 @@ class game
   static long PlayerMassacreAmount;
   static long PetMassacreAmount;
   static long MiscMassacreAmount;
-  static truth WizardMode;
+  static bool WizardMode;
   static int SeeWholeMapCheatMode;
-  static truth GoThroughWallsCheat;
+  static bool GoThroughWallsCheat;
   static int QuestMonstersFound;
   static boneidmap BoneItemIDMap;
   static boneidmap BoneCharacterIDMap;
-  static truth TooGreatDangerFoundTruth;
+  static bool TooGreatDangerFoundTruth;
   static bitmap* BusyAnimationCache[32];
   static itemvectorvector ItemDrawVector;
   static charactervector CharacterDrawVector;
-  static truth SumoWrestling;
+  static bool SumoWrestling;
   static festring PlayerName;
   static liquid* GlobalRainLiquid;
   static v2 GlobalRainSpeed;
   static long GlobalRainTimeModifier;
-  static truth PlayerSumoChampion;
+  static bool PlayerSumoChampion;
   static ulong SquarePartEmitationTick;
   static const int LargeMoveDirection[];
   static long Turn;
   static ulong EquipmentMemory[MAX_EQUIPMENT_SLOTS];
-  static truth PlayerRunning;
+  static bool PlayerRunning;
   static character* LastPetUnderCursor;
   static charactervector PetVector;
   static double DangerFound;
@@ -513,7 +513,7 @@ class game
   static int NecroCounter;
   static int CursorData;
   static olterrain* MonsterPortal;
-  static truth CausePanicFlag;
+  static bool CausePanicFlag;
   static time_t TimePlayedBeforeLastLoad;
   static time_t LastLoad;
   static time_t GameBegan;
@@ -543,7 +543,7 @@ inline col24 game::CombineConstLights(col24 L1, col24 L2)
   return L1;
 }
 
-inline truth game::IsDark(col24 Light)
+inline bool game::IsDark(col24 Light)
 {
   return !Light
     || ((Light & 0xFF0000) < (LIGHT_BORDER << 16)

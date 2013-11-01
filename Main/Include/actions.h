@@ -24,13 +24,13 @@ ACTION(unconsciousness, action)
   virtual void Load(inputfile&);
   virtual void Handle();
   void SetCounter(int What) { Counter = What; }
-  virtual truth IsVoluntary() const { return false; }
-  virtual void Terminate(truth);
-  virtual truth AllowUnconsciousness() const { return false; }
+  virtual bool IsVoluntary() const { return false; }
+  virtual void Terminate(bool);
+  virtual bool AllowUnconsciousness() const { return false; }
   virtual const char* GetDescription() const;
   virtual const char* GetDeathExplanation() const;
-  virtual truth CanBeTalkedTo() const { return false; }
-  virtual truth IsUnconsciousness() const { return true; }
+  virtual bool CanBeTalkedTo() const { return false; }
+  virtual bool IsUnconsciousness() const { return true; }
   void RaiseCounterTo(int);
  protected:
   int Counter;
@@ -42,10 +42,10 @@ ACTION(consume, action)
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
   virtual void Handle();
-  virtual void Terminate(truth);
+  virtual void Terminate(bool);
   void SetConsumingID(ulong What) { ConsumingID = What; }
-  virtual truth AllowUnconsciousness() const { return false; }
-  virtual truth AllowFoodConsumption() const { return false; }
+  virtual bool AllowUnconsciousness() const { return false; }
+  virtual bool AllowFoodConsumption() const { return false; }
   virtual const char* GetDescription() const;
   virtual void SetDescription(const festring&);
  protected:
@@ -60,8 +60,8 @@ ACTION(rest, action)
   virtual void Load(inputfile&);
   virtual void Handle();
   void SetGoalHP(int What) { GoalHP = What; }
-  virtual void Terminate(truth);
-  virtual truth IsRest() const { return true; }
+  virtual void Terminate(bool);
+  virtual bool IsRest() const { return true; }
   virtual const char* GetDescription() const;
   void SetMinToStop(int What) { MinToStop = What; }
  protected:
@@ -77,18 +77,18 @@ ACTION(dig, action)
   virtual void Load(inputfile&);
   virtual void Handle();
   void SetSquareDug(v2 What) { SquareDug = What; }
-  virtual void Terminate(truth);
+  virtual void Terminate(bool);
   void SetRightBackupID(ulong What) { RightBackupID = What; }
   void SetLeftBackupID(ulong What) { LeftBackupID = What; }
-  virtual truth TryDisplace() { return false; }
+  virtual bool TryDisplace() { return false; }
   virtual const char* GetDescription() const;
-  virtual truth ShowEnvironment() const { return false; }
-  void SetMoveDigger(truth What) { MoveDigger = What; }
+  virtual bool ShowEnvironment() const { return false; }
+  void SetMoveDigger(bool What) { MoveDigger = What; }
  protected:
   ulong RightBackupID;
   ulong LeftBackupID;
   v2 SquareDug;
-  truth MoveDigger;
+  bool MoveDigger;
 };
 
 ACTION(go, action)
@@ -99,14 +99,14 @@ ACTION(go, action)
   virtual void Handle();
   int GetDirection() const { return Direction; }
   void SetDirection(int What) { Direction = What; }
-  truth IsWalkingInOpen() const { return WalkingInOpen; }
-  void SetIsWalkingInOpen(truth What) { WalkingInOpen = What; }
-  virtual truth TryDisplace();
+  bool IsWalkingInOpen() const { return WalkingInOpen; }
+  void SetIsWalkingInOpen(bool What) { WalkingInOpen = What; }
+  virtual bool TryDisplace();
   virtual const char* GetDescription() const;
-  virtual truth ShowEnvironment() const { return false; }
+  virtual bool ShowEnvironment() const { return false; }
  protected:
   int Direction;
-  truth WalkingInOpen;
+  bool WalkingInOpen;
 };
 
 ACTION(study, action)
@@ -115,7 +115,7 @@ ACTION(study, action)
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
   virtual void Handle();
-  virtual void Terminate(truth);
+  virtual void Terminate(bool);
   void SetLiteratureID(ulong What) { LiteratureID = What; }
   virtual const char* GetDescription() const;
   void SetCounter(int What) { Counter = What; }

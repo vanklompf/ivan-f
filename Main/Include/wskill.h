@@ -25,9 +25,9 @@ class weaponskill
   weaponskill() : Level(0), Hits(0), HitCounter(0) { }
   int GetLevel() const { return Level; }
   int GetHits() const { return Hits; }
-  truth Tick();
-  truth AddHit(int);
-  truth SubHit(int);
+  bool Tick();
+  bool AddHit(int);
+  bool SubHit(int);
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
   virtual int GetLevelMap(int) const = 0;
@@ -76,8 +76,8 @@ class sweaponskill : public weaponskill
   void AddLevelDownMessage(const char*) const;
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
-  truth IsSkillOf(const item*) const;
-  truth IsSkillOfCloneMother(const item*, ulong) const;
+  bool IsSkillOf(const item*) const;
+  bool IsSkillOfCloneMother(const item*, ulong) const;
   void SetID(ulong What) { ID = What; }
   ulong GetID() const { return ID; }
   void PreProcessForBone() { ID = -ID; }

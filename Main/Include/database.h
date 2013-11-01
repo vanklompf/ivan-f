@@ -37,7 +37,7 @@ template <class type> class databasecreator
   static void CreateDataBaseMemberMap();
   static int CreateDivineConfigurations(const prototype*, database**, int);
  private:
-  static truth AnalyzeData(inputfile&, const festring&, database&);
+  static bool AnalyzeData(inputfile&, const festring&, database&);
   static void CheckDefaults(const festring&, database&);
   static void CreateLTerrainDataBaseMemberMap();
   static void SetBaseValue(const festring&, databasememberbase<database>*, database&);

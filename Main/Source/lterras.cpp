@@ -12,7 +12,7 @@
 
 /* Compiled through levelset.cpp */
 
-truth door::CanBeOpenedByAI() { return !IsLocked() && CanBeOpened(); }
+bool door::CanBeOpenedByAI() { return !IsLocked() && CanBeOpened(); }
 void door::HasBeenHitByItem(character* Thrower, item*, int Damage) { ReceiveDamage(Thrower, Damage, PHYSICAL_DAMAGE); }
 v2 door::GetBitmapPos(int Frame) const { return Opened ? GetOpenBitmapPos(Frame) : olterrain::GetBitmapPos(Frame); }
 int door::GetTheoreticalWalkability() const { return ANY_MOVE; }
@@ -22,9 +22,9 @@ v2 monsterportal::GetBitmapPos(int Frame) const { return v2(16 + (((Frame & 31) 
 
 void fountain::SetSecondaryMaterial(material* What, int SpecialFlags) { SetMaterial(SecondaryMaterial, What, 0, SpecialFlags); }
 void fountain::ChangeSecondaryMaterial(material* What, int SpecialFlags) { ChangeMaterial(SecondaryMaterial, What, 0, SpecialFlags); }
-void fountain::InitMaterials(material* M1, material* M2, truth CUP) { ObjectInitMaterials(MainMaterial, M1, 0, SecondaryMaterial, M2, 0, CUP); }
+void fountain::InitMaterials(material* M1, material* M2, bool CUP) { ObjectInitMaterials(MainMaterial, M1, 0, SecondaryMaterial, M2, 0, CUP); }
 v2 fountain::GetBitmapPos(int) const { return v2(GetSecondaryMaterial() ? 16 : 32, 288); }
-void fountain::InitMaterials(const materialscript* M, const materialscript* C, truth CUP) { InitMaterials(M->Instantiate(), C->Instantiate(), CUP); }
+void fountain::InitMaterials(const materialscript* M, const materialscript* C, bool CUP) { InitMaterials(M->Instantiate(), C->Instantiate(), CUP); }
 
 void brokendoor::HasBeenHitByItem(character* Thrower, item*, int Damage) { ReceiveDamage(Thrower, Damage, PHYSICAL_DAMAGE); }
 
@@ -36,7 +36,7 @@ const char* liquidterrain::ScoreEntry() const { return "drowned"; }
 
 festring sign::GetText() const { return Text; }
 
-truth door::Open(character* Opener)
+bool door::Open(character* Opener)
 {
   if(!Opened)
   {
@@ -49,7 +49,7 @@ truth door::Open(character* Opener)
     }
     else if(RAND() % 20 < Opener->GetAttribute(ARM_STRENGTH))
     {
-      truth WasSeenByPlayer = CanBeSeenByPlayer(); // MakeWalkable() might destroy the door
+      bool WasSeenByPlayer = CanBeSeenByPlayer(); // MakeWalkable() might destroy the door
       MakeWalkable();
 
       if(Opener->IsPlayer())
@@ -84,7 +84,7 @@ truth door::Open(character* Opener)
   }
 }
 
-truth door::Close(character* Closer)
+bool door::Close(character* Closer)
 {
   if(Closer->IsPlayer())
     if(Opened)
@@ -138,7 +138,7 @@ void door::BeKicked(character* Kicker, int KickDamage, int)
 
     EditHP(GetStrengthValue() - KickDamage);
     int SV = Max(GetStrengthValue(), 1);
-    truth LockBreaks = IsLocked() && RAND() % (100 * KickDamage / SV) >= 100;
+    bool LockBreaks = IsLocked() && RAND() % (100 * KickDamage / SV) >= 100;
 
     if(LockBreaks)
       SetIsLocked(false);
@@ -232,7 +232,7 @@ void altar::StepOn(character* Stepper)
   }
 }
 
-truth throne::SitOn(character* Sitter)
+bool throne::SitOn(character* Sitter)
 {
   Sitter->EditAP(-1000);
 
@@ -292,7 +292,7 @@ void altar::BeKicked(character* Kicker, int, int)
   }
 }
 
-truth altar::ReceiveVomit(character* Who, liquid* Liquid)
+bool altar::ReceiveVomit(character* Who, liquid* Liquid)
 {
   if(Who->IsPlayer())
   {
@@ -305,12 +305,12 @@ truth altar::ReceiveVomit(character* Who, liquid* Liquid)
     return false;
 }
 
-truth altar::VomitingIsDangerous(const character*) const
+bool altar::VomitingIsDangerous(const character*) const
 {
   return !GetMasterGod()->LikesVomit();
 }
 
-truth door::AddAdjective(festring& String, truth Articled) const
+bool door::AddAdjective(festring& String, bool Articled) const
 {
   if(olterrain::AddAdjective(String, Articled))
     Articled = false;
@@ -328,7 +328,7 @@ truth door::AddAdjective(festring& String, truth Articled) const
   return true;
 }
 
-truth fountain::SitOn(character* Sitter)
+bool fountain::SitOn(character* Sitter)
 {
   if(GetSecondaryMaterial())
   {
@@ -340,7 +340,7 @@ truth fountain::SitOn(character* Sitter)
     return olterrain::SitOn(Sitter);
 }
 
-truth fountain::Drink(character* Drinker)
+bool fountain::Drink(character* Drinker)
 {
   if(GetSecondaryMaterial())
   {
@@ -409,7 +409,7 @@ truth fountain::Drink(character* Drinker)
 	{
 	  characterspawner Spawner = 0;
 	  int Config = 0, AddChance = 0;
-	  truth ForceAdjacency = false;
+	  bool ForceAdjacency = false;
 
 	  switch(RAND_N(5))
 	  {
@@ -636,7 +636,7 @@ void brokendoor::BeKicked(character* Kicker, int KickDamage, int)
   }
 }
 
-truth altar::Polymorph(character*)
+bool altar::Polymorph(character*)
 {
   room* Room = GetRoom();
 
@@ -660,7 +660,7 @@ truth altar::Polymorph(character*)
   return true;
 }
 
-truth altar::SitOn(character* Sitter)
+bool altar::SitOn(character* Sitter)
 {
   ADD_MESSAGE("You kneel down and worship %s for a moment.", GetMasterGod()->GetName());
 
@@ -696,7 +696,7 @@ void door::Break()
     ActivateBoobyTrap();
   else
   {
-    truth Open = Opened;
+    bool Open = Opened;
     door* Temp = brokendoor::Spawn(GetConfig(), NO_MATERIALS);
     Temp->InitMaterials(GetMainMaterial()->SpawnMore());
     Temp->SetIsLocked(IsLocked());
@@ -732,7 +732,7 @@ void door::CreateBoobyTrap()
   SetBoobyTrap(1);
 }
 
-truth fountain::DipInto(item* ToBeDipped, character* Who)
+bool fountain::DipInto(item* ToBeDipped, character* Who)
 {
   ToBeDipped->DipInto(static_cast<liquid*>(GetSecondaryMaterial()->SpawnMore(100)), Who);
   return true;
@@ -803,7 +803,7 @@ void door::SetParameters(int Param)
   SetIsLocked(Param & LOCKED);
 }
 
-truth door::TryKey(item* Thingy, character* Applier)
+bool door::TryKey(item* Thingy, character* Applier)
 {
   if(Opened)
     return false;
@@ -850,7 +850,7 @@ void fountain::GenerateMaterials()
 	       0);
 }
 
-truth fountain::AddAdjective(festring& String, truth Articled) const
+bool fountain::AddAdjective(festring& String, bool Articled) const
 {
   if(!GetSecondaryMaterial())
   {
@@ -884,7 +884,7 @@ void stairs::Load(inputfile& SaveFile)
   SaveFile >> AttachedArea >> AttachedEntry;
 }
 
-truth stairs::Enter(truth DirectionUp) const
+bool stairs::Enter(bool DirectionUp) const
 {
   if(!DirectionUp != !IsUpLink())
     return olterrain::Enter(DirectionUp);
@@ -999,12 +999,12 @@ olterraincontainer::olterraincontainer()
   Contained = new stack(0, this, HIDDEN);
 }
 
-truth olterraincontainer::Open(character* Opener)
+bool olterraincontainer::Open(character* Opener)
 {
   if(!Opener->IsPlayer())
     return false;
 
-  truth Success;
+  bool Success;
 
   switch(game::KeyQuestion(CONST_S("Do you want to (t)ake something from or (p)ut something in this container? [t,p]"), KEY_ESC, 3, 't', 'p', KEY_ESC))
   {
@@ -1062,7 +1062,7 @@ void door::ReceiveDamage(character* Villain, int Damage, int)
   {
     EditHP(GetStrengthValue() - Damage);
     int SV = Max(GetStrengthValue(), 1);
-    truth LockBreaks = IsLocked() && RAND() % (100 * Damage / SV) >= 100;
+    bool LockBreaks = IsLocked() && RAND() % (100 * Damage / SV) >= 100;
 
     if(LockBreaks)
       SetIsLocked(false);
@@ -1106,7 +1106,7 @@ void brokendoor::ReceiveDamage(character* Villain, int Damage, int)
   {
     EditHP(GetStrengthValue() - Damage);
     int SV = Max(GetStrengthValue(), 1);
-    truth LockBreaks = IsLocked() && RAND() % (100 * Damage / SV) >= 100;
+    bool LockBreaks = IsLocked() && RAND() % (100 * Damage / SV) >= 100;
 
     if(LockBreaks)
       SetIsLocked(false);
@@ -1143,7 +1143,7 @@ void olterraincontainer::Break()
   olterrain::Break();
 }
 
-truth fountain::IsDipDestination() const
+bool fountain::IsDipDestination() const
 {
   return SecondaryMaterial && SecondaryMaterial->IsLiquid();
 }
@@ -1153,12 +1153,12 @@ int door::GetWalkability() const
   return Opened ? ANY_MOVE : ANY_MOVE&~(WALK|FLY);
 }
 
-truth door::IsTransparent() const
+bool door::IsTransparent() const
 {
   return Opened || MainMaterial->IsTransparent();
 }
 
-truth liquidterrain::DipInto(item* ToBeDipped, character* Who)
+bool liquidterrain::DipInto(item* ToBeDipped, character* Who)
 {
   ToBeDipped->DipInto(static_cast<liquid*>(GetMainMaterial()->SpawnMore(100)), Who);
   return true;
@@ -1191,7 +1191,7 @@ void door::BeDestroyed()
   olterrain::Break();
 }
 
-truth fountain::IsFountainWithWater() const
+bool fountain::IsFountainWithWater() const
 {
   if(GetSecondaryMaterial() == 0)
     return 0;

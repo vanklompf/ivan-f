@@ -43,25 +43,25 @@ class action
   action()  : Actor(0), Flags(0) { }
   virtual ~action() { }
   virtual void Handle() = 0;
-  virtual void Terminate(truth);
+  virtual void Terminate(bool);
   character* GetActor() const { return Actor; }
   void SetActor(character* What) { Actor = What; }
-  virtual truth IsVoluntary() const { return true; }
-  virtual truth AllowUnconsciousness() const { return true; }
-  virtual truth AllowFoodConsumption() const { return true; }
-  virtual truth TryDisplace() { return true; }
+  virtual bool IsVoluntary() const { return true; }
+  virtual bool AllowUnconsciousness() const { return true; }
+  virtual bool AllowFoodConsumption() const { return true; }
+  virtual bool TryDisplace() { return true; }
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
-  virtual truth IsRest() const { return false; }
+  virtual bool IsRest() const { return false; }
   virtual const prototype* GetProtoType() const = 0;
   int GetType() const { return GetProtoType()->GetIndex(); }
   virtual const char* GetDescription() const = 0;
-  truth InDNDMode() const { return Flags & IN_DND_MODE; }
+  bool InDNDMode() const { return Flags & IN_DND_MODE; }
   void ActivateInDNDMode() { Flags |= IN_DND_MODE; }
-  virtual truth ShowEnvironment() const { return true; }
+  virtual bool ShowEnvironment() const { return true; }
   virtual const char* GetDeathExplanation() const { return ""; }
-  virtual truth CanBeTalkedTo() const { return true; }
-  virtual truth IsUnconsciousness() const { return false; }
+  virtual bool CanBeTalkedTo() const { return true; }
+  virtual bool IsUnconsciousness() const { return false; }
  protected:
   character* Actor;
   ulong Flags;

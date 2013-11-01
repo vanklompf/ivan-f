@@ -14,8 +14,8 @@
 
 const int humanoid::DrawOrder[] = { TORSO_INDEX, GROIN_INDEX, RIGHT_LEG_INDEX, LEFT_LEG_INDEX, RIGHT_ARM_INDEX, LEFT_ARM_INDEX, HEAD_INDEX };
 
-truth humanoid::BodyPartIsVital(int I) const { return I == TORSO_INDEX || I == HEAD_INDEX || I == GROIN_INDEX; }
-truth humanoid::BodyPartCanBeSevered(int I) const { return I != TORSO_INDEX && I != GROIN_INDEX; }
+bool humanoid::BodyPartIsVital(int I) const { return I == TORSO_INDEX || I == HEAD_INDEX || I == GROIN_INDEX; }
+bool humanoid::BodyPartCanBeSevered(int I) const { return I != TORSO_INDEX && I != GROIN_INDEX; }
 int humanoid::OpenMultiplier() const { return HasAUsableArm() ? 1 : 3; }
 int humanoid::CloseMultiplier() const { return HasAUsableArm() ? 1 : 2; }
 int humanoid::GetCarryingStrength() const { return Max(GetAttribute(LEG_STRENGTH), 1) + CarryingBonus; }
@@ -33,29 +33,29 @@ const char* oree::ThirdPersonBiteVerb() const { return "vomits acidous blood at"
 const char* oree::ThirdPersonCriticalBiteVerb() const { return "vomits very acidous blood at"; }
 const char* oree::BiteNoun() const { return "liquid"; }
 
-truth skeleton::BodyPartIsVital(int I) const { return I == GROIN_INDEX || I == TORSO_INDEX; }
+bool skeleton::BodyPartIsVital(int I) const { return I == GROIN_INDEX || I == TORSO_INDEX; }
 
-truth communist::ShowClassDescription() const { return GetAssignedName() != "Ivan"; }
+bool communist::ShowClassDescription() const { return GetAssignedName() != "Ivan"; }
 
 v2 housewife::GetHeadBitmapPos() const { return v2(112, (RAND() % 6) << 4); }
 
-truth zombie::BodyPartIsVital(int I) const { return I == GROIN_INDEX || I == TORSO_INDEX; }
+bool zombie::BodyPartIsVital(int I) const { return I == GROIN_INDEX || I == TORSO_INDEX; }
 festring zombie::GetZombieDescription() const { return Description; }
 
-truth angel::BodyPartIsVital(int I) const { return I == TORSO_INDEX || I == HEAD_INDEX; }
+bool angel::BodyPartIsVital(int I) const { return I == TORSO_INDEX || I == HEAD_INDEX; }
 
-truth genie::BodyPartIsVital(int I) const { return I == TORSO_INDEX || I == HEAD_INDEX; }
+bool genie::BodyPartIsVital(int I) const { return I == TORSO_INDEX || I == HEAD_INDEX; }
 
 material* golem::CreateBodyPartMaterial(int, long Volume) const { return MAKE_MATERIAL(GetConfig(), Volume); }
 
-truth sumowrestler::EquipmentIsAllowed(int I) const { return I == BELT_INDEX; }
+bool sumowrestler::EquipmentIsAllowed(int I) const { return I == BELT_INDEX; }
 
 petrus::~petrus()
 {
   game::SetPetrus(0);
 }
 
-truth ennerbeast::Hit(character* Enemy, v2, int, truth)
+bool ennerbeast::Hit(character* Enemy, v2, int, bool)
 {
   if(CheckIfTooScaredToHit(Enemy))
     return false;
@@ -154,7 +154,7 @@ void humanoid::Load(inputfile& SaveFile)
       }
 }
 
-truth golem::MoveRandomly()
+bool golem::MoveRandomly()
 {
   if(!(RAND() % 500))
   {
@@ -243,9 +243,9 @@ void petrus::GetAICommand()
   StandIdleAI();
 }
 
-truth petrus::HealFully(character* ToBeHealed)
+bool petrus::HealFully(character* ToBeHealed)
 {
-  truth DidSomething = false;
+  bool DidSomething = false;
 
   for(int c = 0; c < ToBeHealed->GetBodyParts(); ++c)
     if(!ToBeHealed->GetBodyPart(c))
@@ -344,7 +344,7 @@ item* humanoid::GetSecondaryWielded() const
     return 0;
 }
 
-truth humanoid::Hit(character* Enemy, v2 HitPos, int Direction, truth ForceHit)
+bool humanoid::Hit(character* Enemy, v2 HitPos, int Direction, bool ForceHit)
 {
   if(CheckIfTooScaredToHit(Enemy))
     return false;
@@ -455,9 +455,9 @@ truth humanoid::Hit(character* Enemy, v2 HitPos, int Direction, truth ForceHit)
   }
 }
 
-truth humanoid::AddSpecialSkillInfo(felist& List) const
+bool humanoid::AddSpecialSkillInfo(felist& List) const
 {
-  truth Something = false;
+  bool Something = false;
 
   if(CurrentRightSWeaponSkill && CurrentRightSWeaponSkill->GetHits() / 100)
   {
@@ -714,7 +714,7 @@ void priest::BeTalkedTo()
   for(int c = 0; c < PLAYER->GetBodyParts(); ++c)
     if(!PLAYER->GetBodyPart(c) && PLAYER->CanCreateBodyPart(c))
     {
-      truth HasOld = false;
+      bool HasOld = false;
 
       for(std::list<ulong>::const_iterator i = PLAYER->GetOriginalBodyPartID(c).begin(); i != PLAYER->GetOriginalBodyPartID(c).end(); ++i)
       {
@@ -962,7 +962,7 @@ void librarian::BeTalkedTo()
   }
 }
 
-truth communist::MoveRandomly()
+bool communist::MoveRandomly()
 {
   switch(RAND() % 1000)
   {
@@ -1094,7 +1094,7 @@ void kamikazedwarf::CreateInitialEquipment(int SpecialFlags)
   GetCurrentRightSWeaponSkill()->AddHit(GetWSkillHits());
 }
 
-truth kamikazedwarf::Hit(character* Enemy, v2 HitPos, int Direction, truth ForceHit)
+bool kamikazedwarf::Hit(character* Enemy, v2 HitPos, int Direction, bool ForceHit)
 {
   if(!IsPlayer())
   {
@@ -1201,7 +1201,7 @@ bodypart* humanoid::MakeBodyPart(int I) const
   return 0;
 }
 
-truth humanoid::ReceiveDamage(character* Damager, int Damage, int Type, int TargetFlags, int Direction, truth Divide, truth PenetrateArmor, truth Critical, truth ShowMsg)
+bool humanoid::ReceiveDamage(character* Damager, int Damage, int Type, int TargetFlags, int Direction, bool Divide, bool PenetrateArmor, bool Critical, bool ShowMsg)
 {
   int ChooseFrom[MAX_BODYPARTS], BodyParts = 0;
 
@@ -1229,7 +1229,7 @@ truth humanoid::ReceiveDamage(character* Damager, int Damage, int Type, int Targ
   if(!BodyParts)
     return false;
 
-  truth Affected = false;
+  bool Affected = false;
 
   if(Divide)
   {
@@ -1446,7 +1446,7 @@ void humanoid::SwitchToDig(item* DigItem, v2 Square)
   SetAction(Dig);
 }
 
-truth humanoid::CheckKick() const
+bool humanoid::CheckKick() const
 {
   if(!CanKick())
   {
@@ -1493,7 +1493,7 @@ int humanoid::GetUsableArms() const
   return Arms;
 }
 
-truth humanoid::CheckThrow() const
+bool humanoid::CheckThrow() const
 {
   if(!character::CheckThrow())
     return false;
@@ -1507,7 +1507,7 @@ truth humanoid::CheckThrow() const
   }
 }
 
-truth humanoid::CheckOffer() const
+bool humanoid::CheckOffer() const
 {
   if(HasAUsableArm())
     return true;
@@ -1540,7 +1540,7 @@ v2 humanoid::GetEquipmentPanelPos(int I) const // convert to array
   return v2(24, 12);
 }
 
-void humanoid::DrawSilhouette(truth AnimationDraw) const
+void humanoid::DrawSilhouette(bool AnimationDraw) const
 {
   int c;
   blitdata B1 = { DOUBLE_BUFFER,
@@ -1624,7 +1624,7 @@ int humanoid::GetGlobalResistance(int Type) const
   return Resistance;
 }
 
-truth humanoid::TryToRiseFromTheDead()
+bool humanoid::TryToRiseFromTheDead()
 {
   int c;
 
@@ -1662,7 +1662,7 @@ truth humanoid::TryToRiseFromTheDead()
   return true;
 }
 
-truth humanoid::HandleNoBodyPart(int I)
+bool humanoid::HandleNoBodyPart(int I)
 {
   switch(I)
   {
@@ -1683,7 +1683,7 @@ truth humanoid::HandleNoBodyPart(int I)
   }
 }
 
-v2 humanoid::GetBodyPartBitmapPos(int I, truth) const
+v2 humanoid::GetBodyPartBitmapPos(int I, bool) const
 {
   switch(I)
   {
@@ -1700,7 +1700,7 @@ v2 humanoid::GetBodyPartBitmapPos(int I, truth) const
   return v2();
 }
 
-col16 humanoid::GetBodyPartColorB(int I, truth) const
+col16 humanoid::GetBodyPartColorB(int I, bool) const
 {
   switch(I)
   {
@@ -1717,7 +1717,7 @@ col16 humanoid::GetBodyPartColorB(int I, truth) const
   return 0;
 }
 
-col16 humanoid::GetBodyPartColorC(int I, truth) const
+col16 humanoid::GetBodyPartColorC(int I, bool) const
 {
   switch(I)
   {
@@ -1734,7 +1734,7 @@ col16 humanoid::GetBodyPartColorC(int I, truth) const
   return 0;
 }
 
-col16 humanoid::GetBodyPartColorD(int I, truth) const
+col16 humanoid::GetBodyPartColorD(int I, bool) const
 {
   switch(I)
   {
@@ -1753,7 +1753,7 @@ col16 humanoid::GetBodyPartColorD(int I, truth) const
 
 int humanoid::GetBodyPartSparkleFlags(int I) const
 {
-  truth Sparkling = false;
+  bool Sparkling = false;
   int SparkleFlags = GetNaturalSparkleFlags() & SKIN_COLOR ? SPARKLING_A : 0;
 
   switch(I)
@@ -1814,7 +1814,7 @@ shopkeeper::shopkeeper()
     Money = GetMoney() + RAND() % 2001;
 }
 
-void humanoid::Bite(character* Enemy, v2 HitPos, int Direction, truth ForceHit)
+void humanoid::Bite(character* Enemy, v2 HitPos, int Direction, bool ForceHit)
 {
   /* This function ought not to be called without a head */
 
@@ -1825,7 +1825,7 @@ void humanoid::Bite(character* Enemy, v2 HitPos, int Direction, truth ForceHit)
   Enemy->TakeHit(this, 0, GetHead(), HitPos, GetHead()->GetBiteDamage(), GetHead()->GetBiteToHitValue(), RAND() % 26 - RAND() % 26, BITE_ATTACK, Direction, !(RAND() % GetCriticalModifier()), ForceHit);
 }
 
-void humanoid::Kick(lsquare* Square, int Direction, truth ForceHit)
+void humanoid::Kick(lsquare* Square, int Direction, bool ForceHit)
 {
   leg* KickLeg = RAND_2 ? GetRightLeg() : GetLeftLeg();
   EditNP(-50);
@@ -1841,7 +1841,7 @@ void humanoid::Kick(lsquare* Square, int Direction, truth ForceHit)
 
 /* Returns the average number of APs required to kill Enemy */
 
-double humanoid::GetTimeToKill(const character* Enemy, truth UseMaxHP) const
+double humanoid::GetTimeToKill(const character* Enemy, bool UseMaxHP) const
 {
   double Effectivity = 0;
   int AttackStyles = 0;
@@ -1897,7 +1897,7 @@ double humanoid::GetTimeToKill(const character* Enemy, truth UseMaxHP) const
   return AttackStyles ? AttackStyles / Effectivity : 10000000;
 }
 
-int humanoid::GetAttribute(int Identifier, truth AllowBonus) const
+int humanoid::GetAttribute(int Identifier, bool AllowBonus) const
 {
   if(Identifier < BASE_ATTRIBUTES)
     return character::GetAttribute(Identifier, AllowBonus);
@@ -1939,13 +1939,13 @@ int humanoid::GetAttribute(int Identifier, truth AllowBonus) const
   }
 }
 
-truth humanoid::EditAttribute(int Identifier, int Value)
+bool humanoid::EditAttribute(int Identifier, int Value)
 {
   if(Identifier < BASE_ATTRIBUTES)
     return character::EditAttribute(Identifier, Value);
   else if(Identifier == ARM_STRENGTH || Identifier == DEXTERITY)
   {
-    truth Success = false;
+    bool Success = false;
 
     if(GetRightArm() && GetRightArm()->EditAttribute(Identifier, Value))
       Success = true;
@@ -1957,7 +1957,7 @@ truth humanoid::EditAttribute(int Identifier, int Value)
   }
   else if(Identifier == LEG_STRENGTH || Identifier == AGILITY)
   {
-    truth Success = false;
+    bool Success = false;
 
     if(GetRightLeg() && GetRightLeg()->EditAttribute(Identifier, Value))
       Success = true;
@@ -2001,7 +2001,7 @@ void humanoid::EditExperience(int Identifier, double Value, double Speed)
     ABORT("Illegal humanoid attribute %d experience edit request!", Identifier);
 }
 
-int humanoid::DrawStats(truth AnimationDraw) const
+int humanoid::DrawStats(bool AnimationDraw) const
 {
   DrawSilhouette(AnimationDraw);
 
@@ -2062,14 +2062,14 @@ int humanoid::CheckForBlock(character* Enemy, item* Weapon, double ToHitValue, i
   return Damage;
 }
 
-truth humanoid::CanWield() const
+bool humanoid::CanWield() const
 {
   return CanUseEquipment(RIGHT_WIELDED_INDEX) || CanUseEquipment(LEFT_WIELDED_INDEX);
 }
 
 /* return true if still in balance */
 
-truth humanoid::CheckBalance(double KickDamage)
+bool humanoid::CheckBalance(double KickDamage)
 {
   return !CanMove()
     || IsStuck()
@@ -2107,7 +2107,7 @@ void hunter::CreateBodyParts(int SpecialFlags)
       SetBodyPart(LEFT_ARM_INDEX, 0);
 }
 
-truth humanoid::EquipmentEasilyRecognized(int I) const
+bool humanoid::EquipmentEasilyRecognized(int I) const
 {
   if(GetRelation(PLAYER) != HOSTILE)
     return true;
@@ -2182,7 +2182,7 @@ void angel::GetAICommand()
 
 /* Returns true if the angel finds somebody near to heal else false */
 
-truth angel::AttachBodyPartsOfFriendsNear()
+bool angel::AttachBodyPartsOfFriendsNear()
 {
   character* HurtOne = 0;
   bodypart* SeveredOne = 0;
@@ -2305,7 +2305,7 @@ col16 housewife::GetHairColor() const
   return HouseWifeHairColor[RAND() % 3];
 }
 
-int angel::GetAttribute(int Identifier, truth AllowBonus) const // temporary until wings are bodyparts
+int angel::GetAttribute(int Identifier, bool AllowBonus) const // temporary until wings are bodyparts
 {
   if(Identifier == LEG_STRENGTH)
     return GetDefaultLegStrength();
@@ -2315,7 +2315,7 @@ int angel::GetAttribute(int Identifier, truth AllowBonus) const // temporary unt
     return humanoid::GetAttribute(Identifier, AllowBonus);
 }
 
-int genie::GetAttribute(int Identifier, truth AllowBonus) const // temporary until someone invents a better way of doing this
+int genie::GetAttribute(int Identifier, bool AllowBonus) const // temporary until someone invents a better way of doing this
 {
   if(Identifier == LEG_STRENGTH)
     return GetDefaultLegStrength();
@@ -2325,7 +2325,7 @@ int genie::GetAttribute(int Identifier, truth AllowBonus) const // temporary unt
     return humanoid::GetAttribute(Identifier, AllowBonus);
 }
 
-truth humanoid::CanUseStethoscope(truth PrintReason) const
+bool humanoid::CanUseStethoscope(bool PrintReason) const
 {
   if(!GetUsableArms())
   {
@@ -2346,19 +2346,19 @@ truth humanoid::CanUseStethoscope(truth PrintReason) const
   return true;
 }
 
-truth humanoid::IsUsingArms() const
+bool humanoid::IsUsingArms() const
 {
   return GetAttackStyle() & USE_ARMS && CanAttackWithAnArm();
 }
 
-truth humanoid::IsUsingLegs() const
+bool humanoid::IsUsingLegs() const
 {
   return (GetAttackStyle() & USE_LEGS
 	  || (GetAttackStyle() & USE_ARMS && !CanAttackWithAnArm()))
     && HasTwoUsableLegs();
 }
 
-truth humanoid::IsUsingHead() const
+bool humanoid::IsUsingHead() const
 {
   return (GetAttackStyle() & USE_HEAD
 	  || ((GetAttackStyle() & USE_LEGS
@@ -2373,7 +2373,7 @@ void humanoid::CalculateBattleInfo()
   doforbodyparts()(this, &bodypart::CalculateAttackInfo);
 }
 
-item* skeleton::SevereBodyPart(int BodyPartIndex, truth ForceDisappearance, stack* EquipmentDropStack)
+item* skeleton::SevereBodyPart(int BodyPartIndex, bool ForceDisappearance, stack* EquipmentDropStack)
 {
   if(BodyPartIndex == RIGHT_ARM_INDEX)
     EnsureCurrentSWeaponSkillIsCorrect(CurrentRightSWeaponSkill, 0);
@@ -2455,7 +2455,7 @@ void humanoid::CreateInitialEquipment(int SpecialFlags)
     CurrentLeftSWeaponSkill->AddHit(GetLeftSWeaponSkillHits() * 100);
 }
 
-festring humanoid::GetBodyPartName(int I, truth Articled) const
+festring humanoid::GetBodyPartName(int I, bool Articled) const
 {
   festring Article;
 
@@ -2514,7 +2514,7 @@ void humanoid::CreateBlockPossibilityVector(blockvector& Vector, double ToHitVal
     Vector.push_back(std::pair<double, int>(LeftBlockChance * (1 - RightBlockChance), LeftBlockCapability));
 }
 
-item* humanoid::SevereBodyPart(int BodyPartIndex, truth ForceDisappearance, stack* EquipmentDropStack)
+item* humanoid::SevereBodyPart(int BodyPartIndex, bool ForceDisappearance, stack* EquipmentDropStack)
 {
   if(BodyPartIndex == RIGHT_ARM_INDEX)
     EnsureCurrentSWeaponSkillIsCorrect(CurrentRightSWeaponSkill, 0);
@@ -2556,7 +2556,7 @@ int humanoid::GetSWeaponSkillLevel(const item* Item) const
   return 0;
 }
 
-truth humanoid::UseMaterialAttributes() const
+bool humanoid::UseMaterialAttributes() const
 {
   return combinebodypartpredicates()(this, &bodypart::UseMaterialAttributes, 0);
 }
@@ -2717,7 +2717,7 @@ void humanoid::CalculateDodgeValue()
     DodgeValue = 1;
 }
 
-truth humanoid::CheckZap()
+bool humanoid::CheckZap()
 {
   if(!GetUsableArms())
   {
@@ -2837,7 +2837,7 @@ void bananagrower::GetAICommand()
   EditAP(-1000);
 }
 
-truth humanoid::CheckTalk()
+bool humanoid::CheckTalk()
 {
   if(!character::CheckTalk())
     return false;
@@ -2851,17 +2851,17 @@ truth humanoid::CheckTalk()
   return true;
 }
 
-truth angel::CanCreateBodyPart(int I) const
+bool angel::CanCreateBodyPart(int I) const
 {
   return I == TORSO_INDEX || I == HEAD_INDEX || I == RIGHT_ARM_INDEX || I == LEFT_ARM_INDEX;
 }
 
-truth genie::CanCreateBodyPart(int I) const
+bool genie::CanCreateBodyPart(int I) const
 {
   return I == TORSO_INDEX || I == HEAD_INDEX || I == RIGHT_ARM_INDEX || I == LEFT_ARM_INDEX;
 }
 
-truth bananagrower::HandleCharacterBlockingTheWay(character* Char, v2 Pos, int Dir)
+bool bananagrower::HandleCharacterBlockingTheWay(character* Char, v2 Pos, int Dir)
 {
   return Char->GetPos() == v2(45, 45) && (Displace(Char, true) || Hit(Char, Pos, Dir));
 }
@@ -2951,7 +2951,7 @@ long skeleton::GetBodyPartVolume(int I) const
   return 0;
 }
 
-truth humanoid::CheckIfEquipmentIsNotUsable(int I) const
+bool humanoid::CheckIfEquipmentIsNotUsable(int I) const
 {
   return (I == RIGHT_WIELDED_INDEX && GetRightArm()->CheckIfWeaponTooHeavy("this item"))
 	     || (I == LEFT_WIELDED_INDEX && GetLeftArm()->CheckIfWeaponTooHeavy("this item"))
@@ -2959,7 +2959,7 @@ truth humanoid::CheckIfEquipmentIsNotUsable(int I) const
 	     || (I == LEFT_WIELDED_INDEX && GetRightWielded() && GetRightWielded()->IsTwoHanded() && GetRightArm()->CheckIfWeaponTooHeavy(festring(GetPossessivePronoun() + " other wielded item").CStr()));
 }
 
-int mistress::TakeHit(character* Enemy, item* Weapon, bodypart* EnemyBodyPart, v2 HitPos, double Damage, double ToHitValue, int Success, int Type, int Direction, truth Critical, truth ForceHit)
+int mistress::TakeHit(character* Enemy, item* Weapon, bodypart* EnemyBodyPart, v2 HitPos, double Damage, double ToHitValue, int Success, int Type, int Direction, bool Critical, bool ForceHit)
 {
   int Return = humanoid::TakeHit(Enemy, Weapon, EnemyBodyPart, HitPos, Damage, ToHitValue, Success, Type, Direction, Critical, ForceHit);
 
@@ -2976,7 +2976,7 @@ int mistress::TakeHit(character* Enemy, item* Weapon, bodypart* EnemyBodyPart, v
   return Return;
 }
 
-truth petrusswife::SpecialEnemySightedReaction(character* Char)
+bool petrusswife::SpecialEnemySightedReaction(character* Char)
 {
   item* Weapon = Char->GetMainWielded();
 
@@ -2986,7 +2986,7 @@ truth petrusswife::SpecialEnemySightedReaction(character* Char)
   return false;
 }
 
-truth housewife::SpecialEnemySightedReaction(character* Char)
+bool housewife::SpecialEnemySightedReaction(character* Char)
 {
   item* Weapon = Char->GetMainWielded();
 
@@ -3035,9 +3035,9 @@ void guard::GetAICommand()
   StandIdleAI();
 }
 
-truth mistress::ReceiveDamage(character* Damager, int Damage, int Type, int TargetFlags, int Direction, truth Divide, truth PenetrateArmor, truth Critical, truth ShowMsg)
+bool mistress::ReceiveDamage(character* Damager, int Damage, int Type, int TargetFlags, int Direction, bool Divide, bool PenetrateArmor, bool Critical, bool ShowMsg)
 {
-  truth Success = humanoid::ReceiveDamage(Damager, Damage, Type, TargetFlags, Direction, Divide, PenetrateArmor, Critical, ShowMsg);
+  bool Success = humanoid::ReceiveDamage(Damager, Damage, Type, TargetFlags, Direction, Divide, PenetrateArmor, Critical, ShowMsg);
 
   if(Type & SOUND && Success && !(RAND() & 7))
   {
@@ -3354,7 +3354,7 @@ head* humanoid::Behead()
   return Head;
 }
 
-truth communist::BoundToUse(const item* Item, int I) const
+bool communist::BoundToUse(const item* Item, int I) const
 {
   return Item && Item->IsGorovitsFamilyRelic() && Item->IsInCorrectSlot(I);
 }
@@ -3509,17 +3509,17 @@ void humanoid::DetachBodyPart() { }
 
 #endif
 
-truth ennerbeast::MustBeRemovedFromBone() const
+bool ennerbeast::MustBeRemovedFromBone() const
 {
   return !IsEnabled() || GetTeam()->GetID() != MONSTER_TEAM || GetDungeon()->GetIndex() != ELPURI_CAVE || GetLevel()->GetIndex() != ENNER_BEAST_LEVEL;
 }
 
-truth communist::MustBeRemovedFromBone() const
+bool communist::MustBeRemovedFromBone() const
 {
   return !IsEnabled() || GetTeam()->GetID() != IVAN_TEAM || GetDungeon()->GetIndex() != ELPURI_CAVE|| GetLevel()->GetIndex() != IVAN_LEVEL;
 }
 
-truth humanoid::PreProcessForBone()
+bool humanoid::PreProcessForBone()
 {
   for(std::list<sweaponskill*>::iterator i = SWeaponSkill.begin(); i != SWeaponSkill.end(); ++i)
     (*i)->PreProcessForBone();
@@ -3586,7 +3586,7 @@ void playerkind::SetSoulID(ulong What)
     GetPolymorphBackup()->SetSoulID(What);
 }
 
-truth playerkind::SuckSoul(character* Soul)
+bool playerkind::SuckSoul(character* Soul)
 {
   if(Soul->GetID() == SoulID)
   {
@@ -3597,7 +3597,7 @@ truth playerkind::SuckSoul(character* Soul)
   return false;
 }
 
-truth playerkind::TryToRiseFromTheDead()
+bool playerkind::TryToRiseFromTheDead()
 {
   if(humanoid::TryToRiseFromTheDead())
   {
@@ -3768,7 +3768,7 @@ humanoid::~humanoid()
     delete *i;
 }
 
-truth petrus::MoveTowardsHomePos()
+bool petrus::MoveTowardsHomePos()
 {
   if(GetPos() != v2(28, 20))
   {
@@ -3788,7 +3788,7 @@ truth petrus::MoveTowardsHomePos()
     return false;
 }
 
-truth guard::MoveTowardsHomePos()
+bool guard::MoveTowardsHomePos()
 {
   if(GetConfig() == MASTER && GetPos() != v2(30, 16))
   {
@@ -3821,7 +3821,7 @@ int humanoid::GetSumOfAttributes() const
   return character::GetSumOfAttributes() + GetAttribute(LEG_STRENGTH) + GetAttribute(DEXTERITY) ;
 }
 
-truth humanoid::CheckConsume(const festring& Verb) const
+bool humanoid::CheckConsume(const festring& Verb) const
 {
   if(!HasHead())
   {
@@ -3834,7 +3834,7 @@ truth humanoid::CheckConsume(const festring& Verb) const
   return character::CheckConsume(Verb);
 }
 
-truth humanoid::CanConsume(material* Material) const
+bool humanoid::CanConsume(material* Material) const
 {
   return character::CanConsume(Material) && HasHead();
 }
@@ -3915,7 +3915,7 @@ void necromancer::GetAICommand()
     if(CanBeSeenByPlayer())
       ADD_MESSAGE("%s invokes a spell!", CHAR_NAME(DEFINITE));
 
-    truth Interrupt = false;
+    bool Interrupt = false;
 
     switch(GetConfig())
     {
@@ -3970,7 +3970,7 @@ void necromancer::GetAICommand()
   EditAP(-1000);
 }
 
-truth necromancer::TryToRaiseZombie()
+bool necromancer::TryToRaiseZombie()
 {
   for(int c = 0; c < game::GetTeams(); ++c)
     for(std::list<character*>::const_iterator i = game::GetTeam(c)->GetMember().begin();
@@ -4040,7 +4040,7 @@ void humanoid::StayOn(liquid* Liquid)
   if(IsFlying())
     return;
 
-  truth Standing = false;
+  bool Standing = false;
 
   if(GetRightLeg())
   {
@@ -4084,7 +4084,7 @@ bodypart* playerkind::MakeBodyPart(int I) const
   return 0;
 }
 
-truth golem::AddAdjective(festring& String, truth Articled) const
+bool golem::AddAdjective(festring& String, bool Articled) const
 {
   int TotalRustLevel = sumbodypartproperties()(this, &bodypart::GetMainMaterialRustLevel);
 
@@ -4107,7 +4107,7 @@ truth golem::AddAdjective(festring& String, truth Articled) const
   }
 }
 
-void oree::Bite(character* Enemy, v2 HitPos, int, truth)
+void oree::Bite(character* Enemy, v2 HitPos, int, bool)
 {
   if(IsPlayer())
     ADD_MESSAGE("You vomit acidous blood at %s.", Enemy->CHAR_DESCRIPTION(DEFINITE));
@@ -4423,7 +4423,7 @@ void humanoid::DuplicateEquipment(character* Receiver, ulong Flags)
   EnsureCurrentSWeaponSkillIsCorrect(CurrentLeftSWeaponSkill, GetLeftWielded());
 }
 
-truth character::CanHear() const
+bool character::CanHear() const
 {
   return DataBase->CanHear && HasHead();
 }
@@ -4511,7 +4511,7 @@ void orc::PostConstruct()
     GainIntrinsic(LEPROSY);
 }
 
-truth mistress::AllowEquipment(const item* Item, int EquipmentIndex) const
+bool mistress::AllowEquipment(const item* Item, int EquipmentIndex) const
 {
   return ((EquipmentIndex != RIGHT_WIELDED_INDEX
 	   && EquipmentIndex != LEFT_WIELDED_INDEX)
@@ -4551,12 +4551,12 @@ void golem::Load(inputfile& SaveFile)
   SaveFile >> ItemVolume;
 }
 
-truth humanoid::CanVomit() const
+bool humanoid::CanVomit() const
 {
   return HasHead() && character::CanVomit();
 }
 
-truth humanoid::CheckApply() const
+bool humanoid::CheckApply() const
 {
   if(!character::CheckApply())
     return false;
@@ -4653,7 +4653,7 @@ void veterankamikazedwarf::PostConstruct()
     GainIntrinsic(INVISIBLE);
 }
 
-truth humanoid::IsTransparent() const
+bool humanoid::IsTransparent() const
 {
   return character::IsTransparent() || !(GetRightLeg() || GetLeftLeg());
 }
@@ -4763,25 +4763,25 @@ int humanoid::RandomizeTryToUnStickBodyPart(ulong PossibleBodyParts) const
   return Possible ? PossibleArray[RAND_N(Possible)] : NONE_INDEX;
 }
 
-truth humanoid::HasAUsableArm() const
+bool humanoid::HasAUsableArm() const
 {
   arm* R = GetRightArm(), * L = GetLeftArm();
   return (R && R->IsUsable()) || (L && L->IsUsable());
 }
 
-truth humanoid::HasAUsableLeg() const
+bool humanoid::HasAUsableLeg() const
 {
   leg* R = GetRightLeg(), * L = GetLeftLeg();
   return (R && R->IsUsable()) || (L && L->IsUsable());
 }
 
-truth humanoid::HasTwoUsableLegs() const
+bool humanoid::HasTwoUsableLegs() const
 {
   leg* R = GetRightLeg(), * L = GetLeftLeg();
   return R && R->IsUsable() && L && L->IsUsable();
 }
 
-truth humanoid::CanAttackWithAnArm() const
+bool humanoid::CanAttackWithAnArm() const
 {
   arm* R = GetRightArm();
 
@@ -4792,42 +4792,42 @@ truth humanoid::CanAttackWithAnArm() const
   return L && L->GetDamage();
 }
 
-truth humanoid::RightArmIsUsable() const
+bool humanoid::RightArmIsUsable() const
 {
   arm* A = GetRightArm();
   return A && A->IsUsable();
 }
 
-truth humanoid::LeftArmIsUsable() const
+bool humanoid::LeftArmIsUsable() const
 {
   arm* A = GetLeftArm();
   return A && A->IsUsable();
 }
 
-truth humanoid::RightLegIsUsable() const
+bool humanoid::RightLegIsUsable() const
 {
   leg* L = GetRightLeg();
   return L && L->IsUsable();
 }
 
-truth humanoid::LeftLegIsUsable() const
+bool humanoid::LeftLegIsUsable() const
 {
   leg* L = GetLeftLeg();
   return L && L->IsUsable();
 }
 
-truth humanoid::AllowUnconsciousness() const
+bool humanoid::AllowUnconsciousness() const
 {
   return (DataBase->AllowUnconsciousness && TorsoIsAlive()
 	  && BodyPartIsVital(HEAD_INDEX));
 }
 
-truth humanoid::CanChokeOnWeb(web* Web) const
+bool humanoid::CanChokeOnWeb(web* Web) const
 {
   return CanChoke() && Web->IsStuckToBodyPart(HEAD_INDEX);
 }
 
-truth humanoid::BrainsHurt() const
+bool humanoid::BrainsHurt() const
 {
   head* Head = GetHead();
   return !Head || Head->IsBadlyHurt();
@@ -4948,7 +4948,7 @@ const char* humanoid::GetNormalDeathMessage() const
     return "killed @k";
 }
 
-truth humanoid::HasHead() const
+bool humanoid::HasHead() const
 {
   if(GetHead() == 0)
     return 0;

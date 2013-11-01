@@ -34,7 +34,7 @@ web::~web()
   game::RemoveTrapID(TrapData.TrapID);
 }
 
-truth web::TryToUnStick(character* Victim, v2)
+bool web::TryToUnStick(character* Victim, v2)
 {
   ulong TrapID = GetTrapID();
   int Modifier = 7 * GetTrapBaseModifier()
@@ -171,7 +171,7 @@ void web::Draw(blitdata& BlitData) const
   Picture->LuminanceMaskedBlit(BlitData);
 }
 
-truth web::IsStuckToBodyPart(int I) const
+bool web::IsStuckToBodyPart(int I) const
 {
   return 1 << I & TrapData.BodyParts;
 }
@@ -194,7 +194,7 @@ void web::Destroy()
   SendToHell();
 }
 
-truth web::CanBeSeenBy(const character* Who) const
+bool web::CanBeSeenBy(const character* Who) const
 {
   return (GetLSquareUnder()->CanBeSeenBy(Who)
 	  && Who->GetAttribute(WISDOM) > 4);

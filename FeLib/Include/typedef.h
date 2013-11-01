@@ -15,7 +15,6 @@
 
 #include "pragmas.h"
 
-typedef int truth;
 typedef unsigned char uchar;
 typedef unsigned short ushort;
 typedef unsigned int uint;

@@ -22,7 +22,7 @@ int basequadricontroller::OrigoX, basequadricontroller::OrigoY;
 int basequadricontroller::StartX, basequadricontroller::StartY;
 int basequadricontroller::XSize, basequadricontroller::YSize;
 int basequadricontroller::RadiusSquare;
-truth basequadricontroller::SectorCompletelyClear;
+bool basequadricontroller::SectorCompletelyClear;
 
 /* A C-program for MT19937: Integer     version                   */
 /*  genrand() generates one pseudorandom unsigned integer (32bit) */
@@ -199,7 +199,7 @@ void femath::CalculateEnvironmentRectangle(rect& Rect,
     Rect.Y2 = MotherRect.Y2;
 }
 
-truth femath::Clip(int& SourceX, int& SourceY, int& DestX, int& DestY, int& Width, int& Height, int XSize, int YSize, int DestXSize, int DestYSize)
+bool femath::Clip(int& SourceX, int& SourceY, int& DestX, int& DestY, int& Width, int& Height, int XSize, int YSize, int DestXSize, int DestYSize)
 {
   /* This sentence is usually true */
 

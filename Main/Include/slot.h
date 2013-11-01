@@ -33,17 +33,17 @@ class slot
   item* operator->() const { return Item; }
   item* operator*() const { return Item; }
   virtual void AddFriendItem(item*) const = 0;
-  virtual truth IsOnGround() const { return false; }
+  virtual bool IsOnGround() const { return false; }
   virtual void PutInItem(item*) = 0;
   virtual square* GetSquareUnder(int = 0) const = 0;
   virtual void SignalVolumeAndWeightChange() = 0;
   virtual void SignalEmitationIncrease(col24) = 0;
   virtual void SignalEmitationDecrease(col24) = 0;
   virtual void DonateTo(item*);
-  virtual truth CanBeSeenBy(const character*) const = 0;
+  virtual bool CanBeSeenBy(const character*) const = 0;
   virtual void SignalEnchantmentChange() { }
-  virtual truth IsVisible() const = 0;
-  virtual truth IsGearSlot() const { return false; }
+  virtual bool IsVisible() const = 0;
+  virtual bool IsGearSlot() const { return false; }
   virtual const character* FindCarrier() const = 0;
  protected:
   item* Item;
@@ -57,16 +57,16 @@ class stackslot : public slot
   stackslot(stack* MotherStack, stackslot* Last) : MotherStack(MotherStack), Last(Last), Next(0) { }
   virtual void Empty();
   virtual void AddFriendItem(item*) const;
-  virtual truth IsOnGround() const;
+  virtual bool IsOnGround() const;
   virtual square* GetSquareUnder(int = 0) const;
   virtual void SignalVolumeAndWeightChange();
   virtual void SignalEmitationIncrease(col24);
   virtual void SignalEmitationDecrease(col24);
   virtual void DonateTo(item*);
-  virtual truth CanBeSeenBy(const character*) const;
+  virtual bool CanBeSeenBy(const character*) const;
   stack* GetMotherStack() const { return MotherStack; }
   void SetMotherStack(stack* What) { MotherStack = What; }
-  virtual truth IsVisible() const;
+  virtual bool IsVisible() const;
   virtual void PutInItem(item*);
   virtual void Load(inputfile&);
   virtual const character* FindCarrier() const;
@@ -89,8 +89,8 @@ class bodypartslot : public slot
   virtual void SignalEmitationDecrease(col24);
   virtual void PutInItem(item*);
   virtual void Load(inputfile&);
-  virtual truth CanBeSeenBy(const character*) const;
-  virtual truth IsVisible() const { return false; }
+  virtual bool CanBeSeenBy(const character*) const;
+  virtual bool IsVisible() const { return false; }
   virtual const character* FindCarrier() const { return Master; }
  protected:
   character* Master;
@@ -111,10 +111,10 @@ class gearslot : public slot
   virtual void SignalVolumeAndWeightChange();
   virtual void SignalEmitationIncrease(col24);
   virtual void SignalEmitationDecrease(col24);
-  virtual truth CanBeSeenBy(const character*) const;
+  virtual bool CanBeSeenBy(const character*) const;
   virtual void SignalEnchantmentChange();
-  virtual truth IsVisible() const { return false; }
-  virtual truth IsGearSlot() const { return true; }
+  virtual bool IsVisible() const { return false; }
+  virtual bool IsGearSlot() const { return true; }
   virtual const character* FindCarrier() const;
  protected:
   bodypart* BodyPart;

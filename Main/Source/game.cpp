@@ -58,7 +58,7 @@
 #define BACK 2
 
 int game::CurrentLevelIndex;
-truth game::InWilderness = false;
+bool game::InWilderness = false;
 worldmap* game::WorldMap;
 area* game::AreaInLoad;
 square* game::SquareInLoad;
@@ -70,8 +70,8 @@ ulong game::NextTrapID = 1;
 team** game::Team;
 ulong game::LOSTick;
 v2 game::CursorPos(-1, -1);
-truth game::Zoom;
-truth game::Generating = false;
+bool game::Zoom;
+bool game::Generating = false;
 double game::AveragePlayerArmStrengthExperience;
 double game::AveragePlayerLegStrengthExperience;
 double game::AveragePlayerDexterityExperience;
@@ -87,17 +87,17 @@ long game::PetMassacreAmount = 0;
 long game::MiscMassacreAmount = 0;
 boneidmap game::BoneItemIDMap;
 boneidmap game::BoneCharacterIDMap;
-truth game::TooGreatDangerFoundTruth;
+bool game::TooGreatDangerFoundTruth;
 itemvectorvector game::ItemDrawVector;
 charactervector game::CharacterDrawVector;
-truth game::SumoWrestling;
+bool game::SumoWrestling;
 liquid* game::GlobalRainLiquid;
 v2 game::GlobalRainSpeed;
 long game::GlobalRainTimeModifier;
-truth game::PlayerSumoChampion;
+bool game::PlayerSumoChampion;
 ulong game::SquarePartEmitationTick = 0;
 long game::Turn;
-truth game::PlayerRunning;
+bool game::PlayerRunning;
 character* game::LastPetUnderCursor;
 charactervector game::PetVector;
 double game::DangerFound;
@@ -106,11 +106,11 @@ int game::NewAttribute[ATTRIBUTES];
 int game::LastAttributeChangeTick[ATTRIBUTES];
 int game::NecroCounter;
 int game::CursorData;
-truth game::CausePanicFlag;
+bool game::CausePanicFlag;
 
-truth game::Loading = false;
-truth game::JumpToPlayerBe = false;
-truth game::InGetCommand = false;
+bool game::Loading = false;
+bool game::JumpToPlayerBe = false;
+bool game::InGetCommand = false;
 character* game::Petrus = 0;
 time_t game::TimePlayedBeforeLastLoad;
 time_t game::LastLoad;
@@ -129,9 +129,9 @@ const v2 game::BasicMoveVector[] = { v2(-1, 0), v2(1, 0), v2(0, -1), v2(0, 1) };
 const v2 game::LargeMoveVector[] = { v2(-1, -1), v2(0, -1), v2(1, -1), v2(2, -1), v2(-1, 0), v2(2, 0), v2(-1, 1), v2(2, 1), v2(-1, 2), v2(0, 2), v2(1, 2), v2(2, 2), v2(0, 0), v2(1, 0), v2(0, 1), v2(1, 1) };
 const int game::LargeMoveDirection[] = { 0, 1, 1, 2, 3, 4, 3, 4, 5, 6, 6, 7, 8, 8, 8, 8 };
 
-truth game::LOSUpdateRequested = false;
+bool game::LOSUpdateRequested = false;
 uchar*** game::LuxTable = 0;
-truth game::Running;
+bool game::Running;
 character* game::Player;
 v2 game::Camera(0, 0);
 ulong game::Tick;
@@ -143,7 +143,7 @@ int game::NextDangerIDConfigIndex;
 characteridmap game::CharacterIDMap;
 itemidmap game::ItemIDMap;
 trapidmap game::TrapIDMap;
-truth game::PlayerHurtByExplosion;
+bool game::PlayerHurtByExplosion;
 area* game::CurrentArea;
 level* game::CurrentLevel;
 wsquare*** game::CurrentWSquareMap;
@@ -153,9 +153,9 @@ festring game::DefaultSummonMonster;
 festring game::DefaultWish;
 festring game::DefaultChangeMaterial;
 festring game::DefaultDetectMaterial;
-truth game::WizardMode;
+bool game::WizardMode;
 int game::SeeWholeMapCheatMode;
-truth game::GoThroughWallsCheat;
+bool game::GoThroughWallsCheat;
 int game::QuestMonstersFound;
 bitmap* game::BusyAnimationCache[32];
 festring game::PlayerName;
@@ -220,7 +220,7 @@ void game::InitScript()
   GameScript->RandomizeLevels();
 }
 
-truth game::Init(const festring& Name)
+bool game::Init(const festring& Name)
 {
   if(Name.IsEmpty())
     if(ivanconfig::GetDefaultName().IsEmpty())
@@ -674,7 +674,7 @@ const char* game::Insult() // convert to array
 
 /* DefaultAnswer = REQUIRES_ANSWER the question requires an answer */
 
-truth game::TruthQuestion(const festring& String, int DefaultAnswer, int OtherKeyForTrue)
+bool game::TruthQuestion(const festring& String, int DefaultAnswer, int OtherKeyForTrue)
 {
   if(DefaultAnswer == NO)
     DefaultAnswer = 'n';
@@ -693,12 +693,12 @@ void game::DrawEverything()
   graphics::BlitDBToScreen();
 }
 
-truth game::OnScreen(v2 Pos)
+bool game::OnScreen(v2 Pos)
 {
   return Pos.X >= 0 && Pos.Y >= 0 && Pos.X >= Camera.X && Pos.Y >= Camera.Y && Pos.X < GetCamera().X + GetScreenXSize() && Pos.Y < GetCamera().Y + GetScreenYSize();
 }
 
-void game::DrawEverythingNoBlit(truth AnimationDraw)
+void game::DrawEverythingNoBlit(bool AnimationDraw)
 {
   if(LOSUpdateRequested && Player->IsEnabled())
     if(!IsInWilderness())
@@ -759,7 +759,7 @@ void game::DrawEverythingNoBlit(truth AnimationDraw)
   }
 }
 
-truth game::Save(const festring& SaveName)
+bool game::Save(const festring& SaveName)
 {
   outputfile SaveFile(SaveName + ".sav");
   SaveFile << int(SAVE_FILE_VERSION);
@@ -925,7 +925,7 @@ void game::ApplyDivineTick()
     GetGod(c)->ApplyDivineTick();
 }
 
-void game::ApplyDivineAlignmentBonuses(god* CompareTarget, int Multiplier, truth Good)
+void game::ApplyDivineAlignmentBonuses(god* CompareTarget, int Multiplier, bool Good)
 {
   for(int c = 1; c <= GODS; ++c)
     if(GetGod(c) != CompareTarget)
@@ -985,7 +985,7 @@ void game::ShowLevelMessage()
   CurrentLevel->SetLevelMessage("");
 }
 
-int game::DirectionQuestion(const festring& Topic, truth RequireAnswer, truth AcceptYourself)
+int game::DirectionQuestion(const festring& Topic, bool RequireAnswer, bool AcceptYourself)
 {
   for(;;)
   {
@@ -1003,7 +1003,7 @@ int game::DirectionQuestion(const festring& Topic, truth RequireAnswer, truth Ac
   }
 }
 
-void game::RemoveSaves(truth RealSavesAlso)
+void game::RemoveSaves(bool RealSavesAlso)
 {
   if(RealSavesAlso)
   {
@@ -1094,7 +1094,7 @@ void game::DoEvilDeed(int Amount)
   }
 }
 
-void game::SaveWorldMap(const festring& SaveName, truth DeleteAfterwards)
+void game::SaveWorldMap(const festring& SaveName, bool DeleteAfterwards)
 {
   outputfile SaveFile(SaveName + ".wm");
   SaveFile << WorldMap;
@@ -1157,7 +1157,7 @@ void game::CreateTeams()
 
 /* v2 Pos should be removed from xxxQuestion()s? */
 
-festring game::StringQuestion(const festring& Topic, col16 Color, festring::sizetype MinLetters, festring::sizetype MaxLetters, truth AllowExit, stringkeyhandler KeyHandler)
+festring game::StringQuestion(const festring& Topic, col16 Color, festring::sizetype MinLetters, festring::sizetype MaxLetters, bool AllowExit, stringkeyhandler KeyHandler)
 {
   DrawEverythingNoBlit();
   igraph::BlitBackGround(v2(16, 6), v2(GetScreenXSize() << 4, 23)); // pos may be incorrect!
@@ -1167,7 +1167,7 @@ festring game::StringQuestion(const festring& Topic, col16 Color, festring::size
   return Return;
 }
 
-long game::NumberQuestion(const festring& Topic, col16 Color, truth ReturnZeroOnEsc)
+long game::NumberQuestion(const festring& Topic, col16 Color, bool ReturnZeroOnEsc)
 {
   DrawEverythingNoBlit();
   igraph::BlitBackGround(v2(16, 6), v2(GetScreenXSize() << 4, 23));
@@ -1202,7 +1202,7 @@ void game::UpdateCamera()
   UpdateCameraY();
 }
 
-truth game::HandleQuitMessage()
+bool game::HandleQuitMessage()
 {
 #ifdef USE_SDL
 
@@ -1379,7 +1379,7 @@ int game::AskForKeyPress(const festring& Topic)
  * KeyHandler is called when the key has NOT been identified as a movement key
  * Both can be deactivated by passing 0 as parameter */
 
-v2 game::PositionQuestion(const festring& Topic, v2 CursorPos, void (*Handler)(v2), positionkeyhandler KeyHandler, truth Zoom)
+v2 game::PositionQuestion(const festring& Topic, v2 CursorPos, void (*Handler)(v2), positionkeyhandler KeyHandler, bool Zoom)
 {
   int Key = 0;
   SetDoZoom(Zoom);
@@ -1511,7 +1511,7 @@ void game::LookHandler(v2 CursorPos)
     Square->SetMemorizedDescription(OldMemory);
 }
 
-truth game::AnimationController()
+bool game::AnimationController()
 {
   DrawEverythingNoBlit(true);
   return true;
@@ -1532,7 +1532,7 @@ void game::InitGlobalValueMap()
   }
 }
 
-void game::TextScreen(const festring& Text, col16 Color, truth GKey, void (*BitmapEditor)(bitmap*))
+void game::TextScreen(const festring& Text, col16 Color, bool GKey, void (*BitmapEditor)(bitmap*))
 {
   globalwindowhandler::DisableControlLoops();
   iosystem::TextScreen(Text, Color, GKey, BitmapEditor);
@@ -1638,7 +1638,7 @@ v2 game::NameKeyHandler(v2 CursorPos, int Key)
   return CursorPos;
 }
 
-void game::End(festring DeathMessage, truth Permanently, truth AndGoToMenu)
+void game::End(festring DeathMessage, bool Permanently, bool AndGoToMenu)
 {
   globalwindowhandler::DeInstallControlLoop(AnimationController);
   SetIsRunning(false);
@@ -1704,7 +1704,7 @@ int game::Menu(bitmap* BackGround, v2 Pos, const festring& Topic, const festring
 
 void game::InitDangerMap()
 {
-  truth First = true;
+  bool First = true;
 
   for(int c1 = 1; c1 < protocontainer<character>::GetSize(); ++c1)
   {
@@ -1802,7 +1802,7 @@ void game::CalculateNextDanger()
     ABORT("It is dangerous to go ice fishing in the summer.");
 }
 
-truth game::TryTravel(int Dungeon, int Area, int EntryIndex, truth AllowHostiles, truth AlliesFollow)
+bool game::TryTravel(int Dungeon, int Area, int EntryIndex, bool AllowHostiles, bool AlliesFollow)
 {
   charactervector Group;
 
@@ -1816,7 +1816,7 @@ truth game::TryTravel(int Dungeon, int Area, int EntryIndex, truth AllowHostiles
     return false;
 }
 
-truth game::LeaveArea(charactervector& Group, truth AllowHostiles, truth AlliesFollow)
+bool game::LeaveArea(charactervector& Group, bool AllowHostiles, bool AlliesFollow)
 {
   if(!IsInWilderness())
   {
@@ -1845,7 +1845,7 @@ void game::EnterArea(charactervector& Group, int Area, int EntryIndex)
     Generating = true;
     SetIsInWilderness(false);
     CurrentLevelIndex = Area;
-    truth New = !PrepareRandomBone(Area) && !GetCurrentDungeon()->PrepareLevel(Area);
+    bool New = !PrepareRandomBone(Area) && !GetCurrentDungeon()->PrepareLevel(Area);
     igraph::CreateBackGround(*CurrentLevel->GetLevelScript()->GetBackGroundType());
     GetCurrentArea()->SendNewDrawRequest();
     v2 Pos = GetCurrentLevel()->GetEntryPos(Player, EntryIndex);
@@ -1871,7 +1871,7 @@ void game::EnterArea(charactervector& Group, int Area, int EntryIndex)
     }
 
     GetCurrentLevel()->FiatLux();
-    const truth* AutoReveal = GetCurrentLevel()->GetLevelScript()->AutoReveal();
+    const bool* AutoReveal = GetCurrentLevel()->GetLevelScript()->AutoReveal();
 
     if(New && AutoReveal && *AutoReveal)
       GetCurrentLevel()->Reveal();
@@ -2335,7 +2335,7 @@ void game::DisplayMassacreList(const massacremap& MassacreMap, const char* Reaso
 {
   std::set<massacresetentry> MassacreSet;
   festring FirstPronoun;
-  truth First = true;
+  bool First = true;
   charactervector GraveYard;
 
   for(massacremap::const_iterator i1 = MassacreMap.begin(); i1 != MassacreMap.end(); ++i1)
@@ -2462,7 +2462,7 @@ void game::DisplayMassacreList(const massacremap& MassacreMap, const char* Reaso
     delete GraveYard[c];
 }
 
-truth game::MassacreListsEmpty()
+bool game::MassacreListsEmpty()
 {
   return PlayerMassacreMap.empty() && PetMassacreMap.empty() && MiscMassacreMap.empty();
 }
@@ -2506,7 +2506,7 @@ void game::CreateBone()
   }
 }
 
-truth game::PrepareRandomBone(int LevelIndex)
+bool game::PrepareRandomBone(int LevelIndex)
 {
   if(WizardModeIsActive() || GetCurrentDungeon()->IsGenerated(LevelIndex) || !*GetCurrentDungeon()->GetLevelScript(LevelIndex)->CanGenerateBone())
     return false;
@@ -2660,7 +2660,7 @@ long game::GetScore()
 
 /* Only works if New Attnam is loaded */
 
-truth game::TweraifIsFree()
+bool game::TweraifIsFree()
 {
   for(std::list<character*>::const_iterator i = GetTeam(COLONIST_TEAM)->GetMember().begin(); i != GetTeam(COLONIST_TEAM)->GetMember().end(); ++i)
     if((*i)->IsEnabled())
@@ -2669,7 +2669,7 @@ truth game::TweraifIsFree()
   return true;
 }
 
-truth game::IsXMas() // returns true if date is christmaseve or day
+bool game::IsXMas() // returns true if date is christmaseve or day
 {
   time_t Time = time(0);
   struct tm* TM = localtime(&Time);
@@ -2768,7 +2768,7 @@ character* game::GetSumo()
   return GetCurrentLevel()->GetLSquare(SUMO_ROOM_POS)->GetRoom()->GetMaster();
 }
 
-truth game::TryToEnterSumoArena()
+bool game::TryToEnterSumoArena()
 {
   character* Sumo = GetSumo();
 
@@ -2837,7 +2837,7 @@ truth game::TryToEnterSumoArena()
   return true;
 }
 
-truth game::TryToExitSumoArena()
+bool game::TryToExitSumoArena()
 {
   if(GetTeam(PLAYER_TEAM)->GetRelation(GetTeam(NEW_ATTNAM_TEAM)) == HOSTILE)
     return true;
@@ -2879,7 +2879,7 @@ truth game::TryToExitSumoArena()
   }
 }
 
-truth game::EndSumoWrestling(int Result)
+bool game::EndSumoWrestling(int Result)
 {
   msgsystem::LeaveBigMessageMode();
 
@@ -3067,12 +3067,12 @@ void game::GetTime(ivantime& Time)
   Time.Min = Tick % 2000 * 60 / 2000;
 }
 
-truth NameOrderer(character* C1, character* C2)
+bool NameOrderer(character* C1, character* C2)
 {
   return festring::IgnoreCaseCompare(C1->GetName(UNARTICLED), C2->GetName(UNARTICLED));
 }
 
-truth game::PolymorphControlKeyHandler(int Key, festring& String)
+bool game::PolymorphControlKeyHandler(int Key, festring& String)
 {
   if(Key == '?')
   {
@@ -3147,7 +3147,7 @@ inputfile& operator>>(inputfile& SaveFile, killreason& Value)
   return SaveFile;
 }
 
-truth DistanceOrderer(character* C1, character* C2)
+bool DistanceOrderer(character* C1, character* C2)
 {
   v2 PlayerPos = PLAYER->GetPos();
   v2 Pos1 = C1->GetPos();
@@ -3163,7 +3163,7 @@ truth DistanceOrderer(character* C1, character* C2)
     return Pos1.X < Pos2.X;
 }
 
-truth game::FillPetVector(const char* Verb)
+bool game::FillPetVector(const char* Verb)
 {
   PetVector.clear();
   team* Team = GetTeam(PLAYER_TEAM);
@@ -3184,7 +3184,7 @@ truth game::FillPetVector(const char* Verb)
   return true;
 }
 
-truth game::CommandQuestion()
+bool game::CommandQuestion()
 {
   if(!FillPetVector("command"))
     return false;
@@ -3262,7 +3262,7 @@ v2 game::CommandKeyHandler(v2 CursorPos, int Key)
   return CursorPos;
 }
 
-truth game::SelectPet(int Key)
+bool game::SelectPet(int Key)
 {
   if(Key == '+')
   {
@@ -3315,7 +3315,7 @@ void game::CommandScreen(const festring& Topic, ulong PossibleFlags, ulong Const
     for(c = 0; c < COMMAND_FLAGS; ++c)
       if(1 << c & PossibleFlags)
       {
-	truth Changeable = !(1 << c & ConstantFlags);
+	bool Changeable = !(1 << c & ConstantFlags);
 	festring Entry;
 
 	if(Changeable)
@@ -3361,7 +3361,7 @@ void game::CommandScreen(const festring& Topic, ulong PossibleFlags, ulong Const
   }
 }
 
-truth game::CommandAll()
+bool game::CommandAll()
 {
   ulong PossibleFlags = 0, ConstantFlags = ALL_COMMAND_FLAGS, VaryFlags = 0, OldFlags = 0;
   uint c1, c2;
@@ -3389,7 +3389,7 @@ truth game::CommandAll()
 
   ulong NewFlags = OldFlags;
   CommandScreen(CONST_S("Issue commands to whole visible team"), PossibleFlags, ConstantFlags, VaryFlags, NewFlags);
-  truth Change = false;
+  bool Change = false;
 
   for(c1 = 0; c1 < PetVector.size(); ++c1)
   {
@@ -3464,7 +3464,7 @@ double game::GetGameSituationDanger()
 {
   double SituationDanger = 0;
   character* Player = GetPlayer();
-  truth PlayerStuck = Player->IsStuck();
+  bool PlayerStuck = Player->IsStuck();
   v2 PlayerPos = Player->GetPos();
   character* TruePlayer = Player;
 
@@ -3481,9 +3481,9 @@ double game::GetGameSituationDanger()
 	if(Enemy->IsEnabled() && Enemy->CanAttack()
 	   && (Enemy->CanMove() || Enemy->GetPos().IsAdjacent(PlayerPos)))
 	{
-	  truth EnemyStuck = Enemy->IsStuck();
+	  bool EnemyStuck = Enemy->IsStuck();
 	  v2 EnemyPos = Enemy->GetPos();
-	  truth Sees = TruePlayer->CanBeSeenBy(Enemy);
+	  bool Sees = TruePlayer->CanBeSeenBy(Enemy);
 	  character* TrueEnemy = Enemy;
 
 	  if(EnemyStuck)
@@ -3502,7 +3502,7 @@ double game::GetGameSituationDanger()
 		   && (Friend->CanMove() || Friend->GetPos().IsAdjacent(EnemyPos)))
 		{
 		  v2 FriendPos = Friend->GetPos();
-		  truth Sees = TrueEnemy->CanBeSeenBy(Friend);
+		  bool Sees = TrueEnemy->CanBeSeenBy(Friend);
 
 		  if(Friend->IsStuck())
 		  {
@@ -3553,7 +3553,7 @@ inputfile& operator>>(inputfile& SaveFile, massacreid& MI)
   return SaveFile;
 }
 
-truth game::PlayerIsRunning()
+bool game::PlayerIsRunning()
 {
   return PlayerRunning && Player->CanMove();
 }

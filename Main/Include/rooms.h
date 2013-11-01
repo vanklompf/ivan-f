@@ -21,16 +21,16 @@ ROOM(shop, room)
 {
  public:
   virtual void Enter(character*);
-  virtual truth PickupItem(character*, item*, int);
-  virtual truth DropItem(character*, item*, int);
+  virtual bool PickupItem(character*, item*, int);
+  virtual bool DropItem(character*, item*, int);
   virtual void KickSquare(character*, lsquare*);
-  virtual truth ConsumeItem(character*, item*, int);
-  virtual truth AllowDropGifts() const { return false; }
+  virtual bool ConsumeItem(character*, item*, int);
+  virtual bool AllowDropGifts() const { return false; }
   virtual void TeleportSquare(character*, lsquare*);
-  virtual truth AllowSpoil(const item*) const;
-  virtual truth AllowKick(const character*,const lsquare*) const;
+  virtual bool AllowSpoil(const item*) const;
+  virtual bool AllowKick(const character*,const lsquare*) const;
   virtual void HostileAction(character*) const;
-  virtual truth AllowFoodSearch() const { return false; }
+  virtual bool AllowFoodSearch() const { return false; }
   virtual void ReceiveVomit(character*);
 };
 
@@ -39,55 +39,55 @@ ROOM(cathedral, room)
  public:
   cathedral();
   virtual void Enter(character*);
-  virtual truth PickupItem(character*, item*, int);
-  virtual truth DropItem(character*, item*, int);
+  virtual bool PickupItem(character*, item*, int);
+  virtual bool DropItem(character*, item*, int);
   virtual void KickSquare(character*, lsquare*);
-  virtual truth ConsumeItem(character*, item*, int);
-  virtual void SetEntered(truth What) { Entered = What; }
+  virtual bool ConsumeItem(character*, item*, int);
+  virtual void SetEntered(bool What) { Entered = What; }
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
-  virtual truth AllowDropGifts() const { return false; }
-  virtual truth Drink(character*) const;
-  virtual truth HasDrinkHandler() const { return true; }
-  virtual truth Dip(character*) const;
-  virtual truth HasDipHandler() const { return true; }
+  virtual bool AllowDropGifts() const { return false; }
+  virtual bool Drink(character*) const;
+  virtual bool HasDrinkHandler() const { return true; }
+  virtual bool Dip(character*) const;
+  virtual bool HasDipHandler() const { return true; }
   virtual void TeleportSquare(character*, lsquare*);
-  virtual truth AllowSpoil(const item*) const { return false; }
+  virtual bool AllowSpoil(const item*) const { return false; }
   virtual int GetGodRelationAdjustment() const { return -150; }
-  virtual truth AllowKick(const character*,const lsquare*) const;
+  virtual bool AllowKick(const character*,const lsquare*) const;
   virtual void HostileAction(character*) const;
-  virtual truth AllowAltarPolymorph() const { return false; }
-  virtual truth AllowFoodSearch() const { return false; }
+  virtual bool AllowAltarPolymorph() const { return false; }
+  virtual bool AllowFoodSearch() const { return false; }
   virtual void AddItemEffect(item*);
   character* FindRandomExplosiveReceiver() const;
  protected:
-  truth Entered;
+  bool Entered;
 };
 
 ROOM(library, room)
 {
  public:
   virtual void Enter(character*);
-  virtual truth PickupItem(character*, item*, int);
-  virtual truth DropItem(character*, item*, int);
+  virtual bool PickupItem(character*, item*, int);
+  virtual bool DropItem(character*, item*, int);
   virtual void KickSquare(character*, lsquare*);
-  virtual truth ConsumeItem(character*, item*, int);
-  virtual truth AllowDropGifts() const { return false; }
+  virtual bool ConsumeItem(character*, item*, int);
+  virtual bool AllowDropGifts() const { return false; }
   virtual void TeleportSquare(character*, lsquare*);
-  virtual truth AllowKick(const character*, const lsquare*) const;
+  virtual bool AllowKick(const character*, const lsquare*) const;
   virtual void HostileAction(character*) const;
 };
 
 ROOM(bananadroparea, room)
 {
  public:
-  virtual truth PickupItem(character*, item*, int);
-  virtual truth DropItem(character*, item*, int);
+  virtual bool PickupItem(character*, item*, int);
+  virtual bool DropItem(character*, item*, int);
   virtual void KickSquare(character*, lsquare*);
-  virtual truth ConsumeItem(character*, item*, int);
-  virtual truth AllowDropGifts() const { return false; }
+  virtual bool ConsumeItem(character*, item*, int);
+  virtual bool AllowDropGifts() const { return false; }
   virtual void TeleportSquare(character*, lsquare*);
-  virtual truth AllowKick(const character*, const lsquare*) const;
+  virtual bool AllowKick(const character*, const lsquare*) const;
   virtual void HostileAction(character*) const;
 };
 
@@ -96,7 +96,7 @@ ROOM(sumoarena, room)
  public:
   virtual void DestroyTerrain(character*);
   virtual void HostileAction(character*) const;
-  virtual truth CheckDestroyTerrain(character*);
+  virtual bool CheckDestroyTerrain(character*);
 };
 
 #endif

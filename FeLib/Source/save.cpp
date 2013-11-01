@@ -15,7 +15,7 @@
 #include "save.h"
 #include "femath.h"
 
-outputfile::outputfile(const festring& FileName, truth AbortOnErr)
+outputfile::outputfile(const festring& FileName, bool AbortOnErr)
 : Buffer(fopen(FileName.CStr(), "wb")), FileName(FileName)
 {
   if(AbortOnErr && !Buffer)
@@ -37,7 +37,7 @@ void outputfile::ReOpen()
   Buffer = fopen(FileName.CStr(), "ab");
 }
 
-int outputfile::IsOpen()
+bool outputfile::IsOpen()
 {
   if(Buffer)
     return 1;
@@ -47,7 +47,7 @@ int outputfile::IsOpen()
 
 inputfile::inputfile(const festring& FileName,
 		     const valuemap* ValueMap,
-		     truth AbortOnErr)
+		     bool AbortOnErr)
 : Buffer(fopen(FileName.CStr(), "rb")),
   FileName(FileName), ValueMap(ValueMap)
 {
@@ -64,7 +64,7 @@ inputfile::~inputfile()
   }
 }
 
-truth inputfile::IsOpen()
+bool inputfile::IsOpen()
 {
   if(Buffer)
     return 1;
@@ -72,7 +72,7 @@ truth inputfile::IsOpen()
     return 0;
 }
 
-festring inputfile::ReadWord(truth AbortOnEOF)
+festring inputfile::ReadWord(bool AbortOnEOF)
 {
   static festring ToReturn;
   ReadWord(ToReturn, AbortOnEOF);
@@ -180,7 +180,7 @@ int inputfile::HandlePunct(festring& String, int Char, int Mode)
   return PUNCT_RETURN;
 }
 
-void inputfile::ReadWord(festring& String, truth AbortOnEOF)
+void inputfile::ReadWord(festring& String, bool AbortOnEOF)
 {
   int Mode = 0;
   String.Empty();
@@ -229,7 +229,7 @@ void inputfile::ReadWord(festring& String, truth AbortOnEOF)
     clearerr(Buffer);
 }
 
-char inputfile::ReadLetter(truth AbortOnEOF)
+char inputfile::ReadLetter(bool AbortOnEOF)
 {
   for(int Char = fgetc(Buffer); !feof(Buffer); Char = fgetc(Buffer))
   {
@@ -299,11 +299,11 @@ char inputfile::ReadLetter(truth AbortOnEOF)
 /* Reads a number or a formula from inputfile. Valid values could be for
    instance "3", "5 * 4+5", "2+Variable%4" etc. */
 
-long inputfile::ReadNumber(int CallLevel, truth PreserveTerminator)
+long inputfile::ReadNumber(int CallLevel, bool PreserveTerminator)
 {
   long Value = 0;
   static festring Word;
-  truth NumberCorrect = false;
+  bool NumberCorrect = false;
 
   for(;;)
   {

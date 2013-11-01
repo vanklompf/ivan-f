@@ -141,7 +141,7 @@ void worldmap::Generate()
       continue;
 
     v2 AttnamPos, ElpuriCavePos, NewAttnamPos, TunnelEntry, TunnelExit;
-    truth Correct = false;
+    bool Correct = false;
     continent* PetrusLikes;
 
     for(int c1 = 0; c1 < 25; ++c1)
@@ -164,7 +164,7 @@ void worldmap::Generate()
 	    if(IsValidPos(Pos) && AltitudeBuffer[Pos.X][Pos.Y] <= 0)
 	    {
 	      int Distance = 3 + (RAND() & 3);
-	      truth Error = false;
+	      bool Error = false;
 	      TunnelEntry = Pos;
 
 	      for(int c2 = 0; c2 < Distance; ++c2)
@@ -242,7 +242,7 @@ void worldmap::Generate()
 	      static int NotDiagonalDir[4] = { 1, 3, 4, 6 };
 	      static int AdjacentDir[4][2] = { { 0, 1 }, { 0, 2 },
 					       { 1, 3 }, { 2, 3 } };
-	      truth Raised[] = { false, false, false, false };
+	      bool Raised[] = { false, false, false, false };
 	      int d2;
 
 	      for(d2 = 0; d2 < 4; ++d2)
@@ -397,7 +397,7 @@ void worldmap::GenerateClimate()
   for(int y = 0; y < YSize; ++y)
   {
     double DistanceFromEquator = fabs(double(y) / YSize - 0.5);
-    truth LatitudeRainy = DistanceFromEquator <= 0.05
+    bool LatitudeRainy = DistanceFromEquator <= 0.05
 			  || (DistanceFromEquator > 0.25
 			      && DistanceFromEquator <= 0.45);
 
@@ -409,7 +409,7 @@ void worldmap::GenerateClimate()
 	continue;
       }
 
-      truth Rainy = LatitudeRainy;
+      bool Rainy = LatitudeRainy;
 
       if(!Rainy)
 	for(int d = 0; d < 8; ++d)
@@ -535,7 +535,7 @@ void worldmap::CalculateContinents()
     for(int y = 0; y < YSize; ++y)
       if(AltitudeBuffer[x][y] > 0)
       {
-	truth Attached = false;
+	bool Attached = false;
 
 	for(int d = 0; d < 8; ++d)
 	{
@@ -607,7 +607,7 @@ void worldmap::RemoveEmptyContinents()
 	}
 }
 
-void worldmap::Draw(truth) const
+void worldmap::Draw(bool) const
 {
   const int XMin = Max(game::GetCamera().X, 0);
   const int YMin = Max(game::GetCamera().Y, 0);

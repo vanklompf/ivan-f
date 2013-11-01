@@ -138,7 +138,7 @@ INST_FAST_SCRIPT_MEMBER(long);
 INST_FAST_SCRIPT_MEMBER(ulong);
 INST_FAST_SCRIPT_MEMBER(packv2);
 
-truth script::ReadMember(inputfile& SaveFile, const festring& Word)
+bool script::ReadMember(inputfile& SaveFile, const festring& Word)
 {
   scriptmemberbase* Data = GetData(Word.CStr());
 
@@ -387,7 +387,7 @@ template <class type> type* contentscripttemplate<type>::BasicInstantiate(int Sp
   const materialscript* MainMaterial = GetMainMaterial();
   const materialscript* SecondaryMaterial = GetSecondaryMaterial();
   const typename type::database* DataBase = *ConfigData;
-  truth UseOverriddenMaterials = false;
+  bool UseOverriddenMaterials = false;
 
   if(!Config && DataBase->IsAbstract)
   {
@@ -578,7 +578,7 @@ item* contentscript<item>::Instantiate(int SpecialFlags) const
   return Instance;
 }
 
-truth IsValidScript(const fearray<contentscript<item> >* Array)
+bool IsValidScript(const fearray<contentscript<item> >* Array)
 {
   for(uint c = 0; c < Array->Size; ++c)
     if(IsValidScript(&Array->Data[c]))

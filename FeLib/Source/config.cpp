@@ -24,7 +24,7 @@ void configsystem::NormalStringChanger(stringoption* O, const festring& What)
 { O->Value = What; }
 void configsystem::NormalNumberChanger(numberoption* O, long What)
 { O->Value = What; }
-void configsystem::NormalTruthChanger(truthoption* O, truth What)
+void configsystem::NormalTruthChanger(truthoption* O, bool What)
 { O->Value = What; }
 
 configoption::configoption(const char* Name, const char* Description)
@@ -34,7 +34,7 @@ stringoption::stringoption(const char* Name, const char* Desc,
 			   const festring& Value,
 			   void (*ValueDisplayer)(const stringoption*,
 						  festring&),
-			   truth (*ChangeInterface)(stringoption*),
+			   bool (*ChangeInterface)(stringoption*),
 			   void (*ValueChanger)(stringoption*,
 						const festring&))
 : configoption(Name, Desc),
@@ -45,7 +45,7 @@ stringoption::stringoption(const char* Name, const char* Desc,
 numberoption::numberoption(const char* Name, const char* Desc, long Value,
 			   void (*ValueDisplayer)(const numberoption*,
 						  festring&),
-			   truth (*ChangeInterface)(numberoption*),
+			   bool (*ChangeInterface)(numberoption*),
 			   void (*ValueChanger)(numberoption*, long))
 : configoption(Name, Desc),
   Value(Value), ValueDisplayer(ValueDisplayer),
@@ -56,7 +56,7 @@ scrollbaroption::scrollbaroption(const char* Name,
 				 const char* Desc, long Value,
 				 void (*ValueDisplayer)(const numberoption*,
 							festring&),
-				 truth (*ChangeInterface)(numberoption*),
+				 bool (*ChangeInterface)(numberoption*),
 				 void (*ValueChanger)(numberoption*, long),
 				 void (*BarHandler)(long))
 : numberoption(Name, Desc, Value, ValueDisplayer,
@@ -64,16 +64,16 @@ scrollbaroption::scrollbaroption(const char* Name,
   BarHandler(BarHandler) { }
 
 
-truthoption::truthoption(const char* Name, const char* Desc, truth Value,
+truthoption::truthoption(const char* Name, const char* Desc, bool Value,
 			 void (*ValueDisplayer)(const truthoption*, festring&),
-			 truth (*ChangeInterface)(truthoption*),
-			 void (*ValueChanger)(truthoption*, truth))
+			 bool (*ChangeInterface)(truthoption*),
+			 void (*ValueChanger)(truthoption*, bool))
 : configoption(Name, Desc),
   Value(Value), ValueDisplayer(ValueDisplayer),
   ChangeInterface(ChangeInterface),
   ValueChanger(ValueChanger) { }
 
-truth configsystem::Save()
+bool configsystem::Save()
 {
   std::ofstream SaveFile(ConfigFileName.CStr(), std::ios::out);
 
@@ -90,7 +90,7 @@ truth configsystem::Save()
   return true;
 }
 
-truth configsystem::Load()
+bool configsystem::Load()
 {
   inputfile SaveFile(ConfigFileName, 0, false);
 
@@ -115,10 +115,10 @@ truth configsystem::Load()
 
 void configsystem::Show(void (*BackGroundDrawer)(),
 			void (*ListAttributeInitializer)(felist&),
-			truth SlaveScreen)
+			bool SlaveScreen)
 {
   int Chosen;
-  truth TruthChange = false;
+  bool TruthChange = false;
 
   felist List(CONST_S("Which setting do you wish to configure?"));
   List.AddDescription(CONST_S(""));
@@ -179,13 +179,13 @@ void configsystem::NormalTruthDisplayer(const truthoption* O,
   Entry << (O->Value ? "yes" : "no");
 }
 
-truth configsystem::NormalTruthChangeInterface(truthoption* O)
+bool configsystem::NormalTruthChangeInterface(truthoption* O)
 {
   O->ChangeValue(!O->Value);
   return true;
 }
 
-truth configsystem::NormalStringChangeInterface(stringoption* O)
+bool configsystem::NormalStringChangeInterface(stringoption* O)
 {
   festring String;
 
@@ -198,7 +198,7 @@ truth configsystem::NormalStringChangeInterface(stringoption* O)
   return false;
 }
 
-truth configsystem::NormalNumberChangeInterface(numberoption* O)
+bool configsystem::NormalNumberChangeInterface(numberoption* O)
 {
   O->ChangeValue(iosystem::NumberQuestion(CONST_S("Set new ")
 					  + O->Description + ':',

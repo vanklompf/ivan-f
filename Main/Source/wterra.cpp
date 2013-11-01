@@ -109,7 +109,7 @@ owterrain* owterrainprototype::SpawnAndLoad(inputfile& SaveFile) const
   return Terrain;
 }
 
-truth DrawOrderer(const std::pair<v2, int>& Pair1,
+bool DrawOrderer(const std::pair<v2, int>& Pair1,
 		  const std::pair<v2, int>& Pair2)
 {
   return Pair1.second < Pair2.second;
@@ -147,7 +147,7 @@ void gwterrain::CalculateNeighbourBitmapPoses()
     Neighbour[Index].second = 0;
 }
 
-truth owterrain::Enter(truth DirectionUp) const
+bool owterrain::Enter(bool DirectionUp) const
 {
   if(DirectionUp)
   {

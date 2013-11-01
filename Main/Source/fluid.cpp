@@ -29,7 +29,7 @@ fluid::fluid(liquid* Liquid, lsquare* LSquareUnder) : entity(HAS_BE), Next(0), L
   AddLiquid(Liquid->GetVolume());
 }
 
-fluid::fluid(liquid* Liquid, item* MotherItem, const festring& LocationName, truth IsInside) : entity(HAS_BE), Next(0), Liquid(Liquid), LSquareUnder(0), MotherItem(MotherItem), Image(false), GearImage(0), Flags(0), LocationName(LocationName)
+fluid::fluid(liquid* Liquid, item* MotherItem, const festring& LocationName, bool IsInside) : entity(HAS_BE), Next(0), Liquid(Liquid), LSquareUnder(0), MotherItem(MotherItem), Image(false), GearImage(0), Flags(0), LocationName(LocationName)
 {
   TrapData.TrapID = 0;
 
@@ -223,9 +223,9 @@ void fluid::SignalVolumeAndWeightChange()
       AddLiquid(Volume - (Image.AlphaSum >> 6));
 }
 
-truth fluid::FadePictures()
+bool fluid::FadePictures()
 {
-  truth Change = Image.Fade();
+  bool Change = Image.Fade();
 
   if(GearImage)
   {
@@ -247,12 +247,12 @@ void fluid::AddFluidInfo(const fluid* Fluid, festring& String)
   liquid* LiquidStack[4];
   liquid** Show = LiquidStack + 1;
   int Index = 0;
-  truth Blood = false, OneBlood = true;
+  bool Blood = false, OneBlood = true;
 
   for(; Fluid; Fluid = Fluid->Next)
   {
     liquid* Liquid = Fluid->GetLiquid();
-    truth LiquidBlood = Liquid->GetCategoryFlags() & IS_BLOOD;
+    bool LiquidBlood = Liquid->GetCategoryFlags() & IS_BLOOD;
 
     if(!LiquidBlood || !Blood)
     {
@@ -319,7 +319,7 @@ void fluid::SetMotherItem(item* What)
    be true iff the picture is part of a body armor, for instance armor covering
    one's shoulder. */
 
-void fluid::CheckGearPicture(v2 ShadowPos, int SpecialFlags, truth BodyArmor)
+void fluid::CheckGearPicture(v2 ShadowPos, int SpecialFlags, bool BodyArmor)
 {
   if(!UseImage())
     return;
@@ -430,7 +430,7 @@ void fluid::DrawBodyArmorPicture(blitdata& BlitData, int SpecialFlags) const
     GearImage[Index].Animate(BlitData, 0);
 }
 
-truth fluid::imagedata::Fade()
+bool fluid::imagedata::Fade()
 {
   return ShadowPos != ERROR_V2 ? Picture->Fade(AlphaSum, AlphaAverage, 1) : false;
 }
@@ -479,7 +479,7 @@ void fluid::imagedata::Animate(blitdata& BlitData, int CurrentFlags) const
   --DripTimer;
 }
 
-fluid::imagedata::imagedata(truth Load) : Picture(0), DripTimer(0), AlphaSum(0), ShadowPos(ERROR_V2)
+fluid::imagedata::imagedata(bool Load) : Picture(0), DripTimer(0), AlphaSum(0), ShadowPos(ERROR_V2)
 {
   if(!Load)
   {
@@ -598,7 +598,7 @@ void fluid::Redistribute()
   if(!UseImage())
     return;
 
-  truth InitRandMap;
+  bool InitRandMap;
   if(MotherItem == 0)
     InitRandMap = 0;
   else
@@ -615,7 +615,7 @@ void fluid::Redistribute()
   AddLiquid(Liquid->GetVolume());
 }
 
-void fluid::imagedata::Clear(truth InitRandMap)
+void fluid::imagedata::Clear(bool InitRandMap)
 {
   Picture->ClearToColor(TRANSPARENT_COLOR);
   Picture->FillAlpha(0);
@@ -654,7 +654,7 @@ void fluid::Destroy()
   SendToHell();
 }
 
-truth fluid::UseImage() const
+bool fluid::UseImage() const
 {
   return !(Flags & FLUID_INSIDE)
     && (!MotherItem || MotherItem->ShowFluids());
@@ -665,7 +665,7 @@ void fluid::AddTrapName(festring& String, int) const
   Liquid->AddName(String, false, false);
 }
 
-truth fluid::TryToUnStick(character* Victim, v2)
+bool fluid::TryToUnStick(character* Victim, v2)
 {
   ulong TrapID = GetTrapID();
   int Sum = Victim->GetAttribute(ARM_STRENGTH) + Victim->GetAttribute(LEG_STRENGTH) + Victim->GetAttribute(DEXTERITY) + Victim->GetAttribute(AGILITY);
@@ -744,12 +744,12 @@ void fluid::PostProcessForBone()
   TrapData.TrapID = game::CreateNewTrapID(this);
 }
 
-truth fluid::IsStuckTo(const character* Char) const
+bool fluid::IsStuckTo(const character* Char) const
 {
   return TrapData.VictimID == Char->GetID();
 }
 
-truth fluid::IsDangerous(const character* Char) const
+bool fluid::IsDangerous(const character* Char) const
 {
   return Char->GetAttribute(WISDOM) >= Liquid->GetStepInWisdomLimit();
 }

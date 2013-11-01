@@ -44,7 +44,7 @@ void unconsciousness::Handle()
   }
 }
 
-void unconsciousness::Terminate(truth Finished)
+void unconsciousness::Terminate(bool Finished)
 {
   if(Flags & TERMINATING)
     return;
@@ -120,7 +120,7 @@ void consume::Handle()
   }
 }
 
-void consume::Terminate(truth Finished)
+void consume::Terminate(bool Finished)
 {
   if(Flags & TERMINATING)
     return;
@@ -180,7 +180,7 @@ void rest::Handle()
   }
 }
 
-void rest::Terminate(truth Finished)
+void rest::Terminate(bool Finished)
 {
   if(Flags & TERMINATING)
     return;
@@ -280,7 +280,7 @@ void dig::Handle()
     game::DrawEverything();
 }
 
-void dig::Terminate(truth Finished)
+void dig::Terminate(bool Finished)
 {
   if(Flags & TERMINATING)
     return;
@@ -348,7 +348,7 @@ void study::Handle()
     Counter -= GetActor()->GetAttribute(INTELLIGENCE);
 }
 
-void study::Terminate(truth Finished)
+void study::Terminate(bool Finished)
 {
   if(Flags & TERMINATING)
     return;
@@ -399,7 +399,7 @@ void study::Load(inputfile& SaveFile)
   SaveFile >> Counter >> LiteratureID;
 }
 
-truth go::TryDisplace()
+bool go::TryDisplace()
 {
   Terminate(false);
   return true;

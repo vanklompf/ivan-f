@@ -54,8 +54,8 @@ struct v2
   { return v2(int(X / D), int(Y / D)); }
   v2& operator/=(double D)
   { X = int(X / D); Y = int(Y / D); return *this; }
-  truth operator==(v2 V) const { return X == V.X && Y == V.Y; }
-  truth operator!=(v2 V) const { return X != V.X || Y != V.Y; }
+  bool operator==(v2 V) const { return X == V.X && Y == V.Y; }
+  bool operator!=(v2 V) const { return X != V.X || Y != V.Y; }
   v2 operator<<(int S) const { return v2(X << S, Y << S); }
   v2& operator<<=(int S) { X <<= S; Y <<= S; return *this; }
   v2 operator>>(int S) const { return v2(X >> S, Y >> S); }
@@ -64,10 +64,10 @@ struct v2
   { return X < V.X || (X == V.X && Y < V.Y); }
   int GetLengthSquare() const { return X * X + Y * Y; }
   /* Also returns true if V == *this */
-  truth IsAdjacent(v2 V) const
+  bool IsAdjacent(v2 V) const
   { return V.X >= X - 1 && V.X <= X + 1 && V.Y <= Y + 1 && V.Y >= Y - 1; }
   int GetManhattanLength() const { return Max(abs(X), abs(Y)); }
-  truth Is0() const { return X == 0 && Y == 0; }
+  bool Is0() const { return X == 0 && Y == 0; }
   operator packv2() const
   {
     packv2 V = { X, Y };

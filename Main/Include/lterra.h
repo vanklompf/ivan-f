@@ -38,9 +38,9 @@ struct lterraindatabase : public databasebase
 {
   void PostProcess() { }
   v2 BitmapPos;
-  truth UsesLongArticle;
+  bool UsesLongArticle;
   festring Adjective;
-  truth UsesLongAdjectiveArticle;
+  bool UsesLongAdjectiveArticle;
   festring NameSingular;
   festring NamePlural;
   festring PostFix;
@@ -56,10 +56,10 @@ struct lterraindatabase : public databasebase
   festring SitMessage;
   int AttachedGod;
   int Walkability;
-  truth IsAbstract;
-  truth ShowMaterial;
-  truth HasSecondaryMaterial;
-  truth UseBorderTiles;
+  bool IsAbstract;
+  bool ShowMaterial;
+  bool HasSecondaryMaterial;
+  bool UseBorderTiles;
   int BorderTilePriority;
 };
 
@@ -68,21 +68,21 @@ class lterrain : public object
  public:
   lterrain() : LSquareUnder(0) { }
   virtual void Load(inputfile&);
-  virtual truth Open(character*) { return false; }
-  virtual truth Close(character*) { return false; }
+  virtual bool Open(character*) { return false; }
+  virtual bool Close(character*) { return false; }
   v2 GetPos() const;
-  virtual truth CanBeOpened() const { return false; }
-  virtual truth AcceptsOffers() const { return false; }
-  virtual truth ReceiveVomit(character*, liquid*) { return false; }
-  virtual truth CanBeOpenedByAI() { return false; }
-  virtual truth Polymorph(character*) { return false; }
-  virtual truth DipInto(item*, character*) { return false; }
-  virtual truth IsDipDestination() const { return false; }
-  virtual truth TryKey(item*, character*) { return false; }
-  truth CanBeSeenByPlayer() const;
-  truth CanBeSeenBy(character*) const;
+  virtual bool CanBeOpened() const { return false; }
+  virtual bool AcceptsOffers() const { return false; }
+  virtual bool ReceiveVomit(character*, liquid*) { return false; }
+  virtual bool CanBeOpenedByAI() { return false; }
+  virtual bool Polymorph(character*) { return false; }
+  virtual bool DipInto(item*, character*) { return false; }
+  virtual bool IsDipDestination() const { return false; }
+  virtual bool TryKey(item*, character*) { return false; }
+  bool CanBeSeenByPlayer() const;
+  bool CanBeSeenBy(character*) const;
   virtual const festring& GetSitMessage() const = 0;
-  virtual truth SitOn(character*);
+  virtual bool SitOn(character*);
   virtual square* GetSquareUnderEntity(int = 0) const;
   void SetLSquareUnder(lsquare* What) { LSquareUnder = What; }
   lsquare* GetLSquareUnder() const { return LSquareUnder; }
@@ -92,17 +92,17 @@ class lterrain : public object
   virtual void CalculateAll() { CalculateEmitation(); }
   virtual void SignalEmitationIncrease(col24);
   virtual void SignalEmitationDecrease(col24);
-  virtual truth HasKeyHole() const { return CanBeOpened(); }
-  virtual truth IsOnGround() const { return true; }
+  virtual bool HasKeyHole() const { return CanBeOpened(); }
+  virtual bool IsOnGround() const { return true; }
   room* GetRoom() const;
   virtual void SignalRustLevelChange();
   virtual void TryToRust(long);
   virtual void ReceiveAcid(material*, long) { }
-  void InitMaterials(material*, truth = true);
+  void InitMaterials(material*, bool = true);
   void SetMainMaterial(material*, int = 0);
   void ChangeMainMaterial(material*, int = 0);
   virtual void GenerateMaterials();
-  virtual void InitMaterials(const materialscript*, const materialscript*, truth);
+  virtual void InitMaterials(const materialscript*, const materialscript*, bool);
   virtual const fearray<long>& GetMainMaterialConfig() const = 0;
   virtual void SurviveEffect(character*) { }
   virtual void RestoreHP() { }
@@ -118,7 +118,7 @@ struct glterraindatabase : public lterraindatabase
 {
   typedef glterrainprototype prototype;
   void InitDefaults(const prototype*, int);
-  truth AllowRandomInstantiation() const { return true; }
+  bool AllowRandomInstantiation() const { return true; }
   const prototype* ProtoType;
 };
 
@@ -182,7 +182,7 @@ class glterrain : public lterrain, public gterrain
   virtual int GetAttachedGod() const;
   virtual int GetTheoreticalWalkability() const { return DataBase->Walkability; }
   void Draw(blitdata&) const;
-  virtual truth IsAnimated() const;
+  virtual bool IsAnimated() const;
  protected:
   virtual void InstallDataBase(int);
   virtual int GetGraphicsContainerIndex() const;
@@ -198,7 +198,7 @@ struct olterraindatabase : public lterraindatabase
 {
   typedef olterrainprototype prototype;
   void InitDefaults(const prototype*, int);
-  truth AllowRandomInstantiation() const;
+  bool AllowRandomInstantiation() const;
   const prototype* ProtoType;
   festring DigMessage;
   int RestModifier;
@@ -208,15 +208,15 @@ struct olterraindatabase : public lterraindatabase
   v2 OpenBitmapPos;
   v2 WindowBitmapPos;
   fearray<contentscript<item> > LeftOverItems;
-  truth CreateDivineConfigurations;
-  truth CanBeDestroyed;
-  truth IsUpLink;
-  truth CreateLockConfigurations;
-  truth IsAlwaysTransparent;
-  truth ShowThingsUnder;
-  truth IsWall;
-  truth CreateWindowConfigurations;
-  truth IsSafeToCreateDoor;
+  bool CreateDivineConfigurations;
+  bool CanBeDestroyed;
+  bool IsUpLink;
+  bool CreateLockConfigurations;
+  bool IsAlwaysTransparent;
+  bool ShowThingsUnder;
+  bool IsWall;
+  bool CreateWindowConfigurations;
+  bool IsSafeToCreateDoor;
 };
 
 class olterrainprototype
@@ -251,15 +251,15 @@ class olterrain : public lterrain, public oterrain
   typedef olterraindatabase database;
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
-  virtual truth Enter(truth) const;
+  virtual bool Enter(bool) const;
   virtual void BeKicked(character*, int, int);
-  virtual truth IsDoor() const { return false; }
-  virtual truth HasEatEffect() const { return false; }
-  virtual truth HasDrinkEffect() const { return false; }
-  virtual truth Eat(character*) { return false; }
-  virtual truth Drink(character*) { return false; }
+  virtual bool IsDoor() const { return false; }
+  virtual bool HasEatEffect() const { return false; }
+  virtual bool HasDrinkEffect() const { return false; }
+  virtual bool Eat(character*) { return false; }
+  virtual bool Drink(character*) { return false; }
   virtual void Lock() { }
-  virtual truth IsLocked() const { return false; }
+  virtual bool IsLocked() const { return false; }
   virtual void CreateBoobyTrap() { }
   virtual void HasBeenHitByItem(character*, item*, int) { }
   virtual void Break();
@@ -289,7 +289,7 @@ class olterrain : public lterrain, public oterrain
   virtual DATA_BASE_VALUE(const festring&, SitMessage);
   DATA_BASE_TRUTH(ShowMaterial);
   DATA_BASE_VALUE(const festring&, DigMessage);
-  truth CanBeDestroyed() const;
+  bool CanBeDestroyed() const;
   DATA_BASE_VALUE(int, RestModifier);
   DATA_BASE_VALUE(const festring&, RestMessage);
   DATA_BASE_TRUTH(IsUpLink);
@@ -316,21 +316,21 @@ class olterrain : public lterrain, public oterrain
   virtual int GetAttachedGod() const;
   void SetConfig(int, int = 0);
   god* GetMasterGod() const;
-  virtual truth IsTransparent() const;
+  virtual bool IsTransparent() const;
   virtual void Draw(blitdata&) const;
   virtual int GetTheoreticalWalkability() const { return DataBase->Walkability; }
   virtual void BeDestroyed() { Break(); }
   virtual void ReceiveAcid(material*, long);
   virtual void SignalRustLevelChange();
-  virtual truth IsFountainWithWater() const { return false; }
-  truth ShowThingsUnder() const;
-  truth WillBeDestroyedBy(const character*) const;
+  virtual bool IsFountainWithWater() const { return false; }
+  bool ShowThingsUnder() const;
+  bool WillBeDestroyedBy(const character*) const;
   virtual void PreProcessForBone() { }
   virtual void PostProcessForBone() { }
   virtual void FinalProcessForBone() { }
   virtual void RestoreHP() { HP = CalculateMaxHP(); }
-  virtual truth IsAnimated() const;
-  virtual truth VomitingIsDangerous(const character*) const { return false; }
+  virtual bool IsAnimated() const;
+  virtual bool VomitingIsDangerous(const character*) const { return false; }
  protected:
   virtual v2 GetBitmapPos(int) const;
   v2 GetBorderBitmapPos(v2, int) const;

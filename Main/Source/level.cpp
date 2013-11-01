@@ -50,7 +50,7 @@ level::~level()
   game::SetGlobalRainLiquid(0);
 }
 
-void level::ExpandPossibleRoute(int OrigoX, int OrigoY, int TargetX, int TargetY, truth XMode)
+void level::ExpandPossibleRoute(int OrigoX, int OrigoY, int TargetX, int TargetY, bool XMode)
 {
 #define CHECK(x, y) !(FlagMap[x][y] & (ON_POSSIBLE_ROUTE|FORBIDDEN))
 
@@ -138,7 +138,7 @@ void level::ExpandPossibleRoute(int OrigoX, int OrigoY, int TargetX, int TargetY
 #undef CALL_EXPAND
 }
 
-void level::ExpandStillPossibleRoute(int OrigoX, int OrigoY, int TargetX, int TargetY, truth XMode)
+void level::ExpandStillPossibleRoute(int OrigoX, int OrigoY, int TargetX, int TargetY, bool XMode)
 {
 #define CHECK(x, y) (FlagMap[x][y] & (STILL_ON_POSSIBLE_ROUTE|ON_POSSIBLE_ROUTE)) == ON_POSSIBLE_ROUTE
 
@@ -226,7 +226,7 @@ void level::ExpandStillPossibleRoute(int OrigoX, int OrigoY, int TargetX, int Ta
 #undef CALL_EXPAND
 }
 
-void level::GenerateTunnel(int FromX, int FromY, int TargetX, int TargetY, truth XMode)
+void level::GenerateTunnel(int FromX, int FromY, int TargetX, int TargetY, bool XMode)
 {
   FlagMap[FromX][FromY] |= ON_POSSIBLE_ROUTE;
   ExpandPossibleRoute(FromX, FromY, TargetX, TargetY, XMode);
@@ -374,7 +374,7 @@ void level::CreateItems(int Amount)
   }
 }
 
-truth level::MakeRoom(const roomscript* RoomScript)
+bool level::MakeRoom(const roomscript* RoomScript)
 {
   game::BusyAnimation();
   v2 Pos = RoomScript->GetPos()->Randomize();
@@ -621,7 +621,7 @@ truth level::MakeRoom(const roomscript* RoomScript)
   return true;
 }
 
-truth level::GenerateLanterns(int X, int Y, int SquarePos) const
+bool level::GenerateLanterns(int X, int Y, int SquarePos) const
 {
   if(!(RAND() % 7))
   {
@@ -730,7 +730,7 @@ void level::FiatLux()
   CheckSunLight();
 }
 
-void level::GenerateNewMonsters(int HowMany, truth ConsiderPlayer)
+void level::GenerateNewMonsters(int HowMany, bool ConsiderPlayer)
 {
   v2 Pos;
 
@@ -836,7 +836,7 @@ void level::ParticleTrail(v2 StartPos, v2 EndPos)
     ABORT("666th rule of thermodynamics - Particles don't move the way you want them to move.");
 }
 
-truth level::IsOnGround() const
+bool level::IsOnGround() const
 {
   return *LevelScript->IsOnGround();
 }
@@ -860,7 +860,7 @@ room* level::GetRoom(int I) const
   return Room[I];
 }
 
-void level::Explosion(character* Terrorist, const festring& DeathMsg, v2 Pos, int Strength, truth HurtNeutrals)
+void level::Explosion(character* Terrorist, const festring& DeathMsg, v2 Pos, int Strength, bool HurtNeutrals)
 {
   static int StrengthLimit[6] = { 500, 250, 100, 50, 25, 10 };
   uint c;
@@ -914,7 +914,7 @@ void level::Explosion(character* Terrorist, const festring& DeathMsg, v2 Pos, in
   }
 }
 
-truth level::DrawExplosion(const explosion* Explosion) const
+bool level::DrawExplosion(const explosion* Explosion) const
 {
   static v2 StrengthPicPos[7] = { v2(176, 176), v2(0, 144), v2(256, 32), v2(144, 32), v2(64, 32), v2(16, 32),v2(0, 32) };
   v2 BPos = game::CalculateScreenCoordinates(Explosion->Pos) - v2((6 - Explosion->Size) << 4, (6 - Explosion->Size) << 4);
@@ -987,7 +987,7 @@ truth level::DrawExplosion(const explosion* Explosion) const
 
 struct explosioncontroller
 {
-  static truth Handler(int x, int y)
+  static bool Handler(int x, int y)
   {
     lsquare* Square = Map[x][y];
     Square->GetHitByExplosion(CurrentExplosion);
@@ -1022,7 +1022,7 @@ int level::TriggerExplosions(int MinIndex)
       ADD_MESSAGE("You hear explosions.");
 
   game::DrawEverythingNoBlit();
-  truth Drawn = false;
+  bool Drawn = false;
 
   for(c = MinIndex; c < LastExplosion; ++c)
   {
@@ -1073,7 +1073,7 @@ int level::TriggerExplosions(int MinIndex)
   return LastExplosion;
 }
 
-truth level::CollectCreatures(charactervector& CharacterArray, character* Leader, truth AllowHostiles)
+bool level::CollectCreatures(charactervector& CharacterArray, character* Leader, bool AllowHostiles)
 {
   int c;
 
@@ -1088,7 +1088,7 @@ truth level::CollectCreatures(charactervector& CharacterArray, character* Leader
 	    return false;
 	  }
 
-  truth TakeAll = true;
+  bool TakeAll = true;
 
   for(c = 0; c < game::GetTeams(); ++c)
     if(game::GetTeam(c)->GetEnabledMembers()
@@ -1122,7 +1122,7 @@ truth level::CollectCreatures(charactervector& CharacterArray, character* Leader
   return true;
 }
 
-void level::Draw(truth AnimationDraw) const
+void level::Draw(bool AnimationDraw) const
 {
   const int XMin = Max(game::GetCamera().X, 0);
   const int YMin = Max(game::GetCamera().Y, 0);
@@ -1234,8 +1234,8 @@ void level::GenerateRectangularRoom(std::vector<v2>& OKForDoor, std::vector<v2>&
 
   int Room = RoomClass->GetIndex();
   long Counter = 0;
-  truth AllowLanterns = *RoomScript->GenerateLanterns();
-  truth AllowWindows = *RoomScript->GenerateWindows();
+  bool AllowLanterns = *RoomScript->GenerateLanterns();
+  bool AllowWindows = *RoomScript->GenerateWindows();
   int x, y;
   int Shape = *RoomScript->GetShape();
   int Flags = (GTerrain->IsInside() ? *GTerrain->IsInside() : *RoomScript->IsInside()) ? INSIDE : 0;
@@ -1417,7 +1417,7 @@ void level::LightningBeam(beamdata& Beam)
       if((CurrentSquare->*lsquare::GetBeamEffect(Beam.BeamEffect))(Beam))
 	break;
 
-      truth W1, W2;
+      bool W1, W2;
 
       switch(Beam.Direction)
       {
@@ -1602,7 +1602,7 @@ void (level::*level::GetBeam(int I))(beamdata&)
   return Beam[I];
 }
 
-v2 level::FreeSquareSeeker(const character* Char, v2 StartPos, v2 Prohibited, int MaxDistance, truth AllowStartPos) const
+v2 level::FreeSquareSeeker(const character* Char, v2 StartPos, v2 Prohibited, int MaxDistance, bool AllowStartPos) const
 {
   int c;
 
@@ -1636,7 +1636,7 @@ v2 level::FreeSquareSeeker(const character* Char, v2 StartPos, v2 Prohibited, in
 
 /* Returns ERROR_V2 if no free square was found */
 
-v2 level::GetNearestFreeSquare(const character* Char, v2 StartPos, truth AllowStartPos) const
+v2 level::GetNearestFreeSquare(const character* Char, v2 StartPos, bool AllowStartPos) const
 {
   if(AllowStartPos && Char->CanMoveOn(GetLSquare(StartPos)) && Char->IsFreeForMe(GetLSquare(StartPos)))
     return StartPos;
@@ -1668,7 +1668,7 @@ v2 level::GetNearestFreeSquare(const character* Char, v2 StartPos, truth AllowSt
   return ERROR_V2;
 }
 
-v2 level::GetFreeAdjacentSquare(const character* Char, v2 StartPos, truth AllowCharacter) const
+v2 level::GetFreeAdjacentSquare(const character* Char, v2 StartPos, bool AllowCharacter) const
 {
   int PossibleDir[8];
   int Index = 0;
@@ -1715,7 +1715,7 @@ void level::LightningVisualizer(const fearray<lsquare*>& Stack, col16 BeamColor)
   while(clock() - StartTime < 0.05 * CLOCKS_PER_SEC);
 }
 
-truth level::PreProcessForBone()
+bool level::PreProcessForBone()
 {
   if(!*LevelScript->CanGenerateBone())
     return false;
@@ -1736,7 +1736,7 @@ truth level::PreProcessForBone()
 				  &&  (DungeonIndex != ELPURI_CAVE || (Index != ENNER_BEAST_LEVEL && Index != DARK_LEVEL))));
 }
 
-truth level::PostProcessForBone()
+bool level::PostProcessForBone()
 {
   game::SetTooGreatDangerFound(false);
   double DangerSum = 0;
@@ -2346,7 +2346,7 @@ void level::CheckSunLight()
 
 void level::ChangeSunLight()
 {
-  truth SunSet = game::IsDark(SunLightEmitation);
+  bool SunSet = game::IsDark(SunLightEmitation);
   ulong c;
 
   for(c = 0; c < XSizeTimesYSize; ++c)
@@ -2379,7 +2379,7 @@ void level::InitSquarePartEmitationTicks()
       Map[x][y]->SquarePartEmitationTick = 0;
 }
 
-truth level::GenerateWindows(int X, int Y) const
+bool level::GenerateWindows(int X, int Y) const
 {
   olterrain* Terrain = Map[X][Y]->GetOLTerrain();
 
@@ -2395,18 +2395,18 @@ truth level::GenerateWindows(int X, int Y) const
 
 struct sunbeamcontroller : public stackcontroller
 {
-  static truth Handler(int, int);
+  static bool Handler(int, int);
   static void ProcessStack();
   static ulong ID;
   static int SunLightBlockHeight;
   static v2 SunLightBlockPos;
-  static truth ReSunEmitation;
+  static bool ReSunEmitation;
 };
 
 ulong sunbeamcontroller::ID;
 int sunbeamcontroller::SunLightBlockHeight;
 v2 sunbeamcontroller::SunLightBlockPos;
-truth sunbeamcontroller::ReSunEmitation;
+bool sunbeamcontroller::ReSunEmitation;
 
 void level::ForceEmitterNoxify(const emittervector& Emitter) const
 {
@@ -2470,7 +2470,7 @@ void level::ForceEmitterEmitation(const emittervector& Emitter, const sunemitter
 
 struct loscontroller : public tickcontroller, public stackcontroller
 {
-  static truth Handler(int x, int y)
+  static bool Handler(int x, int y)
   {
     lsquare* Square = Map[x >> 1][y >> 1];
     const ulong SquareFlags = Square->Flags;
@@ -2663,7 +2663,7 @@ void level::EmitSunBeam(v2 S, ulong ID, int SourceFlags) const
   }
 }
 
-truth sunbeamcontroller::Handler(int x, int y)
+bool sunbeamcontroller::Handler(int x, int y)
 {
   int X = x >> 1, Y = y >> 1;
 
@@ -2808,7 +2808,7 @@ void level::CalculateLuminances()
 
 struct areacontroller : public stackcontroller
 {
-  static truth Handler(int x, int y)
+  static bool Handler(int x, int y)
   {
     if(x >= 0 && y >= 0 && x < LevelXSize && y < LevelYSize
        && HypotSquare(x - Center.X, y - Center.Y) <= RadiusSquare)
@@ -2888,7 +2888,7 @@ void level::Amnesia(int Percentile)
 
 spawnresult level::SpawnMonsters(characterspawner Spawner, team* Team,
 				 v2 Pos, int Config, int Amount,
-				 truth IgnoreWalkability)
+				 bool IgnoreWalkability)
 {
   spawnresult SR = { 0, 0 };
 

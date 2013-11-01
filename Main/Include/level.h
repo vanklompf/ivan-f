@@ -69,8 +69,8 @@ struct node
   long Remaining;
   long TotalDistanceEstimate;
   long Diagonals;
-  truth InNodeQueue;
-  truth Processed;
+  bool InNodeQueue;
+  bool Processed;
   static node*** NodeMap;
   static int RequiredWalkability;
   static const character* SpecialMover;
@@ -89,7 +89,7 @@ struct explosion
   int Strength;
   int RadiusSquare;
   int Size;
-  truth HurtNeutrals;
+  bool HurtNeutrals;
 };
 
 struct beamdata
@@ -150,33 +150,33 @@ class level : public area
   void GenerateMonsters();
   lsquare* GetLSquare(v2 Pos) const { return Map[Pos.X][Pos.Y]; }
   lsquare* GetLSquare(int x, int y) const { return Map[x][y]; }
-  void GenerateTunnel(int, int, int, int, truth);
-  void ExpandPossibleRoute(int, int, int, int, truth);
-  void ExpandStillPossibleRoute(int, int, int, int, truth);
+  void GenerateTunnel(int, int, int, int, bool);
+  void ExpandPossibleRoute(int, int, int, int, bool);
+  void ExpandStillPossibleRoute(int, int, int, int, bool);
   void Save(outputfile&) const;
   void Load(inputfile&);
   void FiatLux();
   int GetIdealPopulation() const { return IdealPopulation; }
   double GetDifficulty() const { return Difficulty; }
-  void GenerateNewMonsters(int, truth = true);
+  void GenerateNewMonsters(int, bool = true);
   void AttachPos(int, int);
   void AttachPos(v2 Pos) { AttachPos(Pos.X, Pos.Y); }
   void CreateItems(int);
-  truth MakeRoom(const roomscript*);
+  bool MakeRoom(const roomscript*);
   void ParticleTrail(v2, v2);
   festring GetLevelMessage() { return LevelMessage; }
   void SetLevelMessage(const festring& What) { LevelMessage = What; }
   void SetLevelScript(const levelscript* What) { LevelScript = What; }
-  truth IsOnGround() const;
+  bool IsOnGround() const;
   const levelscript* GetLevelScript() const { return LevelScript; }
   int GetLOSModifier() const;
   room* GetRoom(int) const;
   void SetRoom(int, room*);
   void AddRoom(room*);
-  void Explosion(character*, const festring&, v2, int, truth = true);
-  truth CollectCreatures(charactervector&, character*, truth);
+  void Explosion(character*, const festring&, v2, int, bool = true);
+  bool CollectCreatures(charactervector&, character*, bool);
   void ApplyLSquareScript(const squarescript*);
-  virtual void Draw(truth) const;
+  virtual void Draw(bool) const;
   v2 GetEntryPos(const character*, int) const;
   void GenerateRectangularRoom(std::vector<v2>&, std::vector<v2>&, std::vector<v2>&, const roomscript*, room*, v2, v2);
   void Reveal();
@@ -188,17 +188,17 @@ class level : public area
   void SetDungeon(dungeon* What) { Dungeon = What; }
   int GetIndex() const { return Index; }
   void SetIndex(int What) { Index = What; }
-  truth DrawExplosion(const explosion*) const;
+  bool DrawExplosion(const explosion*) const;
   int TriggerExplosions(int);
   lsquare*** GetMap() const { return Map; }
-  v2 GetNearestFreeSquare(const character*, v2, truth = true) const;
-  v2 FreeSquareSeeker(const character*, v2, v2, int, truth) const;
-  v2 GetFreeAdjacentSquare(const character*, v2, truth) const;
+  v2 GetNearestFreeSquare(const character*, v2, bool = true) const;
+  v2 FreeSquareSeeker(const character*, v2, v2, int, bool) const;
+  v2 GetFreeAdjacentSquare(const character*, v2, bool) const;
   static void (level::*GetBeamEffectVisualizer(int))(const fearray<lsquare*>&, col16) const;
   void ParticleVisualizer(const fearray<lsquare*>&, col16) const;
   void LightningVisualizer(const fearray<lsquare*>&, col16) const;
-  truth PreProcessForBone();
-  truth PostProcessForBone();
+  bool PreProcessForBone();
+  bool PostProcessForBone();
   void FinalProcessForBone();
   void GenerateDungeon(int);
   void GenerateDesert();
@@ -234,10 +234,10 @@ class level : public area
   int GetEnchantmentMinusChance() { return EnchantmentMinusChance; }
   int GetEnchantmentPlusChance() { return EnchantmentPlusChance; }
   void Amnesia(int);
-  spawnresult SpawnMonsters(characterspawner, team*, v2, int = 0, int = 1, truth = false);
+  spawnresult SpawnMonsters(characterspawner, team*, v2, int = 0, int = 1, bool = false);
  protected:
-  truth GenerateLanterns(int, int, int) const;
-  truth GenerateWindows(int, int) const;
+  bool GenerateLanterns(int, int, int) const;
+  bool GenerateWindows(int, int) const;
   void CreateRoomSquare(glterrain*, olterrain*, int, int, int, int) const;
   void EmitSunBeams();
   void EmitSunBeam(v2, ulong, int) const;
@@ -254,7 +254,7 @@ class level : public area
   dungeon* Dungeon;
   int Index;
   std::vector<explosion*> ExplosionQueue;
-  std::vector<truth> PlayerHurt;
+  std::vector<bool> PlayerHurt;
   node*** NodeMap;
   uchar** WalkabilityMap;
   std::vector<v2> AttachQueue;

@@ -46,7 +46,7 @@ rawbitmap* graphics::DefaultFont = 0;
 
 void graphics::Init()
 {
-  static truth AlreadyInstalled = false;
+  static bool AlreadyInstalled = false;
 
   if(!AlreadyInstalled)
   {
@@ -87,7 +87,7 @@ void graphics::DeInit()
 #ifdef USE_SDL
 
 void graphics::SetMode(const char* Title, const char* IconName,
-		       v2 NewRes, truth FullScreen)
+		       v2 NewRes, bool FullScreen)
 {
   if(IconName)
   {
@@ -171,7 +171,7 @@ void graphics::LoadDefaultFont(const festring& FileName)
 
 #ifdef __DJGPP__
 
-void graphics::SetMode(const char*, const char*, v2 NewRes, truth)
+void graphics::SetMode(const char*, const char*, v2 NewRes, bool)
 {
   ulong Mode;
 

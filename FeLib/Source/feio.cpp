@@ -40,7 +40,7 @@
    called during every fade tick. */
 
 void iosystem::TextScreen(const festring& Text, col16 Color,
-			  truth GKey, void (*BitmapEditor)(bitmap*))
+			  bool GKey, void (*BitmapEditor)(bitmap*))
 {
   bitmap Buffer(RES, 0);
   Buffer.ActivateFastFlag();
@@ -113,7 +113,7 @@ int iosystem::Menu(const bitmap* BackGround, v2 Pos,
   if(CountChars('\r',sMS) < 1)
     return (-1);
 
-  truth bReady = false;
+  bool bReady = false;
   int iSelected = 0;
   bitmap Backup(DOUBLE_BUFFER);
   Backup.ActivateFastFlag();
@@ -263,7 +263,7 @@ int iosystem::StringQuestion(festring& Input,
 			     v2 Pos, col16 Color,
 			     festring::sizetype MinLetters,
 			     festring::sizetype MaxLetters,
-			     truth Fade, truth AllowExit,
+			     bool Fade, bool AllowExit,
 			     stringkeyhandler StringKeyHandler)
 {
   v2 V(RES.X, 9); ///???????????
@@ -287,7 +287,7 @@ int iosystem::StringQuestion(festring& Input,
   else
     DOUBLE_BUFFER->NormalBlit(B);
 
-  truth TooShort = false;
+  bool TooShort = false;
   FONT->Printf(DOUBLE_BUFFER, Pos, Color, "%s", Topic.CStr());
   Swap(B.Src, B.Dest);
 
@@ -380,7 +380,7 @@ int iosystem::StringQuestion(festring& Input,
    and the transition to that is a fade. */
 
 long iosystem::NumberQuestion(const festring& Topic, v2 Pos, col16 Color,
-			      truth Fade, truth ReturnZeroOnEsc)
+			      bool Fade, bool ReturnZeroOnEsc)
 {
   v2 V(RES.X, 9); ///???????????
   bitmap BackUp(V, 0);
@@ -461,11 +461,11 @@ long iosystem::ScrollBarQuestion(const festring& Topic, v2 Pos,
 				 long Min, long Max, long AbortValue,
 				 col16 TopicColor, col16 Color1,
 				 col16 Color2, int LeftKey, int RightKey,
-				 truth Fade, void (*Handler)(long))
+				 bool Fade, void (*Handler)(long))
 {
   long BarValue = StartValue;
   festring Input;
-  truth FirstTime = true;
+  bool FirstTime = true;
   v2 V(RES.X, 20); ///???????????
   bitmap BackUp(V, 0);
 
@@ -704,7 +704,7 @@ festring iosystem::ContinueMenu(col16 TopicColor, col16 ListColor,
 #endif
 }
 
-truth iosystem::IsAcceptableForStringQuestion(char Key)
+bool iosystem::IsAcceptableForStringQuestion(char Key)
 {
   if(Key == '|' || Key == '<' || Key == '>' || Key == '?' || Key == '*'
      || Key == '/' || Key == '\\' || Key == ':')

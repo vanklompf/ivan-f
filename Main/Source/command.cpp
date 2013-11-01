@@ -33,7 +33,7 @@
 #include "proto.h"
 #endif
 
-command::command(truth (*LinkedFunction)(character*), const char* Description, char Key1, char Key2, truth UsableInWilderness, truth WizardModeFunction) : LinkedFunction(LinkedFunction), Description(Description), Key1(Key1), Key2(Key2), UsableInWilderness(UsableInWilderness), WizardModeFunction(WizardModeFunction) { }
+command::command(bool (*LinkedFunction)(character*), const char* Description, char Key1, char Key2, bool UsableInWilderness, bool WizardModeFunction) : LinkedFunction(LinkedFunction), Description(Description), Key1(Key1), Key2(Key2), UsableInWilderness(UsableInWilderness), WizardModeFunction(WizardModeFunction) { }
 
 char command::GetKey() const { return !ivanconfig::GetUseAlternativeKeys() ? Key1 : Key2; }
 
@@ -111,7 +111,7 @@ command* commandsystem::Command[] =
   0
 };
 
-truth commandsystem::GoUp(character* Char)
+bool commandsystem::GoUp(character* Char)
 {
   if(!Char->TryToUnStickTraps(ZERO_V2))
     return false;
@@ -148,7 +148,7 @@ truth commandsystem::GoUp(character* Char)
     return false;
 }
 
-truth commandsystem::GoDown(character* Char)
+bool commandsystem::GoDown(character* Char)
 {
   if(!Char->TryToUnStickTraps(ZERO_V2))
     return false;
@@ -180,12 +180,12 @@ truth commandsystem::GoDown(character* Char)
     return false;
 }
 
-truth commandsystem::Open(character* Char)
+bool commandsystem::Open(character* Char)
 {
   if(Char->CanOpen())
   {
     int Key;
-    truth OpenableItems = Char->GetStack()->SortedItems(Char, &item::IsOpenable);
+    bool OpenableItems = Char->GetStack()->SortedItems(Char, &item::IsOpenable);
 
     if(OpenableItems)
       Key = game::AskForKeyPress(CONST_S("What do you wish to open? [press a direction key, space or i]"));
@@ -209,7 +209,7 @@ truth commandsystem::Open(character* Char)
   return false;
 }
 
-truth commandsystem::Close(character* Char)
+bool commandsystem::Close(character* Char)
 {
   if(Char->CanOpen())
   {
@@ -224,7 +224,7 @@ truth commandsystem::Close(character* Char)
   return false;
 }
 
-truth commandsystem::Drop(character* Char)
+bool commandsystem::Drop(character* Char)
 {
   if(!Char->GetStack()->GetItems())
   {
@@ -232,7 +232,7 @@ truth commandsystem::Drop(character* Char)
     return false;
   }
 
-  truth Success = false;
+  bool Success = false;
   stack::SetSelected(0);
 
   for(;;)
@@ -278,7 +278,7 @@ truth commandsystem::Drop(character* Char)
   return false;
 }
 
-truth commandsystem::Eat(character* Char)
+bool commandsystem::Eat(character* Char)
 {
   if(!Char->CheckConsume(CONST_S("eat")))
     return false;
@@ -294,7 +294,7 @@ truth commandsystem::Eat(character* Char)
   return Consume(Char, "eat", &item::IsEatable);
 }
 
-truth commandsystem::Drink(character* Char)
+bool commandsystem::Drink(character* Char)
 {
   if(!Char->CheckConsume(CONST_S("drink")))
     return false;
@@ -310,7 +310,7 @@ truth commandsystem::Drink(character* Char)
   return Consume(Char, "drink", &item::IsDrinkable);
 }
 
-truth commandsystem::Consume(character* Char, const char* ConsumeVerb, sorter Sorter)
+bool commandsystem::Consume(character* Char, const char* ConsumeVerb, sorter Sorter)
 {
   lsquare* Square = Char->GetLSquareUnder();
   stack* Inventory = Char->GetStack();
@@ -333,13 +333,13 @@ truth commandsystem::Consume(character* Char, const char* ConsumeVerb, sorter So
   return !Item.empty() ? Char->ConsumeItem(Item[0], ConsumeVerb + CONST_S("ing")) : false;
 }
 
-truth commandsystem::ShowInventory(character* Char)
+bool commandsystem::ShowInventory(character* Char)
 {
   Char->GetStack()->DrawContents(Char, CONST_S("Your inventory"), NO_SELECT);
   return false;
 }
 
-truth commandsystem::PickUp(character* Char)
+bool commandsystem::PickUp(character* Char)
 {
   if(!Char->GetStackUnder()->GetVisibleItems(Char))
   {
@@ -389,7 +389,7 @@ truth commandsystem::PickUp(character* Char)
       return false;
     }
 
-  truth Success = false;
+  bool Success = false;
   stack::SetSelected(0);
 
   for(;;)
@@ -427,7 +427,7 @@ truth commandsystem::PickUp(character* Char)
   return false;
 }
 
-truth commandsystem::Quit(character* Char)
+bool commandsystem::Quit(character* Char)
 {
   if(game::TruthQuestion(CONST_S("Your quest is not yet compeleted! Really quit? [y/N]")))
   {
@@ -441,7 +441,7 @@ truth commandsystem::Quit(character* Char)
     return false;
 }
 
-truth commandsystem::Talk(character* Char)
+bool commandsystem::Talk(character* Char)
 {
   if(!Char->CheckTalk())
     return false;
@@ -497,7 +497,7 @@ truth commandsystem::Talk(character* Char)
   return false;
 }
 
-truth commandsystem::NOP(character* Char)
+bool commandsystem::NOP(character* Char)
 {
   Char->EditExperience(DEXTERITY, -25, 1 << 3);
   Char->EditExperience(AGILITY, -25, 1 << 3);
@@ -505,7 +505,7 @@ truth commandsystem::NOP(character* Char)
   return true;
 }
 
-truth commandsystem::Save(character*)
+bool commandsystem::Save(character*)
 {
   if(game::TruthQuestion(CONST_S("Do you truly wish to save and flee? [y/N]")))
   {
@@ -517,7 +517,7 @@ truth commandsystem::Save(character*)
     return false;
 }
 
-truth commandsystem::Read(character* Char)
+bool commandsystem::Read(character* Char)
 {
   if(!Char->CanRead() && !game::GetSeeWholeMapCheatMode())
   {
@@ -541,7 +541,7 @@ truth commandsystem::Read(character* Char)
   return Item && Char->ReadItem(Item);
 }
 
-truth commandsystem::Dip(character* Char)
+bool commandsystem::Dip(character* Char)
 {
   if(!Char->GetStack()->SortedItems(Char, &item::IsDippable) && !Char->EquipsSomething(&item::IsDippable))
   {
@@ -549,8 +549,8 @@ truth commandsystem::Dip(character* Char)
     return false;
   }
 
-  truth HasDipDestination = Char->PossessesItem(&item::IsDipDestination);
-  truth DipDestinationNear = false;
+  bool HasDipDestination = Char->PossessesItem(&item::IsDipDestination);
+  bool DipDestinationNear = false;
 
   for(int d = 0; d < 9; ++d)
   {
@@ -601,7 +601,7 @@ truth commandsystem::Dip(character* Char)
   return false;
 }
 
-truth commandsystem::ShowKeyLayout(character*)
+bool commandsystem::ShowKeyLayout(character*)
 {
   felist List(CONST_S("Keyboard Layout"));
   List.AddDescription(CONST_S(""));
@@ -638,7 +638,7 @@ truth commandsystem::ShowKeyLayout(character*)
   return false;
 }
 
-truth commandsystem::Look(character* Char)
+bool commandsystem::Look(character* Char)
 {
   festring Msg;
 
@@ -651,7 +651,7 @@ truth commandsystem::Look(character* Char)
   return false;
 }
 
-truth commandsystem::WhatToEngrave(character* Char)
+bool commandsystem::WhatToEngrave(character* Char)
 {
   if(!Char->CanRead())
   {
@@ -663,7 +663,7 @@ truth commandsystem::WhatToEngrave(character* Char)
   return false;
 }
 
-truth commandsystem::Pray(character* Char)
+bool commandsystem::Pray(character* Char)
 {
   felist Panthenon(CONST_S("To Whom you want to address your prayers?"));
   Panthenon.SetEntryDrawer(game::GodEntryDrawer);
@@ -754,7 +754,7 @@ truth commandsystem::Pray(character* Char)
   }
 }
 
-truth commandsystem::Kick(character* Char)
+bool commandsystem::Kick(character* Char)
 {
   /** No multi-tile support */
 
@@ -788,7 +788,7 @@ truth commandsystem::Kick(character* Char)
   return true;
 }
 
-truth commandsystem::Offer(character* Char)
+bool commandsystem::Offer(character* Char)
 {
   if(!Char->CheckOffer())
     return false;
@@ -826,13 +826,13 @@ truth commandsystem::Offer(character* Char)
   return false;
 }
 
-truth commandsystem::DrawMessageHistory(character*)
+bool commandsystem::DrawMessageHistory(character*)
 {
   msgsystem::DrawMessageHistory();
   return false;
 }
 
-truth commandsystem::Throw(character* Char)
+bool commandsystem::Throw(character* Char)
 {
   if(!Char->CheckThrow())
     return false;
@@ -864,7 +864,7 @@ truth commandsystem::Throw(character* Char)
     return false;
 }
 
-truth commandsystem::Apply(character* Char)
+bool commandsystem::Apply(character* Char)
 {
   if(!Char->CanApply())
   {
@@ -885,7 +885,7 @@ truth commandsystem::Apply(character* Char)
   return Item && Item->Apply(Char);
 }
 
-truth commandsystem::ForceVomit(character* Char)
+bool commandsystem::ForceVomit(character* Char)
 {
   if(Char->CanForceVomit())
   {
@@ -918,7 +918,7 @@ truth commandsystem::ForceVomit(character* Char)
   return false;
 }
 
-truth commandsystem::Zap(character* Char)
+bool commandsystem::Zap(character* Char)
 {
   if(!Char->CheckZap())
     return false;
@@ -950,7 +950,7 @@ truth commandsystem::Zap(character* Char)
     return false;
 }
 
-truth commandsystem::Rest(character* Char)
+bool commandsystem::Rest(character* Char)
 {
   if(Char->StateIsActivated(PANIC))
   {
@@ -958,7 +958,7 @@ truth commandsystem::Rest(character* Char)
     return false;
   }
 
-  truth Error = false;
+  bool Error = false;
 
   if(Char->GetHP() == Char->GetMaxHP())
   {
@@ -1014,13 +1014,13 @@ truth commandsystem::Rest(character* Char)
   return true;
 }
 
-truth commandsystem::Sit(character* Char)
+bool commandsystem::Sit(character* Char)
 {
   lsquare* Square = Char->GetLSquareUnder();
   return (Square->GetOLTerrain() && Square->GetOLTerrain()->SitOn(Char)) || Square->GetGLTerrain()->SitOn(Char);
 }
 
-truth commandsystem::Go(character* Char)
+bool commandsystem::Go(character* Char)
 {
   int Dir = game::DirectionQuestion(CONST_S("In what direction do you want to go? [press a direction key]"), false);
 
@@ -1050,41 +1050,41 @@ truth commandsystem::Go(character* Char)
     return 0;
 }
 
-truth commandsystem::ShowConfigScreen(character*)
+bool commandsystem::ShowConfigScreen(character*)
 {
   ivanconfig::Show();
   return false;
 }
 
-truth commandsystem::AssignName(character*)
+bool commandsystem::AssignName(character*)
 {
   game::NameQuestion();
   return false;
 }
 
-truth commandsystem::EquipmentScreen(character* Char)
+bool commandsystem::EquipmentScreen(character* Char)
 {
   return Char->EquipmentScreen(Char->GetStack(), 0);
 }
 
-truth commandsystem::ScrollMessagesDown(character*)
+bool commandsystem::ScrollMessagesDown(character*)
 {
   msgsystem::ScrollDown();
   return false;
 }
 
-truth commandsystem::ScrollMessagesUp(character*)
+bool commandsystem::ScrollMessagesUp(character*)
 {
   msgsystem::ScrollUp();
   return false;
 }
 
-truth commandsystem::ShowWeaponSkills(character* Char)
+bool commandsystem::ShowWeaponSkills(character* Char)
 {
   felist List(CONST_S("Your experience in weapon categories"));
   List.AddDescription(CONST_S(""));
   List.AddDescription(CONST_S("Category name                 Level     Points    Needed    Battle bonus"));
-  truth Something = false;
+  bool Something = false;
   festring Buffer;
 
   for(int c = 0; c < Char->GetAllowedWeaponSkillCategories(); ++c)
@@ -1136,7 +1136,7 @@ truth commandsystem::ShowWeaponSkills(character* Char)
   return false;
 }
 
-truth commandsystem::WieldInRightArm(character* Char)
+bool commandsystem::WieldInRightArm(character* Char)
 {
   if(!Char->CanUseEquipment())
     ADD_MESSAGE("You cannot wield anything.");
@@ -1149,7 +1149,7 @@ truth commandsystem::WieldInRightArm(character* Char)
   return false;
 }
 
-truth commandsystem::WieldInLeftArm(character* Char)
+bool commandsystem::WieldInLeftArm(character* Char)
 {
   if(!Char->CanUseEquipment())
     ADD_MESSAGE("You cannot wield anything.");
@@ -1162,7 +1162,7 @@ truth commandsystem::WieldInLeftArm(character* Char)
   return false;
 }
 
-truth commandsystem::Search(character* Char)
+bool commandsystem::Search(character* Char)
 {
   Char->Search(Char->GetAttribute(PERCEPTION) << 2);
   return true;
@@ -1170,11 +1170,11 @@ truth commandsystem::Search(character* Char)
 
 #ifdef WIZARD
 
-truth commandsystem::WizardMode(character* Char)
+bool commandsystem::WizardMode(character* Char)
 {
   if(!game::WizardModeIsActive())
   {
-    if(game::TruthQuestion(CONST_S("Do you want to cheat, cheater? This action cannot be undone. [y/N]")))
+    if(game::boolQuestion(CONST_S("Do you want to cheat, cheater? This action cannot be undone. [y/N]")))
     {
       game::ActivateWizardMode();
       ADD_MESSAGE("Wizard mode activated.");
@@ -1210,19 +1210,19 @@ truth commandsystem::WizardMode(character* Char)
   return false;
 }
 
-truth commandsystem::RaiseStats(character* Char)
+bool commandsystem::RaiseStats(character* Char)
 {
   Char->EditAllAttributes(1);
   return false;
 }
 
-truth commandsystem::LowerStats(character* Char)
+bool commandsystem::LowerStats(character* Char)
 {
   Char->EditAllAttributes(-1);
   return false;
 }
 
-truth commandsystem::GainAllItems(character* Char)
+bool commandsystem::GainAllItems(character* Char)
 {
   itemvectorvector AllItems;
   protosystem::CreateEveryItem(AllItems);
@@ -1234,19 +1234,19 @@ truth commandsystem::GainAllItems(character* Char)
   return false;
 }
 
-truth commandsystem::SeeWholeMap(character*)
+bool commandsystem::SeeWholeMap(character*)
 {
   game::SeeWholeMap();
   return false;
 }
 
-truth commandsystem::WalkThroughWalls(character*)
+bool commandsystem::WalkThroughWalls(character*)
 {
   game::GoThroughWalls();
   return false;
 }
 
-truth commandsystem::RaiseGodRelations(character*)
+bool commandsystem::RaiseGodRelations(character*)
 {
   for(int c = 1; c <= GODS; ++c)
     game::GetGod(c)->AdjustRelation(50);
@@ -1254,7 +1254,7 @@ truth commandsystem::RaiseGodRelations(character*)
   return false;
 }
 
-truth commandsystem::LowerGodRelations(character*)
+bool commandsystem::LowerGodRelations(character*)
 {
   for(int c = 1; c <= GODS; ++c)
     game::GetGod(c)->AdjustRelation(-50);
@@ -1262,7 +1262,7 @@ truth commandsystem::LowerGodRelations(character*)
   return false;
 }
 
-truth commandsystem::GainDivineKnowledge(character*)
+bool commandsystem::GainDivineKnowledge(character*)
 {
   for(int c = 1; c <= GODS; ++c)
     game::GetGod(c)->SetIsKnown(true);
@@ -1270,7 +1270,7 @@ truth commandsystem::GainDivineKnowledge(character*)
   return false;
 }
 
-truth commandsystem::SecretKnowledge(character* Char)
+bool commandsystem::SecretKnowledge(character* Char)
 {
   felist List(CONST_S("Knowledge of the ancients"));
   List.AddEntry(CONST_S("Character attributes"), LIGHT_GRAY);
@@ -1453,13 +1453,13 @@ truth commandsystem::SecretKnowledge(character* Char)
   return false;
 }
 
-truth commandsystem::DetachBodyPart(character* Char)
+bool commandsystem::DetachBodyPart(character* Char)
 {
   Char->DetachBodyPart();
   return false;
 }
 
-truth commandsystem::SummonMonster(character* Char)
+bool commandsystem::SummonMonster(character* Char)
 {
   character* Summoned = 0;
 
@@ -1475,7 +1475,7 @@ truth commandsystem::SummonMonster(character* Char)
   return false;
 }
 
-truth commandsystem::LevelTeleport(character*)
+bool commandsystem::LevelTeleport(character*)
 {
   long Level = game::NumberQuestion(CONST_S("To which level?"), WHITE);
 
@@ -1494,7 +1494,7 @@ truth commandsystem::LevelTeleport(character*)
   return game::TryTravel(game::GetCurrentDungeonIndex(), Level - 1, RANDOM, true);
 }
 
-truth commandsystem::Possess(character* Char)
+bool commandsystem::Possess(character* Char)
 {
   int Dir = game::DirectionQuestion(CONST_S("Choose creature to possess. [press a direction key]"), false);
 
@@ -1514,7 +1514,7 @@ truth commandsystem::Possess(character* Char)
   return true; // The old player's turn must end
 }
 
-truth commandsystem::Polymorph(character* Char)
+bool commandsystem::Polymorph(character* Char)
 {
   character* NewForm;
 
@@ -1527,7 +1527,7 @@ truth commandsystem::Polymorph(character* Char)
 
 #endif
 
-truth commandsystem::ToggleRunning(character* Char)
+bool commandsystem::ToggleRunning(character* Char)
 {
   if(game::PlayerIsRunning()
      && PLAYER->StateIsActivated(PANIC)
@@ -1547,7 +1547,7 @@ truth commandsystem::ToggleRunning(character* Char)
   return false;
 }
 
-truth commandsystem::IssueCommand(character* Char)
+bool commandsystem::IssueCommand(character* Char)
 {
   if(!Char->CheckTalk())
     return false;

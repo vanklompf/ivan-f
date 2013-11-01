@@ -17,35 +17,35 @@ const char* StrengthValueDescription[] = { "fragile", "rather sturdy", "sturdy",
 
 itemprototype::itemprototype(const itemprototype* Base, itemspawner Spawner, itemcloner Cloner, const char* ClassID) : Base(Base), Spawner(Spawner), Cloner(Cloner), ClassID(ClassID) { Index = protocontainer<item>::Add(this); }
 
-truth itemdatabase::AllowRandomInstantiation() const { return !(Config & S_LOCK_ID); }
+bool itemdatabase::AllowRandomInstantiation() const { return !(Config & S_LOCK_ID); }
 
 item::item() : Slot(0), CloneMotherID(0), Fluid(0), LifeExpectancy(0) { }
-truth item::IsOnGround() const { return Slot[0]->IsOnGround(); }
-truth item::IsSimiliarTo(item* Item) const { return Item->GetType() == GetType() && Item->GetConfig() == GetConfig(); }
+bool item::IsOnGround() const { return Slot[0]->IsOnGround(); }
+bool item::IsSimiliarTo(item* Item) const { return Item->GetType() == GetType() && Item->GetConfig() == GetConfig(); }
 double item::GetBaseDamage() const { return sqrt(5e-5 * GetWeaponStrength()) + GetDamageBonus(); }
 int item::GetBaseMinDamage() const { return int(GetBaseDamage() * 0.75); }
 int item::GetBaseMaxDamage() const { return int(GetBaseDamage() * 1.25) + 1; }
 int item::GetBaseToHitValue() const { return int(10000. / (1000 + GetWeight()) + GetTHVBonus()); }
 int item::GetBaseBlockValue() const { return int((10000. / (1000 + GetWeight()) + GetTHVBonus()) * GetBlockModifier() / 10000.); }
-truth item::IsInCorrectSlot(int I) const { return I == RIGHT_WIELDED_INDEX || I == LEFT_WIELDED_INDEX; }
-truth item::IsInCorrectSlot() const { return IsInCorrectSlot(static_cast<gearslot*>(*Slot)->GetEquipmentIndex()); }
+bool item::IsInCorrectSlot(int I) const { return I == RIGHT_WIELDED_INDEX || I == LEFT_WIELDED_INDEX; }
+bool item::IsInCorrectSlot() const { return IsInCorrectSlot(static_cast<gearslot*>(*Slot)->GetEquipmentIndex()); }
 int item::GetEquipmentIndex() const { return static_cast<gearslot*>(*Slot)->GetEquipmentIndex(); }
 int item::GetGraphicsContainerIndex() const { return GR_ITEM; }
-truth item::IsBroken() const { return GetConfig() & BROKEN; }
+bool item::IsBroken() const { return GetConfig() & BROKEN; }
 const char* item::GetBreakVerb() const { return "breaks"; }
 square* item::GetSquareUnderEntity(int I) const { return GetSquareUnder(I); }
 square* item::GetSquareUnder(int I) const { return Slot[I] ? Slot[I]->GetSquareUnder() : 0; }
 lsquare* item::GetLSquareUnder(int I) const { return static_cast<lsquare*>(Slot[I]->GetSquareUnder()); }
-void item::SignalStackAdd(stackslot* StackSlot, void (stack::*)(item*, truth)) { Slot[0] = StackSlot; }
-truth item::IsAnimated() const { return GraphicData.AnimationFrames > 1 || (Fluid && ShowFluids()); }
-truth item::IsRusted() const { return MainMaterial->GetRustLevel() != NOT_RUSTED; }
-truth item::IsEatable(const character* Eater) const { return GetConsumeMaterial(Eater, &material::IsSolid) && IsConsumable(); }
-truth item::IsDrinkable(const character* Eater) const { return GetConsumeMaterial(Eater, &material::IsLiquid) && IsConsumable(); }
+void item::SignalStackAdd(stackslot* StackSlot, void (stack::*)(item*, bool)) { Slot[0] = StackSlot; }
+bool item::IsAnimated() const { return GraphicData.AnimationFrames > 1 || (Fluid && ShowFluids()); }
+bool item::IsRusted() const { return MainMaterial->GetRustLevel() != NOT_RUSTED; }
+bool item::IsEatable(const character* Eater) const { return GetConsumeMaterial(Eater, &material::IsSolid) && IsConsumable(); }
+bool item::IsDrinkable(const character* Eater) const { return GetConsumeMaterial(Eater, &material::IsLiquid) && IsConsumable(); }
 pixelpredicate item::GetFluidPixelAllowedPredicate() const { return &rawbitmap::IsTransparent; }
 void item::Cannibalize() { Flags |= CANNIBALIZED; }
 void item::SetMainMaterial(material* NewMaterial, int SpecialFlags) { SetMaterial(MainMaterial, NewMaterial, GetDefaultMainVolume(), SpecialFlags); }
 void item::ChangeMainMaterial(material* NewMaterial, int SpecialFlags) { ChangeMaterial(MainMaterial, NewMaterial, GetDefaultMainVolume(), SpecialFlags); }
-void item::InitMaterials(const materialscript* M, const materialscript*, truth CUP) { InitMaterials(M->Instantiate(), CUP); }
+void item::InitMaterials(const materialscript* M, const materialscript*, bool CUP) { InitMaterials(M->Instantiate(), CUP); }
 int item::GetMainMaterialRustLevel() const { return MainMaterial->GetRustLevel(); }
 
 item::item(const item& Item) : object(Item), Slot(0), Size(Item.Size), DataBase(Item.DataBase), Volume(Item.Volume), Weight(Item.Weight), Fluid(0), SquaresUnder(Item.SquaresUnder), LifeExpectancy(Item.LifeExpectancy)
@@ -108,7 +108,7 @@ void item::Fly(character* Thrower, int Direction, int Force)
   v2 StartingPos = GetPos();
   v2 Pos = StartingPos;
   v2 DirVector = game::GetMoveVector(Direction);
-  truth Breaks = false;
+  bool Breaks = false;
   double BaseDamage, BaseToHitValue;
 
   /*** check ***/
@@ -146,7 +146,7 @@ void item::Fly(character* Thrower, int Direction, int Force)
       Pos += DirVector;
       RemoveFromSlot();
       JustHit->GetStack()->AddItem(this, false);
-      truth Draw = game::OnScreen(JustHit->GetPos()) && JustHit->CanBeSeenByPlayer();
+      bool Draw = game::OnScreen(JustHit->GetPos()) && JustHit->CanBeSeenByPlayer();
 
       if(Draw)
 	game::DrawEverything();
@@ -209,7 +209,7 @@ int item::GetStrengthRequirement() const
   return int(1.25e-10 * WeightTimesSize * WeightTimesSize);
 }
 
-truth item::Apply(character* Applier)
+bool item::Apply(character* Applier)
 {
   if(Applier->IsPlayer())
     ADD_MESSAGE("You can't apply this!");
@@ -219,7 +219,7 @@ truth item::Apply(character* Applier)
 
 /* Returns truth that tells whether the Polymorph really happened */
 
-truth item::Polymorph(character* Polymorpher, stack* CurrentStack)
+bool item::Polymorph(character* Polymorpher, stack* CurrentStack)
 {
   if(!IsPolymorphable())
     return false;
@@ -250,7 +250,7 @@ truth item::Polymorph(character* Polymorpher, stack* CurrentStack)
 
 /* Returns whether the Eater must stop eating the item */
 
-truth item::Consume(character* Eater, long Amount)
+bool item::Consume(character* Eater, long Amount)
 {
   material* ConsumeMaterial = GetConsumeMaterial(Eater);
 
@@ -278,7 +278,7 @@ truth item::Consume(character* Eater, long Amount)
   return !NewConsuming->Exists() || !NewConsumeMaterial;
 }
 
-truth item::CanBeEatenByAI(const character* Eater) const
+bool item::CanBeEatenByAI(const character* Eater) const
 {
   material* ConsumeMaterial = GetConsumeMaterial(Eater);
 
@@ -424,7 +424,7 @@ int item::GetResistance(int Type) const
   return 0;
 }
 
-truth item::Open(character* Char)
+bool item::Open(character* Char)
 {
   if(Char->IsPlayer())
     ADD_MESSAGE("You can't open %s.", CHAR_NAME(DEFINITE));
@@ -477,7 +477,7 @@ void item::Initialize(int NewConfig, int SpecialFlags)
   }
 }
 
-truth item::ShowMaterial() const
+bool item::ShowMaterial() const
 {
   if(GetMainMaterialConfig().Size == 1)
     return GetMainMaterial()->GetConfig() != GetMainMaterialConfig()[0];
@@ -493,12 +493,12 @@ long item::GetBlockModifier() const
     return GetSize() * GetRoundness() << 2;
 }
 
-truth item::CanBeSeenByPlayer() const
+bool item::CanBeSeenByPlayer() const
 {
   return CanBeSeenBy(PLAYER);
 }
 
-truth item::CanBeSeenBy(const character* Who) const
+bool item::CanBeSeenBy(const character* Who) const
 {
   for(int c = 0; c < SquaresUnder; ++c)
     if(Slot[c] && Slot[c]->CanBeSeenBy(Who))
@@ -604,7 +604,7 @@ item* item::Duplicate(ulong Flags)
   return Clone;
 }
 
-void item::AddInventoryEntry(const character*, festring& Entry, int Amount, truth ShowSpecialInfo) const
+void item::AddInventoryEntry(const character*, festring& Entry, int Amount, bool ShowSpecialInfo) const
 {
   if(Amount == 1)
     AddName(Entry, INDEFINITE);
@@ -634,7 +634,7 @@ const itemdatabase* itemprototype::ChooseBaseForConfig(itemdatabase** TempConfig
   }
 }
 
-truth item::ReceiveDamage(character* Damager, int Damage, int Type, int Dir)
+bool item::ReceiveDamage(character* Damager, int Damage, int Type, int Dir)
 {
   if(CanBeBroken() && !IsBroken() && Type & (PHYSICAL_DAMAGE|SOUND|ENERGY|ACID))
   {
@@ -705,7 +705,7 @@ void item::SignalSpoil(material*)
   if(CanBeSeenByPlayer())
     ADD_MESSAGE("%s spoils completely.", GetExtendedDescription().CStr());
 
-  truth Equipped = PLAYER->Equips(this);
+  bool Equipped = PLAYER->Equips(this);
   Disappear();
 
   if(Equipped)
@@ -723,7 +723,7 @@ item* item::DuplicateToStack(stack* CurrentStack, ulong Flags)
   return Duplicated;
 }
 
-truth item::CanBePiledWith(const item* Item, const character* Viewer) const
+bool item::CanBePiledWith(const item* Item, const character* Viewer) const
 {
   return GetType() == Item->GetType()
     && GetConfig() == Item->GetConfig()
@@ -772,7 +772,7 @@ void item::Be()
       if(CanBeSeenByPlayer())
 	ADD_MESSAGE("%s disappears.", GetExtendedDescription().CStr());
 
-      truth Equipped = PLAYER->Equips(this);
+      bool Equipped = PLAYER->Equips(this);
       Disappear();
 
       if(Equipped)
@@ -857,7 +857,7 @@ void item::SignalSpoilLevelChange(material*)
   UpdatePictures();
 }
 
-truth item::AllowSpoil() const
+bool item::AllowSpoil() const
 {
   if(IsOnGround())
   {
@@ -1141,8 +1141,8 @@ const rawbitmap* item::GetRawPicture() const
 
 void item::RemoveFluid(fluid* ToBeRemoved)
 {
-  truth WasAnimated = IsAnimated();
-  truth HasFluids = false;
+  bool WasAnimated = IsAnimated();
+  bool HasFluids = false;
 
   for(int c = 0; c < SquaresUnder; ++c)
   {
@@ -1181,9 +1181,9 @@ void item::RemoveFluid(fluid* ToBeRemoved)
   SignalVolumeAndWeightChange();
 }
 
-void item::AddFluid(liquid* ToBeAdded, festring LocationName, int SquareIndex, truth IsInside)
+void item::AddFluid(liquid* ToBeAdded, festring LocationName, int SquareIndex, bool IsInside)
 {
-  truth WasAnimated = IsAnimated();
+  bool WasAnimated = IsAnimated();
 
   if(Fluid)
   {
@@ -1283,7 +1283,7 @@ void item::TryToRust(long LiquidModifier)
   }
 }
 
-void item::CheckFluidGearPictures(v2 ShadowPos, int SpecialFlags, truth BodyArmor)
+void item::CheckFluidGearPictures(v2 ShadowPos, int SpecialFlags, bool BodyArmor)
 {
   if(Fluid)
     for(fluid* F = Fluid[0]; F; F = F->Next)
@@ -1350,7 +1350,7 @@ void item::Destroy(character* Destroyer, int)
       Room->HostileAction(Destroyer);
   }
 
-  truth Equipped = PLAYER->Equips(this);
+  bool Equipped = PLAYER->Equips(this);
   RemoveFromSlot();
   SendToHell();
 
@@ -1398,7 +1398,7 @@ material* item::RemoveMaterial(material*)
   return 0;
 }
 
-void item::InitMaterials(material* FirstMaterial, truth CallUpdatePictures)
+void item::InitMaterials(material* FirstMaterial, bool CallUpdatePictures)
 {
   InitMaterial(MainMaterial, FirstMaterial, GetDefaultMainVolume());
   SignalVolumeAndWeightChange();
@@ -1422,13 +1422,13 @@ void item::SignalSquarePositionChange(int Position)
   Flags |= Position << SQUARE_POSITION_SHIFT;
 }
 
-truth item::Read(character* Reader)
+bool item::Read(character* Reader)
 {
   Reader->StartReading(this, GetReadDifficulty());
   return true;
 }
 
-truth item::CanBeHardened(const character*) const
+bool item::CanBeHardened(const character*) const
 {
   return MainMaterial->GetHardenedMaterial(this) != NONE;
 }
@@ -1439,7 +1439,7 @@ void item::SetLifeExpectancy(int Base, int RandPlus)
   Enable();
 }
 
-truth item::IsVeryCloseToSpoiling() const
+bool item::IsVeryCloseToSpoiling() const
 {
   for(int c = 0; c < GetMaterials(); ++c)
     if(GetMaterial(c) && !GetMaterial(c)->IsVeryCloseToSpoiling())
@@ -1448,7 +1448,7 @@ truth item::IsVeryCloseToSpoiling() const
   return true;
 }
 
-truth item::IsValuable() const
+bool item::IsValuable() const
 {
   if(DataBase->IsValuable)
     return true;
@@ -1503,7 +1503,7 @@ void item::AddTrapName(festring& String, int Amount) const
   }
 }
 
-truth item::WillSpoil() const
+bool item::WillSpoil() const
 {
   for(int c = 0; c < GetMaterials(); ++c)
   {
@@ -1531,7 +1531,7 @@ int item::GetMaxSpoilPercentage() const
   return MaxPercentage;
 }
 
-truth item::HasPrice() const
+bool item::HasPrice() const
 {
   return GetPrice() || GetMaterialPrice();
 }

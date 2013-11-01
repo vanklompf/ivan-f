@@ -16,12 +16,12 @@
 #include "bitmap.h"
 #include "festring.h"
 
-truth (*globalwindowhandler::ControlLoop[MAX_CONTROLS])();
+bool (*globalwindowhandler::ControlLoop[MAX_CONTROLS])();
 int globalwindowhandler::Controls = 0;
 ulong globalwindowhandler::Tick;
-truth globalwindowhandler::ControlLoopsEnabled = true;
+bool globalwindowhandler::ControlLoopsEnabled = true;
 
-void globalwindowhandler::InstallControlLoop(truth (*What)())
+void globalwindowhandler::InstallControlLoop(bool (*What)())
 {
   if(Controls == MAX_CONTROLS)
     ABORT("Animation control frenzy!");
@@ -29,7 +29,7 @@ void globalwindowhandler::InstallControlLoop(truth (*What)())
   ControlLoop[Controls++] = What;
 }
 
-void globalwindowhandler::DeInstallControlLoop(truth (*What)())
+void globalwindowhandler::DeInstallControlLoop(bool (*What)())
 {
   int c;
 
@@ -51,7 +51,7 @@ void globalwindowhandler::DeInstallControlLoop(truth (*What)())
 #include <pc.h>
 #include <keys.h>
 
-int globalwindowhandler::GetKey(truth EmptyBuffer)
+int globalwindowhandler::GetKey(bool EmptyBuffer)
 {
   if(EmptyBuffer)
     while(kbhit())
@@ -70,7 +70,7 @@ int globalwindowhandler::GetKey(truth EmptyBuffer)
 	if(LastTick != Tick)
 	{
 	  LastTick = Tick;
-	  truth Draw = false;
+	  bool Draw = false;
 
 	  for(int c = 0; c < Controls; ++c)
 	    if(ControlLoop[c]())
@@ -105,7 +105,7 @@ int globalwindowhandler::ReadKey()
 #include <algorithm>
 
 std::vector<int> globalwindowhandler::KeyBuffer;
-truth (*globalwindowhandler::QuitMessageHandler)() = 0;
+bool (*globalwindowhandler::QuitMessageHandler)() = 0;
 
 void globalwindowhandler::Init()
 {
@@ -113,7 +113,7 @@ void globalwindowhandler::Init()
   SDL_EnableKeyRepeat(500, 30);
 }
 
-int globalwindowhandler::GetKey(truth EmptyBuffer)
+int globalwindowhandler::GetKey(bool EmptyBuffer)
 {
   SDL_Event Event;
 
@@ -152,7 +152,7 @@ int globalwindowhandler::GetKey(truth EmptyBuffer)
 	  if(LastTick != Tick)
 	  {
 	    LastTick = Tick;
-	    truth Draw = false;
+	    bool Draw = false;
 
 	    for(int c = 0; c < Controls; ++c)
 	      if(ControlLoop[c]())

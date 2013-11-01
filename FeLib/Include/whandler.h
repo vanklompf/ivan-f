@@ -31,35 +31,35 @@
 class globalwindowhandler
 {
  public:
-  static int GetKey(truth = true);
+  static int GetKey(bool = true);
   static int ReadKey();
-  static void InstallControlLoop(truth (*)());
-  static void DeInstallControlLoop(truth (*)());
+  static void InstallControlLoop(bool (*)());
+  static void DeInstallControlLoop(bool (*)());
   static ulong GetTick() { return Tick; }
-  static truth ControlLoopsInstalled() { return Controls; }
+  static bool ControlLoopsInstalled() { return Controls; }
   static void EnableControlLoops() { ControlLoopsEnabled = true; }
   static void DisableControlLoops() { ControlLoopsEnabled = false; }
 #ifdef USE_SDL
   static void Init();
-  static void SetQuitMessageHandler(truth (*What)())
+  static void SetQuitMessageHandler(bool (*What)())
   { QuitMessageHandler = What; }
   static void UpdateTick() { Tick = SDL_GetTicks() / 40; }
 #endif
 #ifdef __DJGPP__
   static void Init() { }
-  static void SetQuitMessageHandler(truth (*)()) { }
+  static void SetQuitMessageHandler(bool (*)()) { }
   static void UpdateTick() { Tick = uclock() * 25 / UCLOCKS_PER_SEC; }
 #endif
  private:
 #ifdef USE_SDL
   static void ProcessMessage(SDL_Event*);
   static std::vector<int> KeyBuffer;
-  static truth (*QuitMessageHandler)();
+  static bool (*QuitMessageHandler)();
 #endif
-  static truth (*ControlLoop[MAX_CONTROLS])();
+  static bool (*ControlLoop[MAX_CONTROLS])();
   static int Controls;
   static ulong Tick;
-  static truth ControlLoopsEnabled;
+  static bool ControlLoopsEnabled;
 };
 
 #endif

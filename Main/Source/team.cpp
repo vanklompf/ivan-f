@@ -116,7 +116,7 @@ void team::Load(inputfile& SaveFile)
   SaveFile >> ID >> Relation >> KillEvilness;
 }
 
-truth team::HasEnemy() const
+bool team::HasEnemy() const
 {
   for(int c = 0; c < game::GetTeams(); ++c)
     if(!game::GetTeam(c)->GetMember().empty() && GetRelation(game::GetTeam(c)) == HOSTILE)

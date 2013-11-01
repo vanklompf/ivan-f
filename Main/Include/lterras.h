@@ -30,39 +30,39 @@ GLTERRAIN(solidterrain, glterrain)
 OLTERRAIN(door, olterrain)
 {
  public:
-  virtual truth Open(character*);
-  virtual truth Close(character*);
-  virtual truth CanBeOpened() const { return !Opened; }
+  virtual bool Open(character*);
+  virtual bool Close(character*);
+  virtual bool CanBeOpened() const { return !Opened; }
   virtual void BeKicked(character*, int, int);
-  virtual void SetIsOpened(truth What) { Opened = What; }
+  virtual void SetIsOpened(bool What) { Opened = What; }
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
-  virtual truth IsDoor() const { return true; }
-  virtual void SetIsLocked(truth What) { Locked = What; }
-  virtual truth IsLocked() const { return Locked; }
-  virtual truth CanBeOpenedByAI();
+  virtual bool IsDoor() const { return true; }
+  virtual void SetIsLocked(bool What) { Locked = What; }
+  virtual bool IsLocked() const { return Locked; }
+  virtual bool CanBeOpenedByAI();
   virtual void ReceiveDamage(character*, int, int);
   virtual void CreateBoobyTrap();
   virtual void ActivateBoobyTrap();
-  virtual truth TryKey(item*, character*);
+  virtual bool TryKey(item*, character*);
   virtual void SetParameters(int);
   virtual void Lock() { SetIsLocked(true); }
   virtual void HasBeenHitByItem(character*, item*, int);
-  virtual truth IsTransparent() const;
+  virtual bool IsTransparent() const;
   virtual int GetWalkability() const;
   virtual int GetTheoreticalWalkability() const;
   virtual void BeDestroyed();
  protected:
   virtual void PostConstruct();
-  virtual truth AddAdjective(festring&, truth) const;
+  virtual bool AddAdjective(festring&, bool) const;
   virtual void Break();
   virtual v2 GetBitmapPos(int) const;
   virtual void MakeWalkable();
   virtual void MakeNotWalkable();
   virtual int GetBoobyTrap() { return BoobyTrap; }
   virtual void SetBoobyTrap(int What) { BoobyTrap = What; }
-  truth Opened;
-  truth Locked;
+  bool Opened;
+  bool Locked;
   int BoobyTrap;
 };
 
@@ -71,7 +71,7 @@ OLTERRAIN(stairs, olterrain)
  public:
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
-  virtual truth Enter(truth) const;
+  virtual bool Enter(bool) const;
   virtual void StepOn(character*);
   virtual void SetAttachedArea(int What) { AttachedArea = What; }
   virtual void SetAttachedEntry(int What) { AttachedEntry = What; }
@@ -93,20 +93,20 @@ OLTERRAIN(portal, stairs)
 OLTERRAIN(altar, olterrain)
 {
  public:
-  virtual truth AcceptsOffers() const { return true; }
+  virtual bool AcceptsOffers() const { return true; }
   virtual void StepOn(character*);
   virtual void BeKicked(character*, int, int);
-  virtual truth ReceiveVomit(character*, liquid*);
-  virtual truth Polymorph(character*);
-  virtual truth SitOn(character*);
+  virtual bool ReceiveVomit(character*, liquid*);
+  virtual bool Polymorph(character*);
+  virtual bool SitOn(character*);
   virtual void Draw(blitdata&) const;
-  virtual truth VomitingIsDangerous(const character*) const;
+  virtual bool VomitingIsDangerous(const character*) const;
 };
 
 OLTERRAIN(throne, decoration)
 {
  public:
-  virtual truth SitOn(character*);
+  virtual bool SitOn(character*);
 };
 
 OLTERRAIN(olterraincontainer, olterrain)
@@ -114,14 +114,14 @@ OLTERRAIN(olterraincontainer, olterrain)
  public:
   olterraincontainer();
   virtual ~olterraincontainer();
-  virtual truth Open(character*);
-  virtual truth CanBeOpened() const { return true; }
+  virtual bool Open(character*);
+  virtual bool CanBeOpened() const { return true; }
   virtual stack* GetContained() const { return Contained; }
   virtual void Load(inputfile&);
   virtual void Save(outputfile&) const;
   virtual void SetItemsInside(const fearray<contentscript<item> >&, int);
   virtual void Break();
-  virtual truth AllowContentEmitation() const { return false; }
+  virtual bool AllowContentEmitation() const { return false; }
   virtual void PreProcessForBone();
   virtual void PostProcessForBone();
   virtual void FinalProcessForBone();
@@ -133,28 +133,28 @@ OLTERRAIN(fountain, olterrain)
 {
  public:
   virtual ~fountain();
-  virtual truth SitOn(character*);
-  virtual truth Drink(character*);
-  virtual truth HasDrinkEffect() const { return true; }
+  virtual bool SitOn(character*);
+  virtual bool Drink(character*);
+  virtual bool HasDrinkEffect() const { return true; }
   virtual void DryOut();
-  virtual truth DipInto(item*, character*);
-  virtual truth IsDipDestination() const;
+  virtual bool DipInto(item*, character*);
+  virtual bool IsDipDestination() const;
   virtual material* GetSecondaryMaterial() const { return SecondaryMaterial; }
   virtual void SetSecondaryMaterial(material*, int = 0);
   virtual void ChangeSecondaryMaterial(material*, int = 0);
-  void InitMaterials(material*, material*, truth = true);
+  void InitMaterials(material*, material*, bool = true);
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
   virtual int GetMaterials() const { return 2; }
   virtual material* GetMaterial(int) const;
-  virtual void InitMaterials(const materialscript*, const materialscript*, truth);
-  virtual truth IsFountainWithWater() const;
+  virtual void InitMaterials(const materialscript*, const materialscript*, bool);
+  virtual bool IsFountainWithWater() const;
   virtual int GetSparkleFlags() const;
  protected:
   virtual void GenerateMaterials();
   virtual col16 GetMaterialColorB(int) const;
   virtual void AddPostFix(festring& String) const { AddContainerPostFix(String); }
-  virtual truth AddAdjective(festring&, truth) const;
+  virtual bool AddAdjective(festring&, bool) const;
   virtual v2 GetBitmapPos(int) const;
   material* SecondaryMaterial;
 };
@@ -176,9 +176,9 @@ GLTERRAIN(liquidterrain, glterrain)
   virtual const char* DeathMessage() const;
   virtual const char* MonsterDeathVerb() const;
   virtual const char* ScoreEntry() const;
-  virtual truth IsFatalToStay() const { return true; }
-  virtual truth DipInto(item*, character*);
-  virtual truth IsDipDestination() const { return true; }
+  virtual bool IsFatalToStay() const { return true; }
+  virtual bool DipInto(item*, character*);
+  virtual bool IsDipDestination() const { return true; }
   virtual void SurviveEffect(character*);
   virtual void AddLocationDescription(festring&) const;
  protected:

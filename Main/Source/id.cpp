@@ -15,7 +15,7 @@
 #include "god.h"
 #include "festring.h"
 
-void id::AddNameSingular(festring& String, truth Articled) const
+void id::AddNameSingular(festring& String, bool Articled) const
 {
   if(Articled)
     if(UsesLongArticle())
@@ -28,7 +28,7 @@ void id::AddNameSingular(festring& String, truth Articled) const
 
 void id::AddName(festring& Name, int Case) const
 {
-  truth Articled;
+  bool Articled;
 
   if((Case & ARTICLE_BIT) && (GetArticleMode() == FORCE_THE || (!GetArticleMode() && !(Case & INDEFINE_BIT))))
   {
@@ -85,7 +85,7 @@ festring id::GetName(int Case, int Amount) const
   return Name;
 }
 
-truth id::AddAdjective(festring& String, truth Articled) const
+bool id::AddAdjective(festring& String, bool Articled) const
 {
   if(GetAdjective().GetSize())
   {
@@ -108,7 +108,7 @@ void id::AddPostFix(festring& String) const
     String << ' ' << GetPostFix();
 }
 
-truth id::AddActiveAdjective(festring& String, truth Articled) const
+bool id::AddActiveAdjective(festring& String, bool Articled) const
 {
   String << (Articled ? "an active " : "active ");
   return true;

@@ -14,7 +14,7 @@
 
 actionprototype::actionprototype(actionspawner Spawner, const char* ClassID) : Spawner(Spawner), ClassID(ClassID) { Index = protocontainer<action>::Add(this); }
 
-void action::Terminate(truth)
+void action::Terminate(bool)
 {
   GetActor()->SetAction(0);
   delete this;

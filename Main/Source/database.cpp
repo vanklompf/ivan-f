@@ -140,7 +140,7 @@ template <class type> int databasecreator<type>::CreateDivineConfigurations(cons
 	break;
     }
 
-    truth Created = false;
+    bool Created = false;
 
     if(!ConfigDataBase)
     {
@@ -606,7 +606,7 @@ template<> void databasecreator<material>::SetBaseValue(const festring& Word, da
 }
 
 template <class type>
-truth databasecreator<type>::AnalyzeData(inputfile& SaveFile, const festring& Word, database& DataBase)
+bool databasecreator<type>::AnalyzeData(inputfile& SaveFile, const festring& Word, database& DataBase)
 {
   typename databasemembermap::iterator i = GetDataBaseMemberMap().find(Word);
 

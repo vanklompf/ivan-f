@@ -165,7 +165,7 @@ cachedfont* rawbitmap::Colorize(const packcol16* Color, alpha BaseAlpha, const p
   packcol16* DestBuffer = Bitmap->GetImage()[0];
   uchar* Palette = this->Palette; // eliminate the efficiency cost of dereferencing
   packalpha* AlphaMap;
-  truth UseAlpha;
+  bool UseAlpha;
 
   if(BaseAlpha != 255 || (Alpha && (Alpha[0] != 255 || Alpha[1] != 255 || Alpha[2] != 255 || Alpha[3] != 255)))
   {
@@ -235,7 +235,7 @@ cachedfont* rawbitmap::Colorize(const packcol16* Color, alpha BaseAlpha, const p
   return Bitmap;
 }
 
-bitmap* rawbitmap::Colorize(v2 Pos, v2 Border, v2 Move, const packcol16* Color, alpha BaseAlpha, const packalpha* Alpha, const uchar* RustData, truth AllowReguralColors) const
+bitmap* rawbitmap::Colorize(v2 Pos, v2 Border, v2 Move, const packcol16* Color, alpha BaseAlpha, const packalpha* Alpha, const uchar* RustData, bool AllowReguralColors) const
 {
   bitmap* Bitmap = new bitmap(Border);
   v2 TargetPos(0, 0);
@@ -272,7 +272,7 @@ bitmap* rawbitmap::Colorize(v2 Pos, v2 Border, v2 Move, const packcol16* Color, 
   int BitmapXSize = Bitmap->GetSize().X;
   uchar* Palette = this->Palette; // eliminate the efficiency cost of dereferencing
   packalpha* AlphaMap;
-  truth UseAlpha;
+  bool UseAlpha;
 
   if(BaseAlpha != 255 || (Alpha && (Alpha[0] != 255 || Alpha[1] != 255 || Alpha[2] != 255 || Alpha[3] != 255)))
   {
@@ -286,7 +286,7 @@ bitmap* rawbitmap::Colorize(v2 Pos, v2 Border, v2 Move, const packcol16* Color, 
     UseAlpha = false;
   }
 
-  truth Rusted = RustData && (RustData[0] || RustData[1] || RustData[2] || RustData[3]);
+  bool Rusted = RustData && (RustData[0] || RustData[1] || RustData[2] || RustData[3]);
   ulong RustSeed[4];
 
   if(Rusted)
@@ -440,7 +440,7 @@ void rawbitmap::PrintfUnshaded(bitmap* Bitmap, v2 Pos, packcol16 Color, const ch
   }
 }
 
-void rawbitmap::AlterGradient(v2 Pos, v2 Border, int MColor, int Amount, truth Clip)
+void rawbitmap::AlterGradient(v2 Pos, v2 Border, int MColor, int Amount, bool Clip)
 {
   int ColorMin = 192 + (MColor << 4);
   int ColorMax = 207 + (MColor << 4);
@@ -636,12 +636,12 @@ v2 rawbitmap::RandomizeSparklePos(const v2* ValidityArray, v2* PossibleBuffer, v
   return Return;
 }
 
-truth rawbitmap::IsTransparent(v2 Pos) const
+bool rawbitmap::IsTransparent(v2 Pos) const
 {
   return PaletteBuffer[Pos.Y][Pos.X] == TRANSPARENT_PALETTE_INDEX;
 }
 
-truth rawbitmap::IsMaterialColor1(v2 Pos) const
+bool rawbitmap::IsMaterialColor1(v2 Pos) const
 {
   int P = PaletteBuffer[Pos.Y][Pos.X];
   return P >= 192 && P < 208;

@@ -30,22 +30,22 @@ class highscore
 {
  public:
   highscore(const festring& = HIGH_SCORE_FILENAME);
-  truth Add(long, const festring&);
+  bool Add(long, const festring&);
   void Draw() const;
   void Save(const festring& = HIGH_SCORE_FILENAME) const;
   void Load(const festring& = HIGH_SCORE_FILENAME);
-  truth LastAddFailed() const;
+  bool LastAddFailed() const;
   void AddToFile(highscore*) const;
-  truth MergeToFile(highscore*) const;
+  bool MergeToFile(highscore*) const;
   int Find(long, const festring&, time_t, long);
   const festring& GetEntry(int) const;
   long GetScore(int) const;
   long GetSize() const;
   ushort GetVersion() const { return Version; }
   void Clear();
-  truth CheckVersion() const;
+  bool CheckVersion() const;
  private:
-  truth Add(long, const festring&, time_t, long);
+  bool Add(long, const festring&, time_t, long);
   std::vector<festring> Entry;
   std::vector<long> Score;
   std::vector<time_t> Time;

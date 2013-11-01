@@ -66,7 +66,7 @@ void object::Load(inputfile& SaveFile)
   LoadMaterial(SaveFile, MainMaterial);
 }
 
-void object::ObjectInitMaterials(material*& FirstMaterial, material* FirstNewMaterial, long FirstDefaultVolume, material*& SecondMaterial, material* SecondNewMaterial, long SecondDefaultVolume, truth CallUpdatePictures)
+void object::ObjectInitMaterials(material*& FirstMaterial, material* FirstNewMaterial, long FirstDefaultVolume, material*& SecondMaterial, material* SecondNewMaterial, long SecondDefaultVolume, bool CallUpdatePictures)
 {
   InitMaterial(FirstMaterial, FirstNewMaterial, FirstDefaultVolume);
   InitMaterial(SecondMaterial, SecondNewMaterial, SecondDefaultVolume);
@@ -150,7 +150,7 @@ void object::UpdatePictures()
   UpdatePictures(GraphicData, ZeroPos, VisualEffects|GetSpecialFlags(), GetMaxAlpha(), GetGraphicsContainerIndex(), &object::GetBitmapPos);
 }
 
-truth object::RandomizeSparklePos(v2& SparklePos, v2 BPos, int& SparkleTime, ulong SeedBase, int SpecialFlags, int GraphicsContainerIndex) const
+bool object::RandomizeSparklePos(v2& SparklePos, v2 BPos, int& SparkleTime, ulong SeedBase, int SpecialFlags, int GraphicsContainerIndex) const
 {
   static int SeedModifier = 1;
   femath::SaveSeed();
@@ -215,7 +215,7 @@ void object::UpdatePictures(graphicdata& GraphicData, v2 Position, int SpecialFl
   int SparkleTime = 0;
   int Seed = 0;
   int FlyAmount = GetSpoilLevel();
-  truth Sparkling = false, FrameNeeded = false, SeedNeeded = false;
+  bool Sparkling = false, FrameNeeded = false, SeedNeeded = false;
   v2 BPos = (this->*BitmapPosRetriever)(0);
   alpha Alpha;
 
@@ -370,12 +370,12 @@ col16 object::GetMaterialColorA(int) const
   return MainMaterial->GetColor();
 }
 
-truth object::AddRustLevelDescription(festring& String, truth Articled) const
+bool object::AddRustLevelDescription(festring& String, bool Articled) const
 {
   return MainMaterial->AddRustLevelDescription(String, Articled);
 }
 
-truth object::AddMaterialDescription(festring& String, truth Articled) const
+bool object::AddMaterialDescription(festring& String, bool Articled) const
 {
   MainMaterial->AddName(String, Articled);
   String << ' ';
@@ -430,7 +430,7 @@ int object::RandomizeMaterialConfiguration()
     : 0;
 }
 
-truth object::AddEmptyAdjective(festring& String, truth Articled) const
+bool object::AddEmptyAdjective(festring& String, bool Articled) const
 {
   if(GetSecondaryMaterial())
     return false;
@@ -449,7 +449,7 @@ void object::CalculateEmitation()
     game::CombineLights(Emitation, MainMaterial->GetEmitation());
 }
 
-truth object::CalculateHasBe() const
+bool object::CalculateHasBe() const
 {
   return MainMaterial && MainMaterial->HasBe();
 }
@@ -509,7 +509,7 @@ int object::GetRustDataA() const
   return MainMaterial->GetRustData();
 }
 
-truth object::DetectMaterial(const material* Material) const
+bool object::DetectMaterial(const material* Material) const
 {
   for(int c = 0; c < GetMaterials(); ++c)
     if(GetMaterial(c) && GetMaterial(c)->IsSameAs(Material))

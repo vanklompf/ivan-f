@@ -49,10 +49,10 @@ class festring
   festring& operator<<(long Int) { return Append(Int); }
   festring& operator<<(ulong Int) { return Append(Int); }
   bool operator<(const festring&) const;
-  truth operator==(const festring&) const;
-  truth operator!=(const festring&) const;
-  truth operator==(const char*) const;
-  truth operator!=(const char*) const;
+  bool operator==(const festring&) const;
+  bool operator!=(const festring&) const;
+  bool operator==(const char*) const;
+  bool operator!=(const char*) const;
   int Compare(const festring&) const;
   const char* CStr() const;
   sizetype GetSize() const { return Size; }
@@ -83,7 +83,7 @@ class festring
   static void SearchAndReplace(festring&, const festring&,
 			       const festring&, sizetype = 0);
   static bool IgnoreCaseCompare(const festring&, const festring&);
-  truth IsEmpty() const { return !Size; }
+  bool IsEmpty() const { return !Size; }
   /* HORRIBLE ERROR!!!! */
   char& operator[](sizetype Index) const { return Data[Index]; }
   void PreProcessForFebot();
@@ -182,25 +182,25 @@ inline bool festring::operator<(const festring& Str) const
     return !ThisSize && StrSize;
 }
 
-inline truth festring::operator==(const festring& Str) const
+inline bool festring::operator==(const festring& Str) const
 {
   sizetype StrSize = Str.Size;
   return Size == StrSize && (!StrSize || !memcmp(Data, Str.Data, StrSize));
 }
 
-inline truth festring::operator!=(const festring& Str) const
+inline bool festring::operator!=(const festring& Str) const
 {
   sizetype StrSize = Str.Size;
   return Size != StrSize || (StrSize && memcmp(Data, Str.Data, StrSize));
 }
 
-inline truth festring::operator==(const char* CStr) const
+inline bool festring::operator==(const char* CStr) const
 {
   sizetype StrSize = strlen(CStr);
   return Size == StrSize && (!StrSize || !memcmp(Data, CStr, StrSize));
 }
 
-inline truth festring::operator!=(const char* CStr) const
+inline bool festring::operator!=(const char* CStr) const
 {
   sizetype StrSize = strlen(CStr);
   return Size != StrSize || (StrSize && memcmp(Data, CStr, StrSize));

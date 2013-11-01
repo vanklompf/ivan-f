@@ -35,9 +35,9 @@ class entity
   entity(const entity&);
   virtual ~entity();
   virtual void Be() { }
-  truth Exists() const { return Flags & EXISTS; }
+  bool Exists() const { return Flags & EXISTS; }
   void SendToHell();
-  truth IsEnabled() const { return Flags & HAS_BE; }
+  bool IsEnabled() const { return Flags & HAS_BE; }
   void Enable();
   void Disable();
   virtual square* GetSquareUnderEntity(int = 0) const = 0;
@@ -45,12 +45,12 @@ class entity
   col24 GetEmitation() const { return Emitation; }
   virtual void SignalEmitationIncrease(col24) { }
   virtual void SignalEmitationDecrease(col24) { }
-  virtual truth ContentsCanBeSeenBy(const character*) const { return false; }
-  virtual truth AllowSpoil() const { return false; }
+  virtual bool ContentsCanBeSeenBy(const character*) const { return false; }
+  virtual bool AllowSpoil() const { return false; }
   virtual void SignalSpoil(material*) { }
   virtual void SignalSpoilLevelChange(material*) { }
-  virtual truth IsOnGround() const = 0;
-  virtual truth AllowContentEmitation() const { return true; }
+  virtual bool IsOnGround() const = 0;
+  virtual bool AllowContentEmitation() const { return true; }
   virtual void SignalRustLevelChange() { }
   virtual material* RemoveMaterial(material*) { return 0; }
   virtual character* TryNecromancy(character*) { return 0; }
@@ -61,11 +61,11 @@ class entity
   virtual void AddTrapName(festring&, int) const { }
   virtual void UnStick() { }
   virtual void UnStick(int) { }
-  virtual truth TryToUnStick(character*, v2);
+  virtual bool TryToUnStick(character*, v2);
   virtual int GetTrapType() const { return 0; }
   void AddFlags(ulong What) { Flags |= What; }
   void RemoveFlags(ulong What) { Flags &= ~What; }
-  virtual truth IsStuckTo(const character*) const { return false; }
+  virtual bool IsStuckTo(const character*) const { return false; }
   virtual const character* FindCarrier() const { return 0; }
  protected:
   col24 Emitation;

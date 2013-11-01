@@ -23,7 +23,7 @@ TRAP(web, trap)
   web();
   virtual ~web();
   virtual void AddDescription(festring&) const;
-  virtual truth TryToUnStick(character*, v2);
+  virtual bool TryToUnStick(character*, v2);
   virtual int GetTrapBaseModifier() const { return Strength; }
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
@@ -36,11 +36,11 @@ TRAP(web, trap)
   virtual void UnStick(int I) { TrapData.BodyParts &= ~(1 << I); }
   void SetStrength(int What) { Strength = What; }
   virtual void Draw(blitdata&) const;
-  truth IsStuckToBodyPart(int) const;
+  bool IsStuckToBodyPart(int) const;
   virtual void ReceiveDamage(character*, int, int, int);
   virtual void Destroy();
-  virtual truth IsDangerous(const character* Char) const { return CanBeSeenBy(Char); }
-  virtual truth CanBeSeenBy(const character*) const;
+  virtual bool IsDangerous(const character* Char) const { return CanBeSeenBy(Char); }
+  virtual bool CanBeSeenBy(const character*) const;
   virtual void PreProcessForBone();
   virtual void PostProcessForBone();
  protected:

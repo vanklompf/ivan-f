@@ -39,7 +39,7 @@ class graphics
 #ifdef __DJGPP__
   static void SwitchMode() { }
 #endif
-  static void SetMode(const char*, const char*, v2, truth);
+  static void SetMode(const char*, const char*, v2, bool);
   static void BlitDBToScreen();
   static v2 GetRes() { return Res; }
   static bitmap* GetDoubleBuffer() { return DoubleBuffer; }

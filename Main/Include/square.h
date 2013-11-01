@@ -41,8 +41,8 @@ class square
   virtual oterrain* GetOTerrain() const = 0;
   festring GetMemorizedDescription() { return MemorizedDescription; }
   void SetMemorizedDescription(const festring& What) { MemorizedDescription = What; }
-  virtual truth CanBeSeenByPlayer(truth = false) const = 0;
-  virtual truth CanBeSeenFrom(v2, long, truth = false) const = 0;
+  virtual bool CanBeSeenByPlayer(bool = false) const = 0;
+  virtual bool CanBeSeenFrom(v2, long, bool = false) const = 0;
   void SendNewDrawRequest() { Flags |= NEW_DRAW_REQUEST; }
   void SendStrongNewDrawRequest() { Flags |= STRONG_NEW_DRAW_REQUEST; }
   const char* SurviveMessage(character*) const;
@@ -50,7 +50,7 @@ class square
   const char* DeathMessage(character*) const;
   const char* MonsterDeathVerb(character*) const;
   const char* ScoreEntry(character*) const;
-  truth IsFatalToStay() const;
+  bool IsFatalToStay() const;
   int GetEntryDifficulty() const;
   int GetRestModifier() const;
   void IncStaticAnimatedEntities()
@@ -68,7 +68,7 @@ class square
   }
   void IncAnimatedEntities() { ++AnimatedEntities; }
   void DecAnimatedEntities() { --AnimatedEntities; }
-  truth CanBeSeenBy(const character*, truth = false) const;
+  bool CanBeSeenBy(const character*, bool = false) const;
   col24 GetLuminance() const { return Luminance; }
   square* GetNeighbourSquare(int) const;
   square* GetNearSquare(v2) const;
@@ -76,7 +76,7 @@ class square
   void SetCharacter(character* What) { Character = What; }
   void AddFlags(ulong What) { Flags |= What; }
   void RemoveFlags(ulong What) { Flags &= ~What; }
-  virtual truth HasBeenSeen() const { return LastSeen; }
+  virtual bool HasBeenSeen() const { return LastSeen; }
   virtual void SurviveEffect(character*);
  protected:
   festring MemorizedDescription;

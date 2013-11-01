@@ -65,7 +65,7 @@ class trap : public entity
   virtual square* GetSquareUnderEntity(int = 0) const;
   void SetLSquareUnder(lsquare* What) { LSquareUnder = What; }
   lsquare* GetLSquareUnder() const { return LSquareUnder; }
-  virtual truth IsOnGround() const { return true; }
+  virtual bool IsOnGround() const { return true; }
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
   int GetType() const { return GetProtoType()->GetIndex(); }
@@ -74,7 +74,7 @@ class trap : public entity
   virtual void StepOnEffect(character*) = 0;
   virtual void Draw(blitdata&) const = 0;
   virtual void ReceiveDamage(character*, int, int, int) { }
-  virtual truth IsDangerous(const character*) const { return false; }
+  virtual bool IsDangerous(const character*) const { return false; }
   virtual void PreProcessForBone() { }
   virtual void PostProcessForBone() { }
  protected:

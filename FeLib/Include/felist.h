@@ -33,7 +33,7 @@ class felist
   felist(const festring&, col16 = WHITE, uint = 0);
   ~felist();
   void AddEntry(const festring&, col16, uint = 0,
-		uint = NO_IMAGE, truth = true);
+		uint = NO_IMAGE, bool = true);
   void AddDescription(const festring&, col16 = WHITE);
   uint Draw();
   void QuickDraw(bitmap*, uint) const;
@@ -46,11 +46,11 @@ class felist
   uint GetLastEntryIndex() const;
   void Load(inputfile&);
   void Save(outputfile&) const;
-  truth IsEmpty() const;
+  bool IsEmpty() const;
   uint GetSelected() const { return Selected; }
   void SetSelected(uint What) { Selected = What; }
   void EditSelected(int What) { Selected += What; }
-  truth DrawPage(bitmap*) const;
+  bool DrawPage(bitmap*) const;
   void Pop();
   static void CreateQuickDrawFontCaches(rawbitmap*, col16, uint);
   void PrintToFile(const festring&);

@@ -23,7 +23,7 @@ class bodypart;
 class materialprototype;
 template <class type> class databasecreator;
 
-typedef material* (*materialspawner)(int, long, truth);
+typedef material* (*materialspawner)(int, long, bool);
 typedef material* (*materialcloner)(const material*);
 
 struct materialdatabase : public databasebase
@@ -98,22 +98,22 @@ class material
   friend class databasecreator<material>;
   typedef materialprototype prototype;
   typedef materialdatabase database;
-  material(int NewConfig, long InitVolume = 0, truth Load = false) : MotherEntity(0) { Initialize(NewConfig, InitVolume, Load); }
+  material(int NewConfig, long InitVolume = 0, bool Load = false) : MotherEntity(0) { Initialize(NewConfig, InitVolume, Load); }
   material() : MotherEntity(0) { }
   virtual ~material() { }
-  void AddName(festring&, truth = false, truth = true) const;
-  festring GetName(truth = false, truth = true) const;
+  void AddName(festring&, bool = false, bool = true) const;
+  festring GetName(bool = false, bool = true) const;
   material* TakeDipVolumeAway();
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
-  truth Effect(character*, long);
+  bool Effect(character*, long);
   virtual material* EatEffect(character*, long);
-  truth HitEffect(character*, bodypart*);
+  bool HitEffect(character*, bodypart*);
   virtual col16 GetSkinColor() const { return GetColor(); }
   virtual void SetSkinColor(int) { }
   long GetRawPrice() const;
-  truth CanBeDug(material* ShovelMaterial) const;
-  virtual truth HasBe() const { return false; }
+  bool CanBeDug(material* ShovelMaterial) const;
+  virtual bool HasBe() const { return false; }
   virtual void Be() { }
   int GetType() const { return GetProtoType()->GetIndex(); }
   virtual void AddConsumeEndMessage(character*) const;
@@ -155,34 +155,34 @@ class material
   material* SpawnMore(long Volume) const { return GetProtoType()->Spawn(GetConfig(), Volume); }
   long GetTotalExplosivePower() const;
   static material* MakeMaterial(int, long = 0);
-  virtual truth IsFlesh() const { return false; }
-  virtual truth IsLiquid() const { return false; }
+  virtual bool IsFlesh() const { return false; }
+  virtual bool IsLiquid() const { return false; }
   virtual const char* GetConsumeVerb() const;
   entity* GetMotherEntity() const { return MotherEntity; }
   void SetMotherEntity(entity* What) { MotherEntity = What; }
-  truth IsSameAs(const material* What) const { return What->GetConfig() == GetConfig(); }
-  truth IsTransparent() const { return GetAlpha() != 255; }
+  bool IsSameAs(const material* What) const { return What->GetConfig() == GetConfig(); }
+  bool IsTransparent() const { return GetAlpha() != 255; }
   virtual long GetTotalNutritionValue() const;
-  virtual truth IsVeryCloseToSpoiling() const { return false; }
+  virtual bool IsVeryCloseToSpoiling() const { return false; }
   virtual void AddWetness(long) { }
   virtual int GetSpoilLevel() const { return 0; }
   virtual void ResetSpoiling() { }
-  truth CanBeEatenByAI(const character*) const;
+  bool CanBeEatenByAI(const character*) const;
   virtual void SetSpoilCounter(int) { }
   DATA_BASE_VALUE(const festring&, BreatheMessage);
-  truth BreatheEffect(character*);
-  virtual truth SkinColorIsSparkling() const { return IsSparkling(); }
-  virtual void SetSkinColorIsSparkling(truth) { }
+  bool BreatheEffect(character*);
+  virtual bool SkinColorIsSparkling() const { return IsSparkling(); }
+  virtual void SetSkinColorIsSparkling(bool) { }
   DATA_BASE_VALUE(int, StepInWisdomLimit);
   virtual void SetRustLevel(int) { }
   virtual int GetRustLevel() const { return NOT_RUSTED; }
   virtual int GetRustData() const { return NOT_RUSTED; }
-  virtual truth TryToRust(long, long = 0) { return false; }
+  virtual bool TryToRust(long, long = 0) { return false; }
   static const database* GetDataBase(int);
-  virtual truth CanSpoil() const { return false; }
-  truth IsSolid() const { return !IsLiquid(); }
+  virtual bool CanSpoil() const { return false; }
+  bool IsSolid() const { return !IsLiquid(); }
   /* A dummy materialpredicate */
-  truth True() const { return true; }
+  bool True() const { return true; }
   void FinishConsuming(character*);
   long GetVolume() const { return Volume; }
   long GetWeight() const
@@ -192,23 +192,23 @@ class material
   void EditVolume(long What) { SetVolume(Volume + What); }
   void SetVolume(long);
   void SetVolumeNoSignals(long What) { Volume = What; }
-  virtual truth IsPowder() const { return false; }
+  virtual bool IsPowder() const { return false; }
   static item* CreateNaturalForm(int, long);
   item* CreateNaturalForm(long) const;
-  virtual truth IsInfectedByLeprosy() const { return false; }
-  virtual void SetIsInfectedByLeprosy(truth) { }
-  virtual truth AddRustLevelDescription(festring&, truth) const { return false; }
+  virtual bool IsInfectedByLeprosy() const { return false; }
+  virtual void SetIsInfectedByLeprosy(bool) { }
+  virtual bool AddRustLevelDescription(festring&, bool) const { return false; }
   int GetHardenedMaterial(const item*) const;
   int GetHardenModifier(const item*) const;
   virtual int GetSpoilPercentage() const { return 0; }
-  virtual truth Spoils() const { return false; }
-  virtual truth IsExplosive() const;
-  virtual truth IsSparkling() const;
+  virtual bool Spoils() const { return false; }
+  virtual bool IsExplosive() const;
+  virtual bool IsSparkling() const;
   material* Duplicate() const { return DataBase->ProtoType->Clone(this); }
-  truth IsStuckTo(const character*) const;
+  bool IsStuckTo(const character*) const;
  protected:
   virtual void PostConstruct() { }
-  void Initialize(int, long, truth);
+  void Initialize(int, long, bool);
   virtual const prototype* FindProtoType() const { return &ProtoType; }
   static const prototype ProtoType;
   const database* DataBase;
@@ -221,7 +221,7 @@ class materialsysbase : public base
 {
  public:
   typedef materialsysbase<type, base> mybase;
-  static type* Spawn(int Config = 0, long Volume = 0, truth Load = false)
+  static type* Spawn(int Config = 0, long Volume = 0, bool Load = false)
   {
     type* M = new type;
     M->Initialize(Config, Volume, Load);

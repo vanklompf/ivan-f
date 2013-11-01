@@ -18,7 +18,7 @@
 
 class bitmap;
 
-typedef truth (rawbitmap::*pixelpredicate)(v2) const;
+typedef bool (rawbitmap::*pixelpredicate)(v2) const;
 
 class fluid : public entity
 {
@@ -28,7 +28,7 @@ class fluid : public entity
  public:
   fluid();
   fluid(liquid*, lsquare*);
-  fluid(liquid*, item*, const festring&, truth);
+  fluid(liquid*, item*, const festring&, bool);
   virtual ~fluid();
   virtual void Be();
   void Save(outputfile&) const;
@@ -40,22 +40,22 @@ class fluid : public entity
   square* GetSquareUnder() const { return LSquareUnder; }
   void SetLSquareUnder(lsquare* What) { LSquareUnder = What; }
   lsquare* GetLSquareUnder() const { return LSquareUnder; }
-  virtual truth IsOnGround() const { return true; }
+  virtual bool IsOnGround() const { return true; }
   void AddLiquid(long);
   void AddLiquidAndVolume(long);
   virtual void SignalVolumeAndWeightChange();
   void SetMotherItem(item*);
   static void AddFluidInfo(const fluid*, festring&);
-  void CheckGearPicture(v2, int, truth);
+  void CheckGearPicture(v2, int, bool);
   void DrawGearPicture(blitdata&, int) const;
-  truth FadePictures();
+  bool FadePictures();
   void DrawBodyArmorPicture(blitdata&, int) const;
   void Redistribute();
   virtual material* RemoveMaterial(material*);
   void Destroy();
   const festring& GetLocationName() const { return LocationName; }
-  truth IsInside() const { return Flags & FLUID_INSIDE; }
-  truth UseImage() const;
+  bool IsInside() const { return Flags & FLUID_INSIDE; }
+  bool UseImage() const;
   virtual int GetTrapType() const { return Liquid->GetType() | FLUID_TRAP; }
   virtual ulong GetTrapID() const { return TrapData.TrapID; }
   virtual ulong GetVictimID() const { return TrapData.VictimID; }
@@ -63,23 +63,23 @@ class fluid : public entity
   virtual void UnStick() { TrapData.VictimID = 0; }
   virtual void UnStick(int I) { TrapData.BodyParts &= ~(1 << I); }
   void StepOnEffect(character*);
-  virtual truth TryToUnStick(character*, v2);
+  virtual bool TryToUnStick(character*, v2);
   virtual void PreProcessForBone();
   virtual void PostProcessForBone();
-  virtual truth IsStuckTo(const character*) const;
-  truth IsDangerous(const character*) const;
+  virtual bool IsStuckTo(const character*) const;
+  bool IsDangerous(const character*) const;
  protected:
   trapdata TrapData;
   struct imagedata
   {
-    imagedata(truth = true);
+    imagedata(bool = true);
     ~imagedata();
     void Animate(blitdata&, int) const;
     void AddLiquidToPicture(const rawbitmap*, long, long, col16, pixelpredicate);
     void Save(outputfile&) const;
     void Load(inputfile&);
-    truth Fade();
-    void Clear(truth);
+    bool Fade();
+    void Clear(bool);
     /* Only pictures of fluids not on ground have their RandMaps initialized,
        since they are animated. Note that the picture is always unrotated. */
     bitmap* Picture;

@@ -22,7 +22,7 @@
 
 const felist* FelistCurrentlyDrawn = 0;
 
-truth FelistDrawController()
+bool FelistDrawController()
 {
   FelistCurrentlyDrawn->DrawPage(DOUBLE_BUFFER);
   return true;
@@ -31,16 +31,16 @@ truth FelistDrawController()
 struct felistentry
 {
   felistentry() : ImageKey(NO_IMAGE) { }
-  felistentry(const festring&, col16, uint, uint, truth);
+  felistentry(const festring&, col16, uint, uint, bool);
   festring String;
   col16 Color;
   uint Marginal;
   uint ImageKey;
-  truth Selectable;
+  bool Selectable;
 };
 
 felistentry::felistentry(const festring& String, col16 Color,
-			 uint Marginal, uint ImageKey, truth Selectable)
+			 uint Marginal, uint ImageKey, bool Selectable)
 : String(String), Color(Color), Marginal(Marginal),
   ImageKey(ImageKey), Selectable(Selectable)
 {
@@ -86,7 +86,7 @@ felist::~felist()
     delete Description[c];
 }
 
-truth felist::IsEmpty() const
+bool felist::IsEmpty() const
 { return Entry.empty(); }
 uint felist::GetLength() const
 { return Entry.size(); }
@@ -138,7 +138,7 @@ uint felist::Draw()
 
   uint c;
   uint Return, Selectables = 0;
-  truth JustSelectMove = false;
+  bool JustSelectMove = false;
 
   for(c = 0; c < Entry.size(); ++c)
     if(Entry[c]->Selectable)
@@ -156,7 +156,7 @@ uint felist::Draw()
 
   for(;;)
   {
-    truth AtTheEnd = DrawPage(Buffer);
+    bool AtTheEnd = DrawPage(Buffer);
 
     if(Flags & FADE)
     {
@@ -301,7 +301,7 @@ uint felist::Draw()
 
 static festring Str;
 
-truth felist::DrawPage(bitmap* Buffer) const
+bool felist::DrawPage(bitmap* Buffer) const
 {
   uint LastFillBottom = Pos.Y + 23 + Description.size() * 10;
   DrawDescription(Buffer);
@@ -509,7 +509,7 @@ void felist::Empty()
 }
 
 void felist::AddEntry(const festring& Str, col16 Color,
-		      uint Marginal, uint Key, truth Selectable)
+		      uint Marginal, uint Key, bool Selectable)
 {
   Entry.push_back(new felistentry(Str, Color, Marginal, Key, Selectable));
 

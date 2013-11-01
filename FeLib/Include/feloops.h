@@ -19,8 +19,8 @@ template <class objecttype, class elementtype>
 struct combinepredicates
 {
   typedef elementtype* (objecttype::*extractor)(int) const;
-  typedef truth (elementtype::*routine)() const;
-  truth operator()(objecttype* O, extractor X, routine F, int A, truth OrBit) const
+  typedef bool (elementtype::*routine)() const;
+  bool operator()(objecttype* O, extractor X, routine F, int A, bool OrBit) const
   {
     for(int c = 0; c < A; ++c)
     {
@@ -38,8 +38,8 @@ template <class objecttype, class elementtype, class param>
 struct combinepredicateswithparam
 {
   typedef elementtype* (objecttype::*extractor)(int) const;
-  typedef truth (elementtype::*routine)(param) const;
-  truth operator()(objecttype* O, extractor X, routine F, param P, int A, truth OrBit) const
+  typedef bool (elementtype::*routine)(param) const;
+  bool operator()(objecttype* O, extractor X, routine F, param P, int A, bool OrBit) const
   {
     for(int c = 0; c < A; ++c)
     {
@@ -113,7 +113,7 @@ template <class objecttype, class elementtype, class param>
 struct findelement
 {
   typedef elementtype* (objecttype::*extractor)(int) const;
-  typedef truth (elementtype::*routine)(param) const;
+  typedef bool (elementtype::*routine)(param) const;
   elementtype* operator()(objecttype* O, extractor X,
 			   routine F, param P, int A) const
   {

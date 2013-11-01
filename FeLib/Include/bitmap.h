@@ -43,7 +43,7 @@ class bitmap
  public:
   friend class cachedfont;
   bitmap(const festring&);
-  bitmap(const bitmap*, int = 0, truth = true);
+  bitmap(const bitmap*, int = 0, bool = true);
   bitmap(v2);
   bitmap(v2, col16);
   ~bitmap();
@@ -74,29 +74,29 @@ class bitmap
   void AlphaMaskedBlit(const blitdata&) const;
   void AlphaLuminanceBlit(const blitdata&) const;
 
-  void DrawLine(int, int, int, int, col16, truth = false);
-  void DrawLine(v2, int, int, col16, truth = false);
-  void DrawLine(int, int, v2, col16, truth = false);
-  void DrawLine(v2, v2, col16, truth = false);
+  void DrawLine(int, int, int, int, col16, bool = false);
+  void DrawLine(v2, int, int, col16, bool = false);
+  void DrawLine(int, int, v2, col16, bool = false);
+  void DrawLine(v2, v2, col16, bool = false);
 
-  void DrawVerticalLine(int, int, int, col16, truth = false);
-  void DrawHorizontalLine(int, int, int, col16, truth = false);
+  void DrawVerticalLine(int, int, int, col16, bool = false);
+  void DrawHorizontalLine(int, int, int, col16, bool = false);
 
   void StretchBlit(const blitdata&) const;
 
-  void DrawRectangle(int, int, int, int, col16, truth = false);
-  void DrawRectangle(v2, int, int, col16, truth = false);
-  void DrawRectangle(int, int, v2, col16, truth = false);
-  void DrawRectangle(v2, v2, col16, truth = false);
+  void DrawRectangle(int, int, int, int, col16, bool = false);
+  void DrawRectangle(v2, int, int, col16, bool = false);
+  void DrawRectangle(int, int, v2, col16, bool = false);
+  void DrawRectangle(v2, v2, col16, bool = false);
 
   void BlitAndCopyAlpha(bitmap*, int = 0) const;
   void MaskedPriorityBlit(const blitdata&) const;
   void AlphaPriorityBlit(const blitdata&) const;
   void FastBlitAndCopyAlpha(bitmap*) const;
   v2 GetSize() const { return Size; }
-  void DrawPolygon(int, int, int, int, col16, truth = true, truth = false, double = 0);
+  void DrawPolygon(int, int, int, int, col16, bool = true, bool = false, double = 0);
   void CreateAlphaMap(alpha);
-  truth Fade(long&, packalpha&, int);
+  bool Fade(long&, packalpha&, int);
   void SetAlpha(int X, int Y, alpha Alpha) { AlphaMap[Y][X] = Alpha; }
   void SetAlpha(v2 Pos, alpha Alpha) { AlphaMap[Pos.Y][Pos.X] = Alpha; }
   alpha GetAlpha(int X, int Y) const { return AlphaMap[Y][X]; }
@@ -104,22 +104,22 @@ class bitmap
   void Outline(col16, alpha, priority);
   void FadeToScreen(bitmapeditor = 0);
   void CreateFlames(rawbitmap*, v2, ulong, int);
-  truth IsValidPos(v2 What) const { return What.X >= 0 && What.Y >= 0 && What.X < Size.X && What.Y < Size.Y; }
-  truth IsValidPos(int X, int Y) const { return X >= 0 && Y >= 0 && X < Size.X && Y < Size.Y; }
+  bool IsValidPos(v2 What) const { return What.X >= 0 && What.Y >= 0 && What.X < Size.X && What.Y < Size.Y; }
+  bool IsValidPos(int X, int Y) const { return X >= 0 && Y >= 0 && X < Size.X && Y < Size.Y; }
   void CreateSparkle(v2, int);
   void CreateFlies(ulong, int, int);
   void CreateLightning(ulong, col16);
-  truth CreateLightning(v2, v2, int, col16);
+  bool CreateLightning(v2, v2, int, col16);
   packcol16** GetImage() const { return Image; }
   packalpha** GetAlphaMap() const { return AlphaMap; }
-  static truth PixelVectorHandler(long, long);
+  static bool PixelVectorHandler(long, long);
   void FillAlpha(alpha);
   void InitPriorityMap(priority);
   void FillPriority(priority);
   void SafeSetPriority(int, int, priority);
   void SafeSetPriority(v2 Pos, priority What) { SafeSetPriority(Pos.X, Pos.Y, What); }
-  void SafeUpdateRandMap(v2, truth);
-  void UpdateRandMap(long, truth);
+  void SafeUpdateRandMap(v2, bool);
+  void UpdateRandMap(long, bool);
   void InitRandMap();
   v2 RandomizePixel() const;
   void AlphaPutPixel(int, int, col16, col24, alpha);
@@ -128,7 +128,7 @@ class bitmap
   alpha CalculateAlphaAverage() const;
   void ActivateFastFlag() { FastFlag = 1; }
   void DeactivateFastFlag() { FastFlag = 0; }
-  void Wobble(int, int, truth);
+  void Wobble(int, int, bool);
   void MoveLineVertically(int, int);
   void MoveLineHorizontally(int, int);
   void InterLace();
@@ -139,10 +139,10 @@ class bitmap
   packcol16** Image;
   packalpha** AlphaMap;
   packpriority** PriorityMap;
-  truth* RandMap;
+  bool* RandMap;
 };
 
-inline void bitmap::SafeUpdateRandMap(v2 Pos, truth What)
+inline void bitmap::SafeUpdateRandMap(v2 Pos, bool What)
 {
   if(RandMap)
     UpdateRandMap(Pos.Y * Size.X + Pos.X, What);

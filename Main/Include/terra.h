@@ -27,7 +27,7 @@ class terrain
   virtual const char* DeathMessage() const;
   virtual const char* MonsterDeathVerb() const;
   virtual const char* ScoreEntry() const;
-  virtual truth IsFatalToStay() const { return false; }
+  virtual bool IsFatalToStay() const { return false; }
   virtual void SurviveEffect(character*) { };
 };
 
@@ -40,7 +40,7 @@ class gterrain : public terrain
 class oterrain : public terrain
 {
  public:
-  virtual truth Enter(truth) const = 0;
+  virtual bool Enter(bool) const = 0;
   virtual int GetRestModifier() const { return 1; }
   virtual void ShowRestMessage(character*) const { }
   virtual int GetWalkability() const = 0;

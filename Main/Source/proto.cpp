@@ -112,7 +112,7 @@ character* protosystem::BalancedCreateMonster()
   return 0;
 }
 
-item* protosystem::BalancedCreateItem(long MinPrice, long MaxPrice, long RequiredCategory, int SpecialFlags, int ConfigFlags, int RequiredGod, truth Polymorph)
+item* protosystem::BalancedCreateItem(long MinPrice, long MaxPrice, long RequiredCategory, int SpecialFlags, int ConfigFlags, int RequiredGod, bool Polymorph)
 {
   typedef item::database database;
   database** PossibleCategory[ITEM_CATEGORIES];
@@ -205,7 +205,7 @@ item* protosystem::BalancedCreateItem(long MinPrice, long MaxPrice, long Require
 	     || ChosenDataBase->IsPolymorphSpawnable))
       {
 	item* Item = ChosenDataBase->ProtoType->Spawn(Config, SpecialFlags);
-	truth GodOK = !RequiredGod || Item->GetAttachedGod() == RequiredGod;
+	bool GodOK = !RequiredGod || Item->GetAttachedGod() == RequiredGod;
 
 	/* Optimization, GetTruePrice() may be rather slow */
 
@@ -319,14 +319,14 @@ template <class type> std::pair<int, int> CountCorrectNameLetters(const typename
   return Result;
 }
 
-template <class type> std::pair<const typename type::prototype*, int> SearchForProto(const festring& What, truth Output)
+template <class type> std::pair<const typename type::prototype*, int> SearchForProto(const festring& What, bool Output)
 {
   typedef typename type::prototype prototype;
   typedef typename type::database database;
 
   festring Identifier;
   Identifier << ' ' << What << ' ';
-  truth Illegal = false, Conflict = false;
+  bool Illegal = false, Conflict = false;
   std::pair<const prototype*, int> ID(0, 0);
   std::pair<int, int> Best(0, 0);
 
@@ -339,7 +339,7 @@ template <class type> std::pair<const typename type::prototype*, int> SearchForP
     for(int c = 0; c < ConfigSize; ++c)
       if(!ConfigData[c]->IsAbstract)
       {
-	truth BrokenRequested = festring::IgnoreCaseFind(Identifier, " broken ") != festring::NPos;
+	bool BrokenRequested = festring::IgnoreCaseFind(Identifier, " broken ") != festring::NPos;
 
 	if(BrokenRequested == !(ConfigData[c]->Config & BROKEN))
 	  continue;
@@ -380,7 +380,7 @@ template <class type> std::pair<const typename type::prototype*, int> SearchForP
   return ID;
 }
 
-character* protosystem::CreateMonster(const festring& What, int SpecialFlags, truth Output)
+character* protosystem::CreateMonster(const festring& What, int SpecialFlags, bool Output)
 {
   std::pair<const character::prototype*, int> ID = SearchForProto<character>(What, Output);
 
@@ -401,7 +401,7 @@ character* protosystem::CreateMonster(const festring& What, int SpecialFlags, tr
     return 0;
 }
 
-item* protosystem::CreateItem(const festring& What, truth Output)
+item* protosystem::CreateItem(const festring& What, bool Output)
 {
   std::pair<const item::prototype*, int> ID = SearchForProto<item>(What, Output);
 
@@ -411,7 +411,7 @@ item* protosystem::CreateItem(const festring& What, truth Output)
     return 0;
 }
 
-material* protosystem::CreateMaterial(const festring& What, long Volume, truth Output)
+material* protosystem::CreateMaterial(const festring& What, long Volume, bool Output)
 {
   for(int c1 = 1; c1 < protocontainer<material>::GetSize(); ++c1)
   {

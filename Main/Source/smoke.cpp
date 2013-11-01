@@ -30,7 +30,7 @@ smoke::smoke(gas* Gas, lsquare* LSquareUnder) : entity(HAS_BE), Next(0), Gas(Gas
     Picture[c] = new bitmap(TILE_V2, TRANSPARENT_COLOR);
     Picture[c]->ActivateFastFlag();
     Picture[c]->CreateAlphaMap(Alpha);
-    truth Correct = false;
+    bool Correct = false;
 
     while(!Correct)
     {
@@ -135,13 +135,13 @@ void smoke::Merge(gas* OtherGas)
   delete OtherGas;
 }
 
-truth smoke::IsDangerousToBreathe(const character* Who) const
+bool smoke::IsDangerousToBreathe(const character* Who) const
 {
   return (!Who->StateIsActivated(GAS_IMMUNITY)
 	  && Who->GetAttribute(WISDOM) >= Gas->GetStepInWisdomLimit());
 }
 
-truth smoke::IsScaryToBreathe(const character* Who) const
+bool smoke::IsScaryToBreathe(const character* Who) const
 {
   return (!Who->StateIsActivated(GAS_IMMUNITY)
 	  && Gas->GetCategoryFlags() & IS_SCARY);

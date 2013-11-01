@@ -31,12 +31,12 @@ typedef std::map<festring, long> valuemap;
 class outputfile
 {
  public:
-  outputfile(const festring&, truth = true);
+  outputfile(const festring&, bool = true);
   ~outputfile();
   void Put(char What) { fputc(What, Buffer); }
   void Write(const char* Offset, long Size)
   { fwrite(Offset, 1, Size, Buffer); }
-  truth IsOpen();
+  bool IsOpen();
   void Close() { fclose(Buffer); }
   void Flush() { fflush(Buffer); }
   void ReOpen();
@@ -48,18 +48,18 @@ class outputfile
 class inputfile
 {
  public:
-  inputfile(const festring&, const valuemap* = 0, truth = true);
+  inputfile(const festring&, const valuemap* = 0, bool = true);
   ~inputfile();
-  festring ReadWord(truth = true);
-  void ReadWord(festring&, truth = true);
-  char ReadLetter(truth = true);
-  long ReadNumber(int = 0xFF, truth = false);
+  festring ReadWord(bool = true);
+  void ReadWord(festring&, bool = true);
+  char ReadLetter(bool = true);
+  long ReadNumber(int = 0xFF, bool = false);
   v2 ReadVector2d();
   rect ReadRect();
   int Get() { return fgetc(Buffer); }
   void Read(char* Offset, long Size) { fread(Offset, 1, Size, Buffer); }
-  truth IsOpen();
-  truth Eof() { return feof(Buffer); }
+  bool IsOpen();
+  bool Eof() { return feof(Buffer); }
   void ClearFlags() { clearerr(Buffer); }
   void SeekPosBegin(long Offset) { fseek(Buffer, Offset, SEEK_SET); }
   void SeekPosCurrent(long Offset) { fseek(Buffer, Offset, SEEK_CUR); }
@@ -100,6 +100,8 @@ inline void ReadData(long& Type, inputfile& SaveFile)
 inline void ReadData(ulong& Type, inputfile& SaveFile)
 { Type = SaveFile.ReadNumber(); }
 inline void ReadData(int& Type, inputfile& SaveFile)
+{ Type = SaveFile.ReadNumber(); }
+inline void ReadData(bool& Type, inputfile& SaveFile)
 { Type = SaveFile.ReadNumber(); }
 inline void ReadData(packv2& Type, inputfile& SaveFile)
 { Type = SaveFile.ReadVector2d(); }
@@ -242,6 +244,18 @@ inline inputfile& operator>>(inputfile& SaveFile, int& Value)
 {
   SaveFile.Read(reinterpret_cast<char*>(&Value), sizeof(Value));
   return SaveFile;
+}
+
+inline outputfile& operator<<(outputfile& SaveFile, bool Value)
+{
+    SaveFile.Write(reinterpret_cast<char*>(&Value), sizeof(Value));
+    return SaveFile;
+}
+
+inline inputfile& operator>>(inputfile& SaveFile, bool& Value)
+{
+    SaveFile.Read(reinterpret_cast<char*>(&Value), sizeof(Value));
+    return SaveFile;
 }
 
 inline outputfile& operator<<(outputfile& SaveFile, double Value)

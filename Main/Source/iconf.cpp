@@ -84,7 +84,7 @@ void ivanconfig::ContrastDisplayer(const numberoption* O, festring& Entry)
   Entry << O->Value << "/100";
 }
 
-truth ivanconfig::DefaultNameChangeInterface(stringoption* O)
+bool ivanconfig::DefaultNameChangeInterface(stringoption* O)
 {
   festring String;
 
@@ -97,7 +97,7 @@ truth ivanconfig::DefaultNameChangeInterface(stringoption* O)
   return false;
 }
 
-truth ivanconfig::DefaultPetNameChangeInterface(stringoption* O)
+bool ivanconfig::DefaultPetNameChangeInterface(stringoption* O)
 {
   festring String;
 
@@ -110,7 +110,7 @@ truth ivanconfig::DefaultPetNameChangeInterface(stringoption* O)
   return false;
 }
 
-truth ivanconfig::AutoSaveIntervalChangeInterface(numberoption* O)
+bool ivanconfig::AutoSaveIntervalChangeInterface(numberoption* O)
 {
   O->ChangeValue(iosystem::NumberQuestion(CONST_S("Set new autosave interval (1-50000 turns, 0 for never):"), GetQuestionPos(), WHITE, !game::IsRunning()));
 
@@ -120,7 +120,7 @@ truth ivanconfig::AutoSaveIntervalChangeInterface(numberoption* O)
   return false;
 }
 
-truth ivanconfig::ContrastChangeInterface(numberoption* O)
+bool ivanconfig::ContrastChangeInterface(numberoption* O)
 {
   iosystem::ScrollBarQuestion(CONST_S("Set new contrast value (0-200, '<' and '>' move the slider):"), GetQuestionPos(), O->Value, 5, 0, 200, O->Value, WHITE, LIGHT_GRAY, DARK_GRAY, game::GetMoveCommandKey(KEY_LEFT_INDEX), game::GetMoveCommandKey(KEY_RIGHT_INDEX), !game::IsRunning(), static_cast<scrollbaroption*>(O)->BarHandler);
 
@@ -147,7 +147,7 @@ void ivanconfig::ContrastChanger(numberoption* O, long What)
 
 #ifndef __DJGPP__
 
-void ivanconfig::FullScreenModeChanger(truthoption*, truth)
+void ivanconfig::FullScreenModeChanger(truthoption*, bool)
 {
   graphics::SwitchMode();
 }

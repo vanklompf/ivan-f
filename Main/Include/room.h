@@ -57,36 +57,36 @@ class room
   int GetIndex() const { return Index; }
   character* GetMaster() const;
   void SetMasterID(ulong What) { MasterID = What; }
-  virtual truth PickupItem(character*, item*, int) { return true; }
-  virtual truth DropItem(character*, item*, int) { return true; }
+  virtual bool PickupItem(character*, item*, int) { return true; }
+  virtual bool DropItem(character*, item*, int) { return true; }
   int GetDivineMaster() const { return DivineMaster; }
   void SetDivineMaster(int What) { DivineMaster = What; }
   virtual void KickSquare(character*, lsquare*) { }
-  virtual truth ConsumeItem(character*, item*, int) { return true; }
-  virtual truth AllowDropGifts() const { return true; }
-  virtual truth Drink(character*) const { return true; }
-  virtual truth HasDrinkHandler() const { return false; }
-  virtual truth Dip(character*) const { return true; }
-  virtual truth HasDipHandler() const { return false; }
+  virtual bool ConsumeItem(character*, item*, int) { return true; }
+  virtual bool AllowDropGifts() const { return true; }
+  virtual bool Drink(character*) const { return true; }
+  virtual bool HasDrinkHandler() const { return false; }
+  virtual bool Dip(character*) const { return true; }
+  virtual bool HasDipHandler() const { return false; }
   virtual void TeleportSquare(character*, lsquare*) { }
   virtual const prototype* GetProtoType() const = 0;
   int GetType() const { return GetProtoType()->GetIndex(); }
   virtual void DestroyTerrain(character*);
-  virtual truth AllowSpoil(const item*) const { return true; }
-  virtual truth CheckDestroyTerrain(character*);
+  virtual bool AllowSpoil(const item*) const { return true; }
+  virtual bool CheckDestroyTerrain(character*);
   virtual int GetGodRelationAdjustment() const { return -50; }
-  virtual truth AllowKick(const character*, const lsquare*) const { return true; }
-  truth MasterIsActive() const;
-  truth CheckKickSquare(const character*, const lsquare*) const;
+  virtual bool AllowKick(const character*, const lsquare*) const { return true; }
+  bool MasterIsActive() const;
+  bool CheckKickSquare(const character*, const lsquare*) const;
   virtual void HostileAction(character*) const { }
-  virtual truth AllowAltarPolymorph() const { return true; }
-  virtual truth AllowFoodSearch() const { return true; }
+  virtual bool AllowAltarPolymorph() const { return true; }
+  virtual bool AllowFoodSearch() const { return true; }
   virtual void ReceiveVomit(character*) { }
-  virtual truth IsOKToDestroyWalls(const character*) const;
+  virtual bool IsOKToDestroyWalls(const character*) const;
   virtual void AddItemEffect(item*) { };
   void FinalProcessForBone();
   void SetFlags(ulong What) { Flags = What; }
-  truth DontGenerateMonsters() const { return Flags & NO_MONSTER_GENERATION; }
+  bool DontGenerateMonsters() const { return Flags & NO_MONSTER_GENERATION; }
  protected:
   mutable character* Master;
   mutable ulong LastMasterSearchTick;

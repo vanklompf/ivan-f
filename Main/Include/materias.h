@@ -25,18 +25,18 @@ MATERIAL(organic, solid)
 {
  public:
   virtual void Be();
-  virtual truth HasBe() const { return true; }
+  virtual bool HasBe() const { return true; }
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
-  virtual truth IsVeryCloseToSpoiling() const { return SpoilLevel == 8; }
+  virtual bool IsVeryCloseToSpoiling() const { return SpoilLevel == 8; }
   virtual int GetSpoilLevel() const { return SpoilLevel; }
   virtual void ResetSpoiling();
   virtual material* EatEffect(character*, long);
   virtual void AddConsumeEndMessage(character*) const;
   virtual void SetSpoilCounter(int);
-  virtual truth CanSpoil() const { return true; }
+  virtual bool CanSpoil() const { return true; }
   virtual int GetSpoilPercentage() const;
-  virtual truth Spoils() const { return true; }
+  virtual bool Spoils() const { return true; }
  protected:
   virtual void PostConstruct();
   ushort SpoilCounter;
@@ -52,7 +52,7 @@ MATERIAL(liquid, material)
 {
  public:
   virtual const char* GetConsumeVerb() const;
-  virtual truth IsLiquid() const { return true; }
+  virtual bool IsLiquid() const { return true; }
   void TouchEffect(item*, const festring&);
   void TouchEffect(character*, int);
   void TouchEffect(lterrain*);
@@ -66,27 +66,27 @@ MATERIAL(flesh, organic)
   virtual void Load(inputfile&);
   virtual col16 GetSkinColor() const { return SkinColor; }
   virtual void SetSkinColor(int What) { SkinColor = What; }
-  virtual truth SkinColorIsSparkling() const { return SkinColorSparkling; }
-  virtual void SetSkinColorIsSparkling(truth What) { SkinColorSparkling = What; }
-  virtual truth IsFlesh() const { return true; }
-  virtual void SetIsInfectedByLeprosy(truth What) { InfectedByLeprosy = What; }
-  virtual truth IsInfectedByLeprosy() const { return InfectedByLeprosy; }
+  virtual bool SkinColorIsSparkling() const { return SkinColorSparkling; }
+  virtual void SetSkinColorIsSparkling(bool What) { SkinColorSparkling = What; }
+  virtual bool IsFlesh() const { return true; }
+  virtual void SetIsInfectedByLeprosy(bool What) { InfectedByLeprosy = What; }
+  virtual bool IsInfectedByLeprosy() const { return InfectedByLeprosy; }
  protected:
   virtual void PostConstruct();
   col16 SkinColor;
-  truth SkinColorSparkling;
-  truth InfectedByLeprosy;
+  bool SkinColorSparkling;
+  bool InfectedByLeprosy;
 };
 
 MATERIAL(powder, liquid)
 {
  public:
   powder() : Wetness(0) { }
-  virtual truth IsPowder() const { return true; }
-  virtual truth IsExplosive() const;
+  virtual bool IsPowder() const { return true; }
+  virtual bool IsExplosive() const;
   virtual void AddWetness(long What) { Wetness += What; }
   virtual void Be();
-  virtual truth HasBe() const { return true; }
+  virtual bool HasBe() const { return true; }
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
  protected:
@@ -102,12 +102,12 @@ MATERIAL(ironalloy, solid)
   virtual void SetRustLevel(int);
   virtual int GetStrengthValue() const;
   virtual int GetRustLevel() const { return RustData & 3; }
-  virtual truth IsSparkling() const;
+  virtual bool IsSparkling() const;
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
   virtual int GetRustData() const { return RustData; }
-  virtual truth TryToRust(long, long = 0);
-  virtual truth AddRustLevelDescription(festring&, truth) const;
+  virtual bool TryToRust(long, long = 0);
+  virtual bool AddRustLevelDescription(festring&, bool) const;
  protected:
   int RustData;
 };

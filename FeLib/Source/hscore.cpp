@@ -25,7 +25,7 @@ long highscore::GetSize() const { return Entry.size(); }
 
 highscore::highscore(const festring& File) : LastAdd(0xFF), Version(HIGH_SCORE_VERSION) { Load(File); }
 
-truth highscore::Add(long NewScore, const festring& NewEntry,
+bool highscore::Add(long NewScore, const festring& NewEntry,
 		     time_t NewTime, long NewRandomID)
 {
   for(uint c = 0; c < Score.size(); ++c)
@@ -131,9 +131,9 @@ void highscore::Load(const festring& File)
   HighScore >> Score >> Entry >> Time >> RandomID >> LastAdd;
 }
 
-truth highscore::MergeToFile(highscore* To) const
+bool highscore::MergeToFile(highscore* To) const
 {
-  truth MergedSomething = false;
+  bool MergedSomething = false;
 
   for(uint c = 0; c < Score.size(); ++c)
     if(!To->Find(Score[c], Entry[c], Time[c], RandomID[c]))
@@ -145,7 +145,7 @@ truth highscore::MergeToFile(highscore* To) const
   return MergedSomething;
 }
 
-truth highscore::Add(long NewScore, const festring& NewEntry)
+bool highscore::Add(long NewScore, const festring& NewEntry)
 {
   return Add(NewScore, NewEntry, time(0), RAND());
 }
@@ -166,7 +166,7 @@ int highscore::Find(long AScore, const festring& AEntry,
   return 0;
 }
 
-truth highscore::LastAddFailed() const
+bool highscore::LastAddFailed() const
 { return LastAdd == MAX_HIGHSCORES; }
 
 void highscore::Clear()
@@ -179,7 +179,7 @@ void highscore::Clear()
   LastAdd = 0xFF;
 }
 
-truth highscore::CheckVersion() const
+bool highscore::CheckVersion() const
 {
   return Version == HIGH_SCORE_VERSION;
 }

@@ -56,7 +56,7 @@ class stackiterator
   stackiterator(stackslot* Slot) : Slot(Slot) { }
   stackiterator& operator++() { Slot = Slot->Next; return *this; }
   stackiterator& operator--() { Slot = Slot->Last; return *this; }
-  truth HasItem() const;
+  bool HasItem() const;
   item* operator->() const { return Slot->Item; }
   item* operator*() const { return Slot->Item; }
   const stackslot& GetSlot() const { return *Slot; }
@@ -71,7 +71,7 @@ class stack
   ~stack();
   void Load(inputfile&);
   void Draw(const character*, blitdata&, int) const;
-  void AddItem(item*, truth = true);
+  void AddItem(item*, bool = true);
   void RemoveItem(stackslot*);
   item* GetItem(int) const;
   stackiterator GetBottom() const { return stackiterator(Bottom); }
@@ -86,12 +86,12 @@ class stack
   int DrawContents(itemvector&, const character*, const festring&, int = 0, sorter = 0) const;
   int DrawContents(itemvector&, stack*, const character*, const festring&, const festring&, const festring&, const festring&, col16, int, sorter = 0) const;
   v2 GetPos() const;
-  void Clean(truth = false);
+  void Clean(bool = false);
   void Save(outputfile&) const;
   int SearchItem(item*) const;
   square* GetSquareUnder() const;
   lsquare* GetLSquareUnder() const { return static_cast<lsquare*>(GetSquareUnder()); }
-  truth SortedItems(const character*, sorter) const;
+  bool SortedItems(const character*, sorter) const;
   void BeKicked(character*, int, int);
   void Polymorph(character*);
   void CheckForStepOnEffect(character*);
@@ -99,10 +99,10 @@ class stack
   void ReceiveDamage(character*, int, int, int = YOURSELF);
   void TeleportRandomly(uint = 0xFFFF);
   void FillItemVector(itemvector&) const;
-  truth IsOnGround() const;
-  truth RaiseTheDead(character*);
-  truth TryKey(item*, character*);
-  truth Open(character*);
+  bool IsOnGround() const;
+  bool RaiseTheDead(character*);
+  bool TryKey(item*, character*);
+  bool Open(character*);
   void SignalVolumeAndWeightChange();
   void CalculateVolumeAndWeight();
   long GetVolume() const { return Volume; }
@@ -117,45 +117,45 @@ class stack
   void SignalEmitationDecrease(int, col24);
   void CalculateEmitation();
   col24 GetSideEmitation(int);
-  truth CanBeSeenBy(const character*, int) const;
-  truth IsDangerous(const character*) const;
-  truth Duplicate(int, ulong = 0);
+  bool CanBeSeenBy(const character*, int) const;
+  bool IsDangerous(const character*) const;
+  bool Duplicate(int, ulong = 0);
   void MoveItemsTo(stack*);
   void MoveItemsTo(slot*);
-  item* GetBottomItem(const character*, truth) const;
+  item* GetBottomItem(const character*, bool) const;
   item* GetBottomVisibleItem(const character*) const;
-  item* GetBottomSideItem(const character*, int, truth) const;
+  item* GetBottomSideItem(const character*, int, bool) const;
   void Pile(itemvectorvector&, const character*, int, sorter = 0) const;
   long GetTruePrice() const;
   static int GetSelected() { return Selected; }
   static void SetSelected(int What) { Selected = What; }
-  truth TakeSomethingFrom(character*, const festring&);
-  truth PutSomethingIn(character*, const festring&, long, ulong);
-  truth IsVisible() const { return !(Flags & HIDDEN); }
+  bool TakeSomethingFrom(character*, const festring&);
+  bool PutSomethingIn(character*, const festring&, long, ulong);
+  bool IsVisible() const { return !(Flags & HIDDEN); }
   int GetSpoiledItems() const;
   void SortAllItems(const sortdata&) const;
   void Search(const character*, int);
-  truth NeedDangerSymbol(const character*) const;
+  bool NeedDangerSymbol(const character*) const;
   void PreProcessForBone();
   void PostProcessForBone();
   void FinalProcessForBone();
-  void AddElement(item*, truth = false);
+  void AddElement(item*, bool = false);
   void SpillFluid(character*, liquid*, long);
   void AddItems(const itemvector&);
   void MoveItemsTo(itemvector&, int);
   void Freeze() { Flags |= FREEZED; }
   void UnFreeze() { Flags &= ~FREEZED; }
   void DropSideItems();
-  truth DetectMaterial(const material*) const;
+  bool DetectMaterial(const material*) const;
   void SetLifeExpectancy(int, int);
-  truth Necromancy(character*);
+  bool Necromancy(character*);
   void CalculateEnchantments();
   const character* FindCarrier() const;
  private:
   void RemoveElement(stackslot*);
   void AddContentsToList(felist&, const character*, const festring&, int, int, sorter) const;
   int SearchChosen(itemvector&, const character*, int, int, int, int, sorter = 0) const;
-  static truth AllowDamage(int, int);
+  static bool AllowDamage(int, int);
   static int Selected;
   stackslot* Bottom;
   stackslot* Top;

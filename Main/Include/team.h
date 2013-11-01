@@ -44,7 +44,7 @@ class team
   const std::list<character*>& GetMember() const { return Member; }
   int GetKillEvilness() const { return KillEvilness; }
   void SetKillEvilness(int What) { KillEvilness = What; }
-  truth HasEnemy() const;
+  bool HasEnemy() const;
   int GetMembers() const { return Member.size(); }
   int GetEnabledMembers() const;
   void MoveMembersTo(charactervector&);

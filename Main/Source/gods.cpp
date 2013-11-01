@@ -336,7 +336,7 @@ void silva::PrayGoodEffect()
       for(int i = 0; i < 50; ++i)
       {
 	v2 Pos = game::GetCurrentLevel()->GetRandomSquare(0, NOT_WALKABLE);
-	truth Correct = false;
+	bool Correct = false;
 
 	for(int d = 0; d < 8; ++d)
 	{
@@ -632,7 +632,7 @@ void mortifer::PrayBadEffect()
 
 void mellis::PrayGoodEffect()
 {
-  truth Success = false;
+  bool Success = false;
   itemvector OKItems;
 
   for(stackiterator i = PLAYER->GetStack()->GetBottom(); i.HasItem(); ++i)
@@ -774,7 +774,7 @@ void nefas::PrayGoodEffect()
 {
   rect Rect;
   femath::CalculateEnvironmentRectangle(Rect, game::GetCurrentLevel()->GetBorder(), PLAYER->GetPos(), 10);
-  truth AudiencePresent = false;
+  bool AudiencePresent = false;
 
   for(int x = Rect.X1; x <= Rect.X2; ++x)
   {
@@ -870,7 +870,7 @@ void scabies::PrayGoodEffect()
     return;
   }
 
-  truth Success = false;
+  bool Success = false;
 
   for(int d = 0; d < PLAYER->GetNeighbourSquares(); ++d)
   {
@@ -944,7 +944,7 @@ void cruentus::PrayGoodEffect()
 {
   rect Rect;
   femath::CalculateEnvironmentRectangle(Rect, game::GetCurrentLevel()->GetBorder(), PLAYER->GetPos(), 10);
-  truth AudiencePresent = false;
+  bool AudiencePresent = false;
 
   for(int x = Rect.X1; x <= Rect.X2; ++x)
   {
@@ -1043,25 +1043,25 @@ void cruentus::PrayBadEffect()
   }
 }
 
-truth scabies::PlayerVomitedOnAltar(liquid*)
+bool scabies::PlayerVomitedOnAltar(liquid*)
 {
   ADD_MESSAGE("%s feels that you are indeed her follower.", GetName());
   AdjustRelation(1);
   return false;
 }
 
-truth atavus::LikesMaterial(const materialdatabase* MDB, const character* Char) const
+bool atavus::LikesMaterial(const materialdatabase* MDB, const character* Char) const
 {
   return Char->GetTorso()->GetMainMaterial()->GetConfig() == MDB->Config;
 }
 
-truth seges::LikesMaterial(const materialdatabase* MDB, const character* Char) const
+bool seges::LikesMaterial(const materialdatabase* MDB, const character* Char) const
 {
   return MDB->BodyFlags & IS_ALIVE
     && Char->GetTorso()->GetMainMaterial()->GetConfig() == MDB->Config;
 }
 
-truth scabies::LikesMaterial(const materialdatabase* MDB, const character* Char) const
+bool scabies::LikesMaterial(const materialdatabase* MDB, const character* Char) const
 {
   return MDB->BodyFlags & IS_ALIVE
     && Char->GetTorso()->GetMainMaterial()->GetConfig() == MDB->Config;

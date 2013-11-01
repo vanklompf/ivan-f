@@ -50,7 +50,7 @@ void dungeon::Initialize()
   }
 
   Level = new level*[GetLevels()];
-  Generated = new truth[GetLevels()];
+  Generated = new bool[GetLevels()];
 
   for(int c = 0; c < GetLevels(); ++c)
     Level[c] = 0;
@@ -72,7 +72,7 @@ const levelscript* dungeon::GetLevelScript(int I)
 
 /* Returns whether the level has been visited before */
 
-truth dungeon::PrepareLevel(int Index, truth Visual)
+bool dungeon::PrepareLevel(int Index, bool Visual)
 {
   if(Generated[Index])
   {
@@ -104,7 +104,7 @@ truth dungeon::PrepareLevel(int Index, truth Visual)
   }
 }
 
-void dungeon::SaveLevel(const festring& SaveName, int Number, truth DeleteAfterwards)
+void dungeon::SaveLevel(const festring& SaveName, int Number, bool DeleteAfterwards)
 {
   outputfile SaveFile(SaveName + '.' + Index + Number);
   SaveFile << Level[Number];

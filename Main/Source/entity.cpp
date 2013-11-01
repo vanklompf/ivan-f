@@ -12,7 +12,7 @@
 
 /* Compiled through coreset.cpp */
 
-truth entity::TryToUnStick(character*, v2) { return false; }
+bool entity::TryToUnStick(character*, v2) { return false; }
 
 entity::entity(const entity& Entity) : Emitation(Entity.Emitation), Flags(Entity.Flags)
 {

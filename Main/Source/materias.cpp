@@ -16,9 +16,9 @@ void organic::ResetSpoiling() { SpoilCounter = SpoilLevel = 0; }
 
 const char* liquid::GetConsumeVerb() const { return "drinking"; }
 
-truth powder::IsExplosive() const { return !Wetness && material::IsExplosive(); }
+bool powder::IsExplosive() const { return !Wetness && material::IsExplosive(); }
 
-truth ironalloy::IsSparkling() const { return material::IsSparkling() && GetRustLevel() == NOT_RUSTED; }
+bool ironalloy::IsSparkling() const { return material::IsSparkling() && GetRustLevel() == NOT_RUSTED; }
 
 void organic::Be()
 {
@@ -201,7 +201,7 @@ int ironalloy::GetStrengthValue() const
   return 0; /* not possible */
 }
 
-truth ironalloy::AddRustLevelDescription(festring& Name, truth Articled) const
+bool ironalloy::AddRustLevelDescription(festring& Name, bool Articled) const
 {
   if(GetRustLevel() == NOT_RUSTED)
     return false;
@@ -274,7 +274,7 @@ void liquid::TouchEffect(character* Char, int BodyPartIndex)
 
 /* Doesn't do the actual rusting, just returns whether it should happen */
 
-truth ironalloy::TryToRust(long Modifier, long Volume)
+bool ironalloy::TryToRust(long Modifier, long Volume)
 {
   if(GetRustLevel() != VERY_RUSTED)
   {

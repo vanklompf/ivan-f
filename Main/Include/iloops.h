@@ -19,7 +19,7 @@
 struct combinebodypartpredicates : public combinepredicates<const character, bodypart>
 {
   typedef combinepredicates<const character, bodypart> base;
-  truth operator()(const character* C, base::routine F, truth OrBit) const
+  bool operator()(const character* C, base::routine F, bool OrBit) const
   {
     return base::operator()(C, &character::GetBodyPart, F, C->GetBodyParts(), OrBit);
   }
@@ -29,7 +29,7 @@ template <class param>
 struct combinebodypartpredicateswithparam : public combinepredicateswithparam<const character, bodypart, param>
 {
   typedef combinepredicateswithparam<const character, bodypart, param> base;
-  truth operator()(const character* C, typename base::routine F, param P, truth OrBit) const
+  bool operator()(const character* C, typename base::routine F, param P, bool OrBit) const
   {
     return base::operator()(C, &character::GetBodyPart, F, P, C->GetBodyParts(), OrBit);
   }
@@ -38,7 +38,7 @@ struct combinebodypartpredicateswithparam : public combinepredicateswithparam<co
 struct combineequipmentpredicates : public combinepredicates<const character, item>
 {
   typedef combinepredicates<const character, item> base;
-  truth operator()(const character* C, base::routine F, truth OrBit) const
+  bool operator()(const character* C, base::routine F, bool OrBit) const
   {
     return base::operator()(C, &character::GetEquipment, F, C->GetEquipments(), OrBit);
   }
@@ -48,7 +48,7 @@ template <class param>
 struct combineequipmentpredicateswithparam : public combinepredicateswithparam<const character, item, param>
 {
   typedef combinepredicateswithparam<const character, item, param> base;
-  truth operator()(const character* C, typename base::routine F, param P, truth OrBit) const
+  bool operator()(const character* C, typename base::routine F, param P, bool OrBit) const
   {
     return base::operator()(C, &character::GetEquipment, F, P, C->GetEquipments(), OrBit);
   }

@@ -341,7 +341,7 @@ void festring::Erase(sizetype Pos, sizetype Length)
 
     if(Pos < OldSize)
     {
-      truth MoveReq = Length < OldSize - Pos;
+      bool MoveReq = Length < OldSize - Pos;
 
       if(OwnsData)
       {
@@ -479,7 +479,7 @@ festring& festring::Append(long Integer)
 
   char IntegerBuffer[12];
   char* BufferPtr = IntegerBuffer;
-  truth Negative = false;
+  bool Negative = false;
 
   if(Integer < 0)
   {
@@ -493,7 +493,7 @@ festring& festring::Append(long Integer)
   else if(Integer > 2147483647)
     return Append("Inf", 3);
 
-  truth ForceZeros = false;
+  bool ForceZeros = false;
 
   if(Integer >= 2000000000)
   {
@@ -628,7 +628,7 @@ festring::sizetype festring::IgnoreCaseFind(const festring& Where,
   for(; Where.GetSize() >= What.GetSize() + Begin; ++Begin)
     if(::Capitalize(Where[Begin]) == ::Capitalize(What[0]))
     {
-      truth Equal = true;
+      bool Equal = true;
 
       for(sizetype c = 1; c < What.GetSize(); ++c)
 	if(::Capitalize(Where[Begin + c]) != ::Capitalize(What[c]))
@@ -739,7 +739,7 @@ void festring::PreProcessForFebot()
 void festring::PostProcessForFebot()
 {
   Capitalize();
-  truth CapitalizeNextChar = false;
+  bool CapitalizeNextChar = false;
 
   for(sizetype c = 0; c < Size - 1; ++c)
   {
@@ -794,7 +794,7 @@ void festring::SwapData(festring& Str)
   char*const TData = Data;
   const sizetype TSize = Size;
   const sizetype TReserved = Reserved;
-  const truth TOwnsData = OwnsData;
+  const bool TOwnsData = OwnsData;
   Data = Str.Data;
   Size = Str.Size;
   Reserved = Str.Reserved;

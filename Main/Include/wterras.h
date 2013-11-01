@@ -20,7 +20,7 @@ GWTERRAIN(ocean, gwterrain)
  public:
   ocean() { SetAnimationFrames(32); }
   virtual const char* GetNameStem() const;
-  virtual truth UsesLongArticle() const { return true; }
+  virtual bool UsesLongArticle() const { return true; }
   virtual v2 GetBitmapPos(int) const;
   virtual int GetPriority() const { return 10; }
   virtual const char* SurviveMessage() const;
@@ -28,7 +28,7 @@ GWTERRAIN(ocean, gwterrain)
   virtual const char* DeathMessage() const;
   virtual const char* MonsterDeathVerb() const;
   virtual const char* ScoreEntry() const;
-  virtual truth IsFatalToStay() const { return true; }
+  virtual bool IsFatalToStay() const { return true; }
   virtual int GetWalkability() const;
 };
 
@@ -76,7 +76,7 @@ GWTERRAIN(evergreenforest, gwterrain)
  public:
   virtual const char* GetNameStem() const;
   virtual v2 GetBitmapPos(int) const;
-  virtual truth UsesLongArticle() const { return true; }
+  virtual bool UsesLongArticle() const { return true; }
   virtual int GetPriority() const { return 70; }
 };
 
@@ -118,7 +118,7 @@ OWTERRAIN(underwatertunnel, owterrain)
   virtual const char* GetNameStem() const;
   virtual v2 GetBitmapPos(int) const;
   virtual int GetAttachedDungeon() const;
-  virtual truth UsesLongArticle() const { return true; }
+  virtual bool UsesLongArticle() const { return true; }
 };
 
 OWTERRAIN(underwatertunnelexit, owterrain)
@@ -127,7 +127,7 @@ OWTERRAIN(underwatertunnelexit, owterrain)
   virtual const char* GetNameStem() const;
   virtual v2 GetBitmapPos(int) const;
   virtual int GetAttachedDungeon() const;
-  virtual truth UsesLongArticle() const { return true; }
+  virtual bool UsesLongArticle() const { return true; }
   virtual int GetAttachedArea() const { return 2; }
 };
 

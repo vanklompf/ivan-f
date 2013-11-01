@@ -15,13 +15,13 @@
 materialprototype::materialprototype(const materialprototype* Base, materialspawner Spawner, materialcloner Cloner, const char* ClassID) : Base(Base), Spawner(Spawner), Cloner(Cloner), ClassID(ClassID) { Index = protocontainer<material>::Add(this); }
 
 long material::GetRawPrice() const { return GetPriceModifier() * GetWeight() / 10000; }
-truth material::CanBeDug(material* ShovelMaterial) const { return ShovelMaterial->GetStrengthValue() > GetStrengthValue(); }
+bool material::CanBeDug(material* ShovelMaterial) const { return ShovelMaterial->GetStrengthValue() > GetStrengthValue(); }
 long material::GetTotalExplosivePower() const { return long(double(Volume) * GetExplosivePower() / 1000000); }
 const char* material::GetConsumeVerb() const { return "eating"; }
 
 materialpredicate TrueMaterialPredicate = &material::True;
 
-void material::AddName(festring& Name, truth Articled, truth Adjective) const
+void material::AddName(festring& Name, bool Articled, bool Adjective) const
 {
   if(Articled)
     if(GetNameFlags() & USE_AN)
@@ -32,7 +32,7 @@ void material::AddName(festring& Name, truth Articled, truth Adjective) const
   Name << (Adjective ? GetAdjectiveStem() : GetNameStem());
 }
 
-festring material::GetName(truth Articled, truth Adjective) const
+festring material::GetName(bool Articled, bool Adjective) const
 {
   static festring Name;
   Name.Empty();
@@ -64,7 +64,7 @@ void material::Load(inputfile& SaveFile)
   databasecreator<material>::InstallDataBase(this, ReadType<ushort>(SaveFile));
 }
 
-truth material::Effect(character* Eater, long Amount)
+bool material::Effect(character* Eater, long Amount)
 {
   /* Receivexxx should return truth! */
 
@@ -165,7 +165,7 @@ material* material::EatEffect(character* Eater, long Amount)
     return MotherEntity->RemoveMaterial(this);
 }
 
-truth material::HitEffect(character* Enemy, bodypart* BodyPart)
+bool material::HitEffect(character* Enemy, bodypart* BodyPart)
 {
   if(!Volume)
     return false;
@@ -184,7 +184,7 @@ truth material::HitEffect(character* Enemy, bodypart* BodyPart)
   }
 
   long Amount = Max<long>(GetVolume() >> 1, 1);
-  truth Success;
+  bool Success;
 
   if(GetInteractionFlags() & AFFECT_INSIDE)
   {
@@ -264,7 +264,7 @@ void material::SetVolume(long What)
     MotherEntity->SignalVolumeAndWeightChange();
 }
 
-void material::Initialize(int NewConfig, long InitVolume, truth Load)
+void material::Initialize(int NewConfig, long InitVolume, bool Load)
 {
   if(!Load)
   {
@@ -279,13 +279,13 @@ long material::GetTotalNutritionValue() const
   return GetNutritionValue() * GetVolume() / 50;
 }
 
-truth material::CanBeEatenByAI(const character* Eater) const
+bool material::CanBeEatenByAI(const character* Eater) const
 {
   return Eater->GetAttribute(WISDOM) < GetConsumeWisdomLimit()
     && !GetSpoilLevel() && !Eater->CheckCannibalism(this);
 }
 
-truth material::BreatheEffect(character* Enemy)
+bool material::BreatheEffect(character* Enemy)
 {
   return Effect(Enemy, Max<long>(GetVolume() / 10, 50));
 }
@@ -372,17 +372,17 @@ int material::GetHardenModifier(const item* Item) const
   return M;
 }
 
-truth material::IsExplosive() const
+bool material::IsExplosive() const
 {
   return DataBase->InteractionFlags & CAN_EXPLODE;
 }
 
-truth material::IsSparkling() const
+bool material::IsSparkling() const
 {
   return DataBase->CategoryFlags & IS_SPARKLING;
 }
 
-truth material::IsStuckTo(const character* Char) const
+bool material::IsStuckTo(const character* Char) const
 {
   return MotherEntity->IsStuckTo(Char);
 }

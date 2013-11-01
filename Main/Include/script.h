@@ -40,21 +40,21 @@
 
 #define SCRIPT_TRUTH(name)\
  public:\
-  const truth* name() const { return name##Holder.Member; }\
+  const bool* name() const { return name##Holder.Member; }\
  protected:\
-  scriptmember<truth> name##Holder
+  scriptmember<bool> name##Holder
 
 #define SCRIPT_TRUTH_WITH_BASE(name)\
  public:\
-  const truth* name() const { return GetMemberOf(name##Holder, Base, &scripttype::name); }\
+  const bool* name() const { return GetMemberOf(name##Holder, Base, &scripttype::name); }\
  protected:\
-  scriptmember<truth> name##Holder
+  scriptmember<bool> name##Holder
 
 #define FAST_SCRIPT_TRUTH(name)\
  public:\
-  truth name() const { return name##Holder.Member; }\
+  bool name() const { return name##Holder.Member; }\
  protected:\
-  fastscriptmember<truth> name##Holder
+  fastscriptmember<bool> name##Holder
 
 class glterrain;
 class olterrain;
@@ -138,7 +138,7 @@ class script
   virtual void Save(outputfile& SaveFile) const { SaveDataMap(GetDataMap(), SaveFile); }
   virtual void Load(inputfile& SaveFile) { LoadDataMap(GetDataMap(), SaveFile); }
  protected:
-  truth ReadMember(inputfile&, const festring&);
+  bool ReadMember(inputfile&, const festring&);
   virtual scriptmemberbase* GetDataFromMap(const datamap&, const char*);
   virtual scriptmemberbase* GetData(const char* String) { return GetDataFromMap(GetDataMap(), String); }
   virtual const datamap& GetDataMap() const = 0;
@@ -165,7 +165,7 @@ class posscript : public script
  public:
   typedef posscript scripttype;
   virtual void ReadFrom(inputfile&);
-  truth GetRandom() const { return Random; }
+  bool GetRandom() const { return Random; }
   static void InitDataMap();
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
@@ -175,7 +175,7 @@ class posscript : public script
   SCRIPT_MEMBER(rect, Borders);
   FAST_SCRIPT_MEMBER(packv2, Vector);
   FAST_SCRIPT_MEMBER(uchar, Flags);
-  truth Random;
+  bool Random;
 };
 
 class materialscript : public script
@@ -203,7 +203,7 @@ class basecontentscript : public script
   basecontentscript();
   virtual void ReadFrom(inputfile&);
   int GetContentType() const { return ContentType; }
-  truth IsValid() const { return ContentType || Random; }
+  bool IsValid() const { return ContentType || Random; }
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
   static void InitDataMap();
@@ -216,12 +216,12 @@ class basecontentscript : public script
   SCRIPT_MEMBER(materialscript, MainMaterial);
   SCRIPT_MEMBER(materialscript, SecondaryMaterial);
   ushort ContentType : 15;
-  truth Random : 1;
+  bool Random : 1;
   ushort Config;
   FAST_SCRIPT_MEMBER(uchar, Parameters);
 };
 
-inline truth IsValidScript(const basecontentscript* S) { return S->IsValid(); }
+inline bool IsValidScript(const basecontentscript* S) { return S->IsValid(); }
 
 template <class type> class contentscripttemplate : public basecontentscript
 {
@@ -260,7 +260,7 @@ class contentscript<item> : public contentscripttemplate<item>
   FAST_SCRIPT_TRUTH(IsActive);
 };
 
-truth IsValidScript(const fearray<contentscript<item> >*);
+bool IsValidScript(const fearray<contentscript<item> >*);
 
 template <>
 class contentscript<character> : public contentscripttemplate<character>

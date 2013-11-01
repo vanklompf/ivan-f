@@ -32,11 +32,11 @@ class wterrain
   worldmap* GetWorldMap() const { return WSquareUnder->GetWorldMap(); }
   void AddName(festring&, int) const;
   festring GetName(int) const;
-  truth IsAnimated() const { return AnimationFrames > 1; }
+  bool IsAnimated() const { return AnimationFrames > 1; }
   void SetAnimationFrames(int What) { AnimationFrames = What; }
   virtual const char* GetNameStem() const = 0;
  protected:
-  virtual truth UsesLongArticle() const { return false; }
+  virtual bool UsesLongArticle() const { return false; }
   virtual v2 GetBitmapPos(int) const = 0;
   wsquare* WSquareUnder;
   int AnimationFrames;
@@ -97,7 +97,7 @@ class owterrain : public wterrain, public oterrain
   virtual int GetAttachedDungeon() const { return 0; }
   virtual int GetAttachedArea() const { return 0; }
   virtual int GetAttachedEntry() const;
-  virtual truth Enter(truth) const;
+  virtual bool Enter(bool) const;
   virtual int GetWalkability() const;
 };
 

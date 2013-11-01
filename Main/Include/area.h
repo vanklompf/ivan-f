@@ -29,7 +29,7 @@ class area
   area();
   area(int, int);
   virtual ~area();
-  virtual void Draw(truth) const = 0;
+  virtual void Draw(bool) const = 0;
   void Save(outputfile&) const;
   void Load(inputfile&);
   int GetFlag(v2 Pos) const { return FlagMap[Pos.X][Pos.Y]; }
@@ -41,8 +41,8 @@ class area
   void SendNewDrawRequest();
   void Initialize(int, int);
   square* GetNeighbourSquare(v2, int) const;
-  truth IsValidPos(v2 Pos) const { return Pos.X >= 0 && Pos.Y >= 0 && Pos.X < XSize && Pos.Y < YSize; }
-  truth IsValidPos(int X, int Y) const { return X >= 0 && Y >= 0 && X < XSize && Y < YSize; }
+  bool IsValidPos(v2 Pos) const { return Pos.X >= 0 && Pos.Y >= 0 && Pos.X < XSize && Pos.Y < YSize; }
+  bool IsValidPos(int X, int Y) const { return X >= 0 && Y >= 0 && X < XSize && Y < YSize; }
   const rect& GetBorder() const { return Border; }
   void SetEntryPos(int, v2);
  protected:

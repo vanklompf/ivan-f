@@ -92,7 +92,7 @@ void weaponskill::Load(inputfile& SaveFile)
   SaveFile >> (int&)Level >> (int&)Hits >> (int&)HitCounter;
 }
 
-truth weaponskill::AddHit(int AddHits)
+bool weaponskill::AddHit(int AddHits)
 {
   if(!AddHits)
     return false;
@@ -112,7 +112,7 @@ truth weaponskill::AddHit(int AddHits)
   return Level != OldLevel;
 }
 
-truth weaponskill::SubHit(int SubHits)
+bool weaponskill::SubHit(int SubHits)
 {
   if(!SubHits)
     return false;
@@ -167,7 +167,7 @@ void sweaponskill::Load(inputfile& SaveFile)
   SaveFile >> ID >> Weight >> (int&)Config;
 }
 
-truth weaponskill::Tick()
+bool weaponskill::Tick()
 {
   if(Hits && HitCounter++ >= GetUnuseTickMap(Level))
   {
@@ -180,14 +180,14 @@ truth weaponskill::Tick()
   return false;
 }
 
-truth sweaponskill::IsSkillOf(const item* Item) const
+bool sweaponskill::IsSkillOf(const item* Item) const
 {
   return (ID == Item->GetID()
 	  && Weight == Item->GetWeight()
 	  && Config == Item->GetConfig());
 }
 
-truth sweaponskill::IsSkillOfCloneMother(const item* Item, ulong CMID) const
+bool sweaponskill::IsSkillOfCloneMother(const item* Item, ulong CMID) const
 {
   return (ID == CMID
 	  && Weight == Item->GetWeight()

@@ -95,7 +95,7 @@ void gearslot::AddFriendItem(item* Item) const
     GetBodyPart()->GetMaster()->GetStack()->AddItem(Item);
 }
 
-truth stackslot::IsOnGround() const
+bool stackslot::IsOnGround() const
 {
   return GetMotherStack()->IsOnGround();
 }
@@ -226,17 +226,17 @@ void stackslot::DonateTo(item* Item) // could be optimized
   Empty();
 }
 
-truth stackslot::CanBeSeenBy(const character* Viewer) const
+bool stackslot::CanBeSeenBy(const character* Viewer) const
 {
   return GetMotherStack()->CanBeSeenBy(Viewer, Item->GetSquarePosition());
 }
 
-truth bodypartslot::CanBeSeenBy(const character* Viewer) const
+bool bodypartslot::CanBeSeenBy(const character* Viewer) const
 {
   return GetMaster()->CanBeSeenBy(Viewer);
 }
 
-truth gearslot::CanBeSeenBy(const character* Viewer) const
+bool gearslot::CanBeSeenBy(const character* Viewer) const
 {
   return GetBodyPart()->CanBeSeenBy(Viewer);
 }
@@ -246,7 +246,7 @@ void gearslot::SignalEnchantmentChange()
   GetBodyPart()->SignalEnchantmentChange();
 }
 
-truth stackslot::IsVisible() const
+bool stackslot::IsVisible() const
 {
   return GetMotherStack()->IsVisible();
 }

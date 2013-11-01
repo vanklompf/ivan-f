@@ -47,7 +47,7 @@ void stack::Draw(const character* Viewer, blitdata& BlitData,
 
   if(RequiredSquarePosition == CENTER)
   {
-    truth PlusSymbol = VisibleItems > 1, Dangerous = NeedDangerSymbol(Viewer);
+    bool PlusSymbol = VisibleItems > 1, Dangerous = NeedDangerSymbol(Viewer);
 
     if(PlusSymbol || Dangerous)
     {
@@ -70,7 +70,7 @@ void stack::Draw(const character* Viewer, blitdata& BlitData,
   }
 }
 
-void stack::AddItem(item* ToBeAdded, truth RunRoomEffects)
+void stack::AddItem(item* ToBeAdded, bool RunRoomEffects)
 {
   if(!ToBeAdded)
     return;
@@ -101,7 +101,7 @@ void stack::AddItem(item* ToBeAdded, truth RunRoomEffects)
 void stack::RemoveItem(stackslot* Slot)
 {
   item* Item = Slot->GetItem();
-  truth WasAnimated = Item->IsAnimated();
+  bool WasAnimated = Item->IsAnimated();
   col24 Emit = Item->GetEmitation();
   RemoveElement(Slot);
   SignalVolumeAndWeightChange();
@@ -131,7 +131,7 @@ void stack::RemoveItem(stackslot* Slot)
 /* Removes all items. LastClean should be true only if the stack is being
    deleted (the default is false) */
 
-void stack::Clean(truth LastClean)
+void stack::Clean(bool LastClean)
 {
   if(!Items)
     return;
@@ -225,7 +225,7 @@ v2 stack::GetPos() const
 /* Returns whether there are any items satisfying the sorter or any visible
    items if it is zero */
 
-truth stack::SortedItems(const character* Viewer, sorter SorterFunction) const
+bool stack::SortedItems(const character* Viewer, sorter SorterFunction) const
 {
   if(Items)
     for(stackiterator i = GetBottom(); i.HasItem(); ++i)
@@ -531,7 +531,7 @@ void stack::AddContentsToList(felist& Contents, const character* Viewer,
   itemvectorvector PileVector;
   Pile(PileVector, Viewer, RequiredSquarePosition, SorterFunction);
 
-  truth DrawDesc = Desc.GetSize();
+  bool DrawDesc = Desc.GetSize();
   long LastCategory = 0;
   festring Entry;
 
@@ -608,7 +608,7 @@ int stack::SearchChosen(itemvector& ReturnVector,
   return Pos;
 }
 
-truth stack::RaiseTheDead(character* Summoner)
+bool stack::RaiseTheDead(character* Summoner)
 {
   itemvector ItemVector;
   FillItemVector(ItemVector);
@@ -622,7 +622,7 @@ truth stack::RaiseTheDead(character* Summoner)
 
 /* Returns false if the Applier didn't try to use the key */
 
-truth stack::TryKey(item* Key, character* Applier)
+bool stack::TryKey(item* Key, character* Applier)
 {
   if(!Applier->IsPlayer())
     return false;
@@ -639,7 +639,7 @@ truth stack::TryKey(item* Key, character* Applier)
 
 /* Returns false if the Applier didn't try to open anything */
 
-truth stack::Open(character* Opener)
+bool stack::Open(character* Opener)
 {
   if(!Opener->IsPlayer())
     return false;
@@ -816,7 +816,7 @@ col24 stack::GetSideEmitation(int RequiredSquarePosition)
   return Emitation;
 }
 
-truth stack::CanBeSeenBy(const character* Viewer, int SquarePosition) const
+bool stack::CanBeSeenBy(const character* Viewer, int SquarePosition) const
 {
   if(MotherEntity)
     return MotherEntity->ContentsCanBeSeenBy(Viewer);
@@ -827,7 +827,7 @@ truth stack::CanBeSeenBy(const character* Viewer, int SquarePosition) const
   }
 }
 
-truth stack::IsDangerous(const character* Stepper) const
+bool stack::IsDangerous(const character* Stepper) const
 {
   for(stackiterator i = GetBottom(); i.HasItem(); ++i)
     if(i->IsDangerous(Stepper) && i->CanBeSeenBy(Stepper))
@@ -839,7 +839,7 @@ truth stack::IsDangerous(const character* Stepper) const
 /* Returns true if something was duplicated.
    Max is the cap of items to be affected */
 
-truth stack::Duplicate(int Max, ulong Flags)
+bool stack::Duplicate(int Max, ulong Flags)
 {
   if(!GetItems())
     return false;
@@ -859,7 +859,7 @@ truth stack::Duplicate(int Max, ulong Flags)
 
 /* Adds the item without any external update requests */
 
-void stack::AddElement(item* Item, truth)
+void stack::AddElement(item* Item, bool)
 {
   ++Items;
 
@@ -891,7 +891,7 @@ void stack::MoveItemsTo(slot* Slot)
 }
 
 item* stack::GetBottomItem(const character* Char,
-			   truth ForceIgnoreVisibility) const
+			   bool ForceIgnoreVisibility) const
 {
   if((Flags & HIDDEN) || ForceIgnoreVisibility)
     return Bottom ? **Bottom : 0;
@@ -901,7 +901,7 @@ item* stack::GetBottomItem(const character* Char,
 
 item* stack::GetBottomSideItem(const character* Char,
 			       int RequiredSquarePosition,
-			       truth ForceIgnoreVisibility) const
+			       bool ForceIgnoreVisibility) const
 {
   for(stackiterator i = GetBottom(); i.HasItem(); ++i)
     if(i->GetSquarePosition() == RequiredSquarePosition
@@ -911,7 +911,7 @@ item* stack::GetBottomSideItem(const character* Char,
   return 0;
 }
 
-truth CategorySorter(const itemvector& V1, const itemvector& V2)
+bool CategorySorter(const itemvector& V1, const itemvector& V2)
 {
   return (*V1.begin())->GetCategory() < (*V2.begin())->GetCategory();
 }
@@ -974,7 +974,7 @@ long stack::GetTruePrice() const
 /* GUI used for instance by chests and bookcases.
    Returns whether anything was done. */
 
-truth stack::TakeSomethingFrom(character* Opener,
+bool stack::TakeSomethingFrom(character* Opener,
 			       const festring& ContainerName)
 {
   if(!GetItems())
@@ -983,7 +983,7 @@ truth stack::TakeSomethingFrom(character* Opener,
     return false;
   }
 
-  truth Success = false;
+  bool Success = false;
   room* Room = GetLSquareUnder()->GetRoom();
   SetSelected(0);
 
@@ -1018,7 +1018,7 @@ truth stack::TakeSomethingFrom(character* Opener,
 /* GUI used for instance by chests and bookcases (use ContainerID == 0 if
    the container isn't an item). Returns whether anything was done. */
 
-truth stack::PutSomethingIn(character* Opener, const festring& ContainerName,
+bool stack::PutSomethingIn(character* Opener, const festring& ContainerName,
 			    long StorageVolume, ulong ContainerID)
 {
   if(!Opener->GetStack()->GetItems())
@@ -1027,7 +1027,7 @@ truth stack::PutSomethingIn(character* Opener, const festring& ContainerName,
     return false;
   }
 
-  truth Success = false;
+  bool Success = false;
   room* Room = GetLSquareUnder()->GetRoom();
   SetSelected(0);
 
@@ -1086,7 +1086,7 @@ truth stack::PutSomethingIn(character* Opener, const festring& ContainerName,
   return Success;
 }
 
-truth stack::IsOnGround() const
+bool stack::IsOnGround() const
 {
   return !MotherEntity || MotherEntity->IsOnGround();
 }
@@ -1120,7 +1120,7 @@ void stack::Search(const character* Char, int Perception)
 
 /* Used to determine whether the danger symbol should be shown */
 
-truth stack::NeedDangerSymbol(const character* Viewer) const
+bool stack::NeedDangerSymbol(const character* Viewer) const
 {
   for(stackiterator i = GetBottom(); i.HasItem(); ++i)
     if(i->NeedDangerSymbol() && i->CanBeSeenBy(Viewer))
@@ -1242,7 +1242,7 @@ void stack::DropSideItems()
   }
 }
 
-truth stack::AllowDamage(int Direction, int SquarePosition)
+bool stack::AllowDamage(int Direction, int SquarePosition)
 {
   if(SquarePosition == CENTER)
     return true;
@@ -1274,7 +1274,7 @@ long stack::GetWeight(const character* Viewer, int SquarePosition) const
   return Weight;
 }
 
-truth stack::DetectMaterial(const material* Material) const
+bool stack::DetectMaterial(const material* Material) const
 {
   for(stackiterator i = GetBottom(); i.HasItem(); ++i)
     if(i->DetectMaterial(Material))
@@ -1289,7 +1289,7 @@ void stack::SetLifeExpectancy(int Base, int RandPlus)
     i->SetLifeExpectancy(Base, RandPlus);
 }
 
-truth stack::Necromancy(character* Necromancer)
+bool stack::Necromancy(character* Necromancer)
 {
   itemvector ItemVector;
   FillItemVector(ItemVector);
@@ -1312,7 +1312,7 @@ const character* stack::FindCarrier() const
   return MotherEntity ? MotherEntity->FindCarrier() : 0;
 }
 
-truth stackiterator::HasItem() const
+bool stackiterator::HasItem() const
 { 
   if(Slot == 0)
     return 0;

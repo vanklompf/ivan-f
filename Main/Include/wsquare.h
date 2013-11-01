@@ -36,19 +36,19 @@ class wsquare : public square
   void ChangeWTerrain(gwterrain*, owterrain*);
   worldmap* GetWorldMap() const { return static_cast<worldmap*>(AreaUnder); }
   void SetWorldMapUnder(worldmap* What) { AreaUnder = What; }
-  void UpdateMemorizedDescription(truth = false);
+  void UpdateMemorizedDescription(bool = false);
   virtual gterrain* GetGTerrain() const;
   virtual oterrain* GetOTerrain() const;
   void ChangeGWTerrain(gwterrain*);
   void ChangeOWTerrain(owterrain*);
   void SetWTerrain(gwterrain*, owterrain*);
-  truth SignalSeen();
+  bool SignalSeen();
   void CalculateLuminance();
   wsquare* GetNeighbourWSquare(int I) const { return static_cast<worldmap*>(AreaUnder)->GetNeighbourWSquare(Pos, I); }
   int GetWalkability() const;
   virtual int GetSquareWalkability() const { return GetWalkability(); }
-  virtual truth CanBeSeenByPlayer(truth = false) const;
-  virtual truth CanBeSeenFrom(v2, long, truth = false) const;
+  virtual bool CanBeSeenByPlayer(bool = false) const;
+  virtual bool CanBeSeenFrom(v2, long, bool = false) const;
  protected:
   gwterrain* GWTerrain;
   owterrain* OWTerrain;

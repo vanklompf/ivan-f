@@ -43,7 +43,7 @@ void room::DestroyTerrain(character* Who)
 
 /* returns true if player agrees to continue */
 
-truth room::CheckDestroyTerrain(character* Infidel)
+bool room::CheckDestroyTerrain(character* Infidel)
 {
   if(!MasterIsActive() || Infidel == GetMaster() || GetMaster()->GetRelation(Infidel) == HOSTILE)
     return true;
@@ -59,13 +59,13 @@ truth room::CheckDestroyTerrain(character* Infidel)
     return false;
 }
 
-truth room::MasterIsActive() const
+bool room::MasterIsActive() const
 {
   character* Master = GetMaster();
   return Master && Master->IsEnabled() && Master->IsConscious();
 }
 
-truth room::CheckKickSquare(const character* Kicker, const lsquare* LSquare) const
+bool room::CheckKickSquare(const character* Kicker, const lsquare* LSquare) const
 {
   if(!AllowKick(Kicker, LSquare))
   {
@@ -90,7 +90,7 @@ character* room::GetMaster() const
   }
 }
 
-truth room::IsOKToDestroyWalls(const character* Infidel) const
+bool room::IsOKToDestroyWalls(const character* Infidel) const
 {
   return !MasterIsActive() || Infidel == GetMaster() || GetMaster()->GetRelation(Infidel) == HOSTILE;
 }

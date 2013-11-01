@@ -57,6 +57,9 @@ set( FELIB_LIST
 	${FELIB_DIR}/Source/whandler.cpp
 )
 
+FILE( GLOB FELIB_HEADERS ${FELIB_DIR}/Include/*.h )
+set ( FELIB_LIST ${FELIB_LIST} ${FELIB_HEADERS} )
+
 set( MAIN_LIST
 	${MAIN_DIR}/Source/actset.cpp
 	${MAIN_DIR}/Source/areaset.cpp
@@ -84,6 +87,9 @@ set( MAIN_LIST
 	${MAIN_DIR}/Source/wmapset.cpp
 	${MAIN_DIR}/Source/wskill.cpp
 )
+
+FILE( GLOB MAIN_HEADERS ${MAIN_DIR}/Include/*.h )
+set ( MAIN_LIST ${MAIN_LIST} ${MAIN_HEADERS} )
 
 include_directories( ${FELIB_DIR}/Include ${MAIN_DIR}/Include )
 

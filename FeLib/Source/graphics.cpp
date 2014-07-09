@@ -92,6 +92,10 @@ void graphics::SetMode(const char* Title, const char* IconName,
   if(IconName)
   {
     SDL_Surface* Icon = SDL_LoadBMP(IconName);
+	if (Icon == NULL)
+	{
+		ABORT("Could not load Icon file");
+	}
     SDL_SetColorKey(Icon, SDL_SRCCOLORKEY,
 		    SDL_MapRGB(Icon->format, 255, 255, 255));
     SDL_WM_SetIcon(Icon, NULL);

@@ -10,11 +10,6 @@
  *
  */
 
-#ifdef __DJGPP__
-#include <conio.h>
-#include "graphics.h"
-#endif
-
 #ifdef WIN32
 #include <windows.h>
 #else

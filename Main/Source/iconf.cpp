@@ -53,14 +53,12 @@ truthoption ivanconfig::LookZoom(	  "LookZoom",
 truthoption ivanconfig::UseAlternativeKeys("UseAlternativeKeys",
 					   "use alternative direction keys",
 					   false);
-#ifndef __DJGPP__
 truthoption ivanconfig::FullScreenMode(	  "FullScreenMode",
 					  "run the game in full screen mode",
 					  false,
 					  &configsystem::NormalTruthDisplayer,
 					  &configsystem::NormalTruthChangeInterface,
 					  &FullScreenModeChanger);
-#endif
 col24 ivanconfig::ContrastLuminance = NORMAL_LUMINANCE;
 
 v2 ivanconfig::GetQuestionPos() { return game::IsRunning() ? v2(16, 6) : v2(30, 30); }
@@ -145,14 +143,10 @@ void ivanconfig::ContrastChanger(numberoption* O, long What)
   CalculateContrastLuminance();
 }
 
-#ifndef __DJGPP__
-
 void ivanconfig::FullScreenModeChanger(truthoption*, bool)
 {
   graphics::SwitchMode();
 }
-
-#endif
 
 void ivanconfig::Show()
 {
@@ -170,15 +164,11 @@ void ivanconfig::ContrastHandler(long Value)
   }
 }
 
-#ifndef __DJGPP__
-
 void ivanconfig::SwitchModeHandler()
 {
   FullScreenMode.Value = !FullScreenMode.Value;
   Save();
 }
-
-#endif
 
 void ivanconfig::CalculateContrastLuminance()
 {
@@ -196,10 +186,8 @@ void ivanconfig::Initialize()
   configsystem::AddOption(&AutoDropLeftOvers);
   configsystem::AddOption(&LookZoom);
   configsystem::AddOption(&UseAlternativeKeys);
-#ifndef __DJGPP__
   configsystem::AddOption(&FullScreenMode);
-#endif
-#if defined(WIN32) || defined(__DJGPP__)
+#if defined(WIN32)
   configsystem::SetConfigFileName("ivan.cfg");
 #else
   configsystem::SetConfigFileName(festring(getenv("HOME")) + "/.ivan.conf");

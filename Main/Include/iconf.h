@@ -27,12 +27,8 @@ class ivanconfig
   static bool GetAutoDropLeftOvers() { return AutoDropLeftOvers.Value; }
   static bool GetLookZoom() { return LookZoom.Value; }
   static bool GetUseAlternativeKeys() { return UseAlternativeKeys.Value; }
-#ifndef __DJGPP__
   static bool GetFullScreenMode() { return FullScreenMode.Value; }
   static void SwitchModeHandler();
-#else
-  static bool GetFullScreenMode() { return true; }
-#endif
   static long ApplyContrastTo(long);
   static void Save() { configsystem::Save(); }
   static void Load() { configsystem::Load(); }
@@ -50,9 +46,7 @@ class ivanconfig
   static bool ContrastChangeInterface(numberoption*);
   static void AutoSaveIntervalChanger(numberoption*, long);
   static void ContrastChanger(numberoption*, long);
-#ifndef __DJGPP__
   static void FullScreenModeChanger(truthoption*, bool);
-#endif
   static void ContrastHandler(long);
   static void BackGroundDrawer();
   static stringoption DefaultName;
@@ -63,9 +57,7 @@ class ivanconfig
   static truthoption AutoDropLeftOvers;
   static truthoption LookZoom;
   static truthoption UseAlternativeKeys;
-#ifndef __DJGPP__
   static truthoption FullScreenMode;
-#endif
   static col24 ContrastLuminance;
 };
 

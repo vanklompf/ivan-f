@@ -54,22 +54,12 @@ void globalerrorhandler::Install()
     AlreadyInstalled = true;
     OldNewHandler = set_new_handler(NewHandler);
 
-#ifdef __DJGPP__
-    for(int c = 0; c < SIGNALS; ++c)
-      OldSignal[c] = signal(Signal[c], SignalHandler);
-#endif
-
     atexit(globalerrorhandler::DeInstall);
   }
 }
 
 void globalerrorhandler::DeInstall()
 {
-#ifdef __DJGPP__
-  for(int c = 0; c < SIGNALS; ++c)
-    signal(Signal[c], OldSignal[c]);
-#endif
-
   set_new_handler(OldNewHandler);
 }
 
@@ -118,58 +108,3 @@ int globalerrorhandler::NewHandler(size_t)
   return 0;
 #endif
 }
-
-#ifdef __DJGPP__
-
-void globalerrorhandler::SignalHandler(int Signal)
-{
-  static bool AlreadySignalled = false;
-
-  if(!AlreadySignalled)
-  {
-    AlreadySignalled = true;
-    graphics::DeInit();
-    std::cout << "Fatal Error: ";
-
-    switch (Signal)
-    {
-     case SIGABRT:
-      std::cout << "Abort";
-      break;
-     case SIGFPE:
-      std::cout << "Divide by zero";
-      break;
-     case SIGILL:
-      std::cout << "Invalid/unknown";
-      break;
-     case SIGSEGV:
-      std::cout << "Segmentation violation";
-      break;
-     case SIGTERM:
-      std::cout << "Termination request";
-      break;
-     case SIGINT:
-      std::cout << "Break interrupt";
-      break;
-     case SIGKILL:
-      std::cout << "Kill";
-      break;
-     case SIGQUIT:
-      std::cout << "Quit";
-      break;
-     default:
-      std::cout << "Unknown";
-    }
-
-    std::cout << " exception signalled.";
-
-    if(Signal != SIGINT)
-      std::cout << BugMsg;
-
-    std::cout << std::endl;
-  }
-
-  exit(2);
-}
-
-#endif

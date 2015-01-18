@@ -21,3 +21,11 @@ build*/
 # Backup files
 *~
 *.swp
+*.tlog
+*.obj
+*.suo
+*.pdb
+*.log
+*.sdf
+*.opensdf
+*.idb

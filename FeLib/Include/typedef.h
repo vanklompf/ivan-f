@@ -12,21 +12,21 @@
 
 #ifndef __TYPEDEF_H__
 #define __TYPEDEF_H__
-
+#include <cstdint>
 #include "pragmas.h"
 
 typedef unsigned char uchar;
-typedef unsigned short ushort;
-typedef unsigned int uint;
-typedef unsigned long ulong;
-typedef int col16;
+typedef uint16_t ushort;
+typedef uint32_t uint;
+typedef uint32_t ulong;
+typedef int32_t col16;
 typedef ushort packcol16;
 typedef ulong col24;
-typedef int alpha;
-typedef uchar packalpha;
-typedef int priority;
-typedef uchar packpriority;
-typedef uchar paletteindex;
+typedef int32_t alpha;
+typedef uint8_t packalpha;
+typedef int32_t priority;
+typedef uint8_t packpriority;
+typedef uint8_t paletteindex;
 
 typedef const int ctruth;
 typedef const unsigned char cuchar;

@@ -47,7 +47,6 @@ class festring
   festring& operator<<(int Int) { return Append(Int); }
   festring& operator<<(uint Int) { return Append(Int); }
   festring& operator<<(long Int) { return Append(Int); }
-  festring& operator<<(ulong Int) { return Append(Int); }
   bool operator<(const festring&) const;
   bool operator==(const festring&) const;
   bool operator!=(const festring&) const;

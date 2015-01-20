@@ -608,16 +608,18 @@ const v2 SILHOUETTE_SIZE(48, 64);
 #define WINDOW 1024
 
 /* item flags */
-
 #define CANNIBALIZED 4
 #define SQUARE_POSITION_BITS (16|32|64)
 #define SQUARE_POSITION_SHIFT 4
 
 /* bodypart flags */
 
-#define UNIQUE 128
-#define BADLY_HURT 256
-#define STUCK 512
+
+#define UNIQUE     (1 >> 7)
+#define BADLY_HURT (1 >> 8)
+#define STUCK      (1 >> 9)
+
+
 #define BODYPART_SPARKLE_SHIFT 9
 
 #define NO_BROKEN 1

@@ -24,8 +24,6 @@
 #define HIGH_SCORE_FILENAME LOCAL_STATE_DIR "/ivan-highscore.scores"
 #endif
 
-class festring;
-
 class highscore
 {
  public:

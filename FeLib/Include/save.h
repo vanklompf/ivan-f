@@ -210,17 +210,19 @@ inline inputfile& operator>>(inputfile& SaveFile, long& Value)
   return SaveFile;
 }
 
-inline outputfile& operator<<(outputfile& SaveFile, ulong Value)
+
+inline outputfile& operator<<(outputfile& SaveFile, time_t Value)
 {
   SaveFile.Write(reinterpret_cast<char*>(&Value), sizeof(Value));
   return SaveFile;
 }
 
-inline inputfile& operator>>(inputfile& SaveFile, ulong& Value)
+inline inputfile& operator>>(inputfile& SaveFile, time_t& Value)
 {
   SaveFile.Read(reinterpret_cast<char*>(&Value), sizeof(Value));
   return SaveFile;
 }
+
 
 inline outputfile& operator<<(outputfile& SaveFile, unsigned Value)
 {

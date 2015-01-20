@@ -19,13 +19,13 @@
 
 struct v2;
 
-struct packv2
+struct packv2 
 {
   operator v2() const;
   short X, Y;
 };
 
-struct podv2
+struct podv2 
 {
   operator v2() const;
   int X, Y;
@@ -33,49 +33,75 @@ struct podv2
 
 /* Standard structure for representing positions */
 
-struct v2
+struct v2 
 {
-  v2() { }
-  v2(int X, int Y) : X(X), Y(Y) { }
+  v2() {}
+  v2(int X, int Y) : X(X), Y(Y) {}
   v2 operator+(v2 V) const { return v2(X + V.X, Y + V.Y); }
-  v2& operator+=(v2 V) { X += V.X; Y += V.Y; return *this; }
+  v2 &operator+=(v2 V) {
+    X += V.X;
+    Y += V.Y;
+    return *this;
+  }
   v2 operator-(v2 V) const { return v2(X - V.X, Y - V.Y); }
-  v2& operator-=(v2 V) { X -= V.X; Y -= V.Y; return *this; }
-  v2 operator-()const { return v2(-X, -Y); }
+  v2 &operator-=(v2 V) {
+    X -= V.X;
+    Y -= V.Y;
+    return *this;
+  }
+  v2 operator-() const { return v2(-X, -Y); }
   v2 operator*(int I) const { return v2(X * I, Y * I); }
-  v2& operator*=(int I) { X *= I; Y *= I; return *this; }
+  v2 &operator*=(int I) {
+    X *= I;
+    Y *= I;
+    return *this;
+  }
   v2 operator/(int I) const { return v2(X / I, Y / I); }
-  v2& operator/=(int I) { X /= I; Y /= I; return *this; }
-  v2 operator*(double D) const
-  { return v2(int(X * D), int(Y * D)); }
-  v2& operator*=(double D)
-  { X = int(X * D); Y = int(Y * D); return *this; }
-  v2 operator/(double D) const
-  { return v2(int(X / D), int(Y / D)); }
-  v2& operator/=(double D)
-  { X = int(X / D); Y = int(Y / D); return *this; }
+  v2 &operator/=(int I) {
+    X /= I;
+    Y /= I;
+    return *this;
+  }
+  v2 operator*(double D) const { return v2(int(X * D), int(Y * D)); }
+  v2 &operator*=(double D) {
+    X = int(X * D);
+    Y = int(Y * D);
+    return *this;
+  }
+  v2 operator/(double D) const { return v2(int(X / D), int(Y / D)); }
+  v2 &operator/=(double D) {
+    X = int(X / D);
+    Y = int(Y / D);
+    return *this;
+  }
   bool operator==(v2 V) const { return X == V.X && Y == V.Y; }
   bool operator!=(v2 V) const { return X != V.X || Y != V.Y; }
   v2 operator<<(int S) const { return v2(X << S, Y << S); }
-  v2& operator<<=(int S) { X <<= S; Y <<= S; return *this; }
+  v2 &operator<<=(int S) {
+    X <<= S;
+    Y <<= S;
+    return *this;
+  }
   v2 operator>>(int S) const { return v2(X >> S, Y >> S); }
-  v2& operator>>=(int S) { X >>= S; Y >>= S; return *this; }
-  bool operator<(v2 V) const
-  { return X < V.X || (X == V.X && Y < V.Y); }
+  v2 &operator>>=(int S) {
+    X >>= S;
+    Y >>= S;
+    return *this;
+  }
+  bool operator<(v2 V) const { return X < V.X || (X == V.X && Y < V.Y); }
   int GetLengthSquare() const { return X * X + Y * Y; }
   /* Also returns true if V == *this */
-  bool IsAdjacent(v2 V) const
-  { return V.X >= X - 1 && V.X <= X + 1 && V.Y <= Y + 1 && V.Y >= Y - 1; }
+  bool IsAdjacent(v2 V) const {
+    return V.X >= X - 1 && V.X <= X + 1 && V.Y <= Y + 1 && V.Y >= Y - 1;
+  }
   int GetManhattanLength() const { return Max(abs(X), abs(Y)); }
   bool Is0() const { return X == 0 && Y == 0; }
-  operator packv2() const
-  {
-    packv2 V = { X, Y };
+  operator packv2() const {
+    packv2 V = {X, Y};
     return V;
   }
-  operator podv2() const
-  {
-    podv2 V = { X, Y };
+  operator podv2() const {
+    podv2 V = {X, Y};
     return V;
   }
   int X, Y;
@@ -89,21 +115,19 @@ inline podv2::operator v2() const { return v2(X, Y); }
  * Size x Size according to Flags (see felibdef.h)
  */
 
-inline void Rotate(v2& Vect, int Size, int Flags)
-{
+inline void Rotate(v2 &Vect, int Size, int Flags) {
   const int Limit = Size - 1;
 
-  if(Flags & ROTATE)
-  {
+  if (Flags & ROTATE) {
     const int T = Vect.X;
     Vect.X = Limit - Vect.Y;
     Vect.Y = T;
   }
 
-  if(Flags & MIRROR)
+  if (Flags & MIRROR)
     Vect.X = Limit - Vect.X;
 
-  if(Flags & FLIP)
+  if (Flags & FLIP)
     Vect.Y = Limit - Vect.Y;
 }
 

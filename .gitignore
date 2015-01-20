@@ -6,17 +6,21 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
+*.dll
 
 # Compiled Static libraries
 *.lai
 *.la
 *.a
+*.lib
 
 # kdev4 files
 *.kdev4
 
 # CMake build dir
 build*/
+Debug*/
+Release*/
 
 # Backup files
 *~
@@ -29,3 +33,11 @@ build*/
 *.sdf
 *.opensdf
 *.idb
+*.sbr
+*.bsc
+*.ilk
+*.exp
+*.pch
+*.cache
+*.ipch
+*.nupkg

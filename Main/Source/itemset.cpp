@@ -47,6 +47,7 @@ EXTENDED_SYSTEM_SPECIALIZATIONS(item)(0, 0, 0, "item");
 #include "rawbit.h"
 #include "balance.h"
 
+/* TODO: figure out and fix including cpp (wtf?)*/
 #include "item.cpp"
 #include "bodypart.cpp"
 #include "gear.cpp"

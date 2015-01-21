@@ -9,12 +9,13 @@
  *  along with this file for more details
  *
  */
-
 #include "whandler.h"
 #include "graphics.h"
 #include "error.h"
 #include "bitmap.h"
 #include "festring.h"
+
+
 
 bool (*globalwindowhandler::ControlLoop[MAX_CONTROLS])();
 int globalwindowhandler::Controls = 0;

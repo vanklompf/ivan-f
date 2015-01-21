@@ -209,9 +209,6 @@
     <ClCompile Include="Source\command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\cont.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\coreset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -371,6 +368,9 @@
     <ClCompile Include="Source\wterras.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\cont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource\Ivan.ico">
@@ -383,6 +383,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.clang-format" />
     <None Include="packages.config" />
   </ItemGroup>
 </Project>

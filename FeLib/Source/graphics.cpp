@@ -74,7 +74,7 @@ void graphics::SetMode(const char* Title, const char* IconName,
 	}
     SDL_SetColorKey(Icon, SDL_SRCCOLORKEY,
 		    SDL_MapRGB(Icon->format, 255, 255, 255));
-    SDL_WM_SetIcon(Icon, NULL);
+	SDL_WM_SetIcon(Icon, NULL);
   }
 
   ulong Flags = SDL_SWSURFACE;

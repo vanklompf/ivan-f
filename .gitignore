@@ -21,6 +21,7 @@
 build*/
 Debug*/
 Release*/
+SDL*/
 
 # Backup files
 *~

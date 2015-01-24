@@ -90,7 +90,7 @@ int globalwindowhandler::GetKey(bool EmptyBuffer)
 	ProcessMessage(&Event);
       else
       {
-	if(SDL_GetAppState() & SDL_APPACTIVE
+	if(SDL_GetAppState() &  SDL_APPACTIVE
 	   && Controls && ControlLoopsEnabled)
 	{
 	  static ulong LastTick = 0;

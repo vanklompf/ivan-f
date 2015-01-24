@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\scripts">
+      <UniqueIdentifier>{09607e4a-4e7a-4611-8cd6-0dc0b334c7dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Graphics">
+      <UniqueIdentifier>{7ce4d545-e083-4e29-b3ac-f2e5a9aa4750}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\action.h">
@@ -384,6 +390,67 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.clang-format" />
-    <None Include="packages.config" />
+    <None Include="..\Script\char.dat">
+      <Filter>Resource Files\scripts</Filter>
+    </None>
+    <None Include="..\Script\define.dat">
+      <Filter>Resource Files\scripts</Filter>
+    </None>
+    <None Include="..\Script\dungeon.dat">
+      <Filter>Resource Files\scripts</Filter>
+    </None>
+    <None Include="..\Script\glterra.dat">
+      <Filter>Resource Files\scripts</Filter>
+    </None>
+    <None Include="..\Script\item.dat">
+      <Filter>Resource Files\scripts</Filter>
+    </None>
+    <None Include="..\Script\material.dat">
+      <Filter>Resource Files\scripts</Filter>
+    </None>
+    <None Include="..\Script\olterra.dat">
+      <Filter>Resource Files\scripts</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\Graphics\Char.pcx">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
+    <Resource Include="..\Graphics\Cursor.pcx">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
+    <Resource Include="..\Graphics\Effect.pcx">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
+    <Resource Include="..\Graphics\Font.pcx">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
+    <Resource Include="..\Graphics\FOW.pcx">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
+    <Resource Include="..\Graphics\GLTerra.pcx">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
+    <Resource Include="..\Graphics\Humanoid.pcx">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
+    <Resource Include="..\Graphics\Icon.bmp">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
+    <Resource Include="..\Graphics\Item.pcx">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
+    <Resource Include="..\Graphics\Menu.pcx">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
+    <Resource Include="..\Graphics\OLTerra.pcx">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
+    <Resource Include="..\Graphics\Symbol.pcx">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
+    <Resource Include="..\Graphics\WTerra.pcx">
+      <Filter>Resource Files\Graphics</Filter>
+    </Resource>
   </ItemGroup>
 </Project>

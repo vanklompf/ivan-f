@@ -13,10 +13,6 @@
 #ifndef __GRAPHICS_H__
 #define __GRAPHICS_H__
 
-#ifdef USE_SDL
-#include <SDL.h>
-#endif
-
 #include "v2.h"
 
 #define DOUBLE_BUFFER graphics::GetDoubleBuffer()
@@ -27,32 +23,38 @@ class bitmap;
 class rawbitmap;
 class festring;
 
+struct SDL_Window;
+struct SDL_Renderer;
+struct SDL_Texture;
+
 class graphics
 {
- public:
+public:
   friend class bitmap;
   static void Init();
   static void DeInit();
-#ifdef USE_SDL
   static void SwitchMode();
-#endif
   static void SetMode(const char*, const char*, v2, bool);
   static void BlitDBToScreen();
   static v2 GetRes() { return Res; }
-  static bitmap* GetDoubleBuffer() { return DoubleBuffer; }
+  static bitmap* GetDoubleBuffer() { return s_doubleBuffer; }
   static void LoadDefaultFont(const festring&);
   static rawbitmap* GetDefaultFont() { return DefaultFont; }
-  static void SetSwitchModeHandler(void (*What)())
-  { SwitchModeHandler = What; }
- private:
+  static void SetSwitchModeHandler(void (*What)()) { SwitchModeHandler = What; }
+
+private:
+  static SDL_Window* Screen;
+  static SDL_Renderer* Renderer;
+  static SDL_Texture* Texture;
+
   static void (*SwitchModeHandler)();
-#ifdef USE_SDL
-  static SDL_Surface* Screen;
-#endif
-  static bitmap* DoubleBuffer;
+  static bitmap* s_doubleBuffer;
   static v2 Res;
   static int ColorDepth;
   static rawbitmap* DefaultFont;
+
+public:
+  static bool IsActive();
 };
 
 #endif

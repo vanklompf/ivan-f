@@ -9,10 +9,7 @@
  *  along with this file for more details
  *
  */
-
-#ifdef USE_SDL
 #include "SDL.h"
-#endif
 
 #include "graphics.h"
 #include "bitmap.h"
@@ -22,12 +19,11 @@
 
 void (*graphics::SwitchModeHandler)();
 
-#ifdef USE_SDL
-SDL_Surface* graphics::Screen;
-#endif
+SDL_Window* graphics::Screen;
+SDL_Renderer* graphics::Renderer;
+SDL_Texture* graphics::Texture;
 
-
-bitmap* graphics::DoubleBuffer;
+bitmap* graphics::s_doubleBuffer;
 v2 graphics::Res;
 int graphics::ColorDepth;
 rawbitmap* graphics::DefaultFont = 0;
@@ -40,10 +36,8 @@ void graphics::Init()
   {
     AlreadyInstalled = true;
 
-#ifdef USE_SDL
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE))
       ABORT("Can't initialize SDL.");
-#endif
 
     atexit(graphics::DeInit);
   }
@@ -54,10 +48,7 @@ void graphics::DeInit()
   delete DefaultFont;
   DefaultFont = 0;
 
-#ifdef USE_SDL
   SDL_Quit();
-#endif
-
 }
 
 #ifdef USE_SDL
@@ -72,9 +63,8 @@ void graphics::SetMode(const char* Title, const char* IconName,
 	{
 		ABORT("Could not load Icon file");
 	}
-    SDL_SetColorKey(Icon, SDL_SRCCOLORKEY,
-		    SDL_MapRGB(Icon->format, 255, 255, 255));
-	SDL_WM_SetIcon(Icon, NULL);
+    SDL_SetColorKey(Icon, SDL_TRUE, SDL_MapRGB(Icon->format, 255, 255, 255));
+	SDL_SetWindowIcon(Screen, Icon);
   }
 
   ulong Flags = SDL_SWSURFACE;
@@ -82,45 +72,56 @@ void graphics::SetMode(const char* Title, const char* IconName,
   if(FullScreen)
   {
     SDL_ShowCursor(SDL_DISABLE);
-    Flags |= SDL_FULLSCREEN;
+    Flags |= SDL_WINDOW_FULLSCREEN;
   }
 
-  Screen = SDL_SetVideoMode(NewRes.X, NewRes.Y, 16, Flags);
+  Screen = SDL_CreateWindow(Title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, NewRes.X, NewRes.Y, Flags);
+
+  Renderer = SDL_CreateRenderer(Screen, -1, 0);
+  SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
+  SDL_RenderClear(Renderer);
+  SDL_RenderPresent(Renderer);
+
+  Texture =
+      SDL_CreateTexture(Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, NewRes.X, NewRes.Y);
 
   if(!Screen)
     ABORT("Couldn't set video mode.");
 
-  SDL_WM_SetCaption(Title, 0);
   globalwindowhandler::Init();
-  DoubleBuffer = new bitmap(NewRes);
+  s_doubleBuffer = new bitmap(NewRes);
   Res = NewRes;
   ColorDepth = 16;
 }
 
 void graphics::BlitDBToScreen()
 {
-  if(SDL_MUSTLOCK(Screen) && SDL_LockSurface(Screen) < 0)
-    ABORT("Can't lock screen");
-
-  packcol16* SrcPtr = DoubleBuffer->GetImage()[0];
+  /*if(SDL_MUSTLOCK(Screen) && SDL_LockSurface(Screen) < 0)
+    ABORT("Can't lock screen");*/
+	/*
+  packcol16* SrcPtr = s_doubleBuffer->GetImage()[0];
   packcol16* DestPtr = static_cast<packcol16*>(Screen->pixels);
   ulong ScreenYMove = (Screen->pitch >> 1);
   ulong LineSize = Res.X << 1;
 
-  for(int y = 0; y < Res.Y; ++y, SrcPtr += Res.X, DestPtr += ScreenYMove)
+  for (int y = 0; y < Res.Y; ++y, SrcPtr += Res.X, DestPtr += ScreenYMove)
     memcpy(DestPtr, SrcPtr, LineSize);
+	*/
+  /* if (SDL_MUSTLOCK(Screen)) SDL_UnlockSurface(Screen); */
 
-  if(SDL_MUSTLOCK(Screen))
-    SDL_UnlockSurface(Screen);
 
-  SDL_UpdateRect(Screen, 0, 0, Res.X, Res.Y);
+  SDL_UpdateTexture(Texture, NULL, s_doubleBuffer, Res.Y);
+  SDL_RenderClear(Renderer);
+  SDL_RenderCopy(Renderer, Texture, NULL, NULL);
+  SDL_RenderPresent(Renderer);
+  //SDL_UpdateRect(Screen, 0, 0, Res.X, Res.Y);
 }
 
 void graphics::SwitchMode()
 {
   ulong Flags;
 
-  if(Screen->flags & SDL_FULLSCREEN)
+  if(SDL_GetWindowFlags(Screen) & SDL_WINDOW_FULLSCREEN)
   {
     SDL_ShowCursor(SDL_ENABLE);
     Flags = SDL_SWSURFACE;
@@ -128,13 +129,13 @@ void graphics::SwitchMode()
   else
   {
     SDL_ShowCursor(SDL_DISABLE);
-    Flags = SDL_SWSURFACE|SDL_FULLSCREEN;
+    Flags = SDL_SWSURFACE| SDL_WINDOW_FULLSCREEN;
   }
 
   if(SwitchModeHandler)
     SwitchModeHandler();
 
-  Screen = SDL_SetVideoMode(Res.X, Res.Y, ColorDepth, Flags);
+  SDL_SetWindowFullscreen(Screen, Flags);
 
   if(!Screen)
     ABORT("Couldn't toggle fullscreen mode.");
@@ -147,4 +148,9 @@ void graphics::SwitchMode()
 void graphics::LoadDefaultFont(const festring& FileName)
 {
   DefaultFont = new rawbitmap(FileName);
+}
+
+bool graphics::IsActive()
+{
+	return !(SDL_GetWindowFlags(graphics::Screen) & SDL_WINDOW_MINIMIZED);
 }

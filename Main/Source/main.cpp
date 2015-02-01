@@ -24,9 +24,9 @@
 #include "message.h"
 #include "proto.h"
 
-int Main(int argc, char **argv)
+int Main(int argc, char** argv)
 {
-  if(argc > 1 && festring(argv[1]) == "--version")
+  if (argc > 1 && festring(argv[1]) == "--version")
   {
     std::cout << "Iter Vehemens ad Necem version " << IVAN_VERSION << std::endl;
     return 0;
@@ -45,63 +45,60 @@ int Main(int argc, char **argv)
   protosystem::Initialize();
   igraph::LoadMenu();
 
-  for(;;)
+  for (;;)
   {
-    int Select = iosystem::Menu(igraph::GetMenuGraphic(),
-				v2(RES.X / 2, RES.Y / 2 - 20),
-				CONST_S("\r"),
-				CONST_S("Start Game\rContinue Game\r"
-					"Configuration\rHighscores\r"
-					"Quit\r"),
-				LIGHT_GRAY,
-				CONST_S("Released under the GNU\r"
-					"General Public License\r"
-					"More info: see COPYING\r"),
-				CONST_S("IVAN v" IVAN_VERSION "\r"));
+    int Select = iosystem::Menu(igraph::GetMenuGraphic(), v2(RES.X / 2, RES.Y / 2 - 20),
+                                CONST_S("\r"), CONST_S("Start Game\rContinue Game\r"
+                                                       "Configuration\rHighscores\r"
+                                                       "Quit\r"),
+                                LIGHT_GRAY, CONST_S("Released under the GNU\r"
+                                                    "General Public License\r"
+                                                    "More info: see COPYING\r"),
+                                CONST_S("IVAN v" IVAN_VERSION "\r"));
 
-    switch(Select)
+    switch (Select)
     {
-     case 0:
-      if(game::Init())
+      case 0:
+        if (game::Init())
+        {
+          igraph::UnLoadMenu();
+
+          game::Run();
+          game::DeInit();
+          igraph::LoadMenu();
+        }
+
+        break;
+      case 1:
       {
-	igraph::UnLoadMenu();
+        festring LoadName = iosystem::ContinueMenu(WHITE, LIGHT_GRAY, game::GetSaveDir());
 
-	game::Run();
-	game::DeInit();
-	igraph::LoadMenu();
+        if (LoadName.GetSize())
+        {
+          LoadName.Resize(LoadName.GetSize() - 4);
+
+          if (game::Init(LoadName))
+          {
+            igraph::UnLoadMenu();
+            game::Run();
+            game::DeInit();
+            igraph::LoadMenu();
+          }
+        }
+
+        break;
       }
-
-      break;
-     case 1:
+      case 2:
+        ivanconfig::Show();
+        break;
+      case 3:
       {
-	festring LoadName = iosystem::ContinueMenu(WHITE, LIGHT_GRAY, game::GetSaveDir());
-
-	if(LoadName.GetSize())
-	{
-	  LoadName.Resize(LoadName.GetSize() - 4);
-
-	  if(game::Init(LoadName))
-	  {
-	    igraph::UnLoadMenu();
-	    game::Run();
-	    game::DeInit();
-	    igraph::LoadMenu();
-	  }
-	}
-
-	break;
+        highscore HScore;
+        HScore.Draw();
+        break;
       }
-     case 2:
-      ivanconfig::Show();
-      break;
-     case 3:
-      {
-	highscore HScore;
-	HScore.Draw();
-	break;
-      }
-     case 4:
-      return 0;
+      case 4:
+        return 0;
     }
   }
 }

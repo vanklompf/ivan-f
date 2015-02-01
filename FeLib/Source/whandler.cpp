@@ -47,8 +47,6 @@ void globalwindowhandler::DeInstallControlLoop(bool (*What)())
   }
 }
 
-#ifdef USE_SDL
-
 #include <algorithm>
 
 std::vector<int> globalwindowhandler::KeyBuffer;
@@ -56,67 +54,73 @@ bool (*globalwindowhandler::QuitMessageHandler)() = 0;
 
 void globalwindowhandler::Init()
 {
-  SDL_EnableUNICODE(1);
-  SDL_EnableKeyRepeat(500, 30);
+  //SDL_EnableUNICODE(1);
+  //SDL_EnableKeyRepeat(500, 30);
 }
 
 int globalwindowhandler::GetKey(bool EmptyBuffer)
 {
-  SDL_Event Event;
+    SDL_Event Event;
 
-  if(EmptyBuffer)
-  {
-    while(SDL_PollEvent(&Event))
-      ProcessMessage(&Event);
-
-    KeyBuffer.clear();
-  }
-
-  for(;;)
-    if(!KeyBuffer.empty())
+    if (EmptyBuffer)
     {
-      int Key = KeyBuffer[0];
-      KeyBuffer.erase(KeyBuffer.begin());
+		while (SDL_PollEvent(&Event))
+		{
+		  ProcessEvent(Event);
+		}
 
-      if(Key > 0xE000)
-	return Key - 0xE000;
-
-      if(Key && Key < 0x81)
-	return Key;
+        KeyBuffer.clear();
     }
-    else
+
+    while (1)
     {
-      if(SDL_PollEvent(&Event))
-	ProcessMessage(&Event);
-      else
-      {
-	if(SDL_GetAppState() &  SDL_APPACTIVE
-	   && Controls && ControlLoopsEnabled)
-	{
-	  static ulong LastTick = 0;
-	  UpdateTick();
+        if (!KeyBuffer.empty())
+        {
+            int Key = KeyBuffer[0];
+            KeyBuffer.erase(KeyBuffer.begin());
 
-	  if(LastTick != Tick)
-	  {
-	    LastTick = Tick;
-	    bool Draw = false;
+            if (Key > 0xE000)
+                return Key - 0xE000;
 
-	    for(int c = 0; c < Controls; ++c)
-	      if(ControlLoop[c]())
-		Draw = true;
+            if (Key && Key < 0x81)
+                return Key;
+        }
+        else
+        {
+            if (SDL_PollEvent(&Event))
+            {
+                ProcessEvent(Event);
+            }
+            else
+            {
+                if (graphics::IsActive() && Controls && ControlLoopsEnabled)
+                //if (SDL_GetAppState() & SDL_APPACTIVE && Controls && ControlLoopsEnabled)
+                {
+                    static ulong LastTick = 0;
+                    UpdateTick();
 
-	    if(Draw)
-	      graphics::BlitDBToScreen();
-	  }
+                    if (LastTick != Tick)
+                    {
+                        LastTick = Tick;
+                        bool Draw = false;
 
-	  SDL_Delay(10);
-	}
-	else
-	{
-	  SDL_WaitEvent(&Event);
-	  ProcessMessage(&Event);
-	}
-      }
+                        for (int c = 0; c < Controls; ++c)
+                            if (ControlLoop[c]())
+                                Draw = true;
+
+                        if (Draw)
+                            graphics::BlitDBToScreen();
+                    }
+
+                    SDL_Delay(10);
+                }
+                else
+                {
+                    SDL_WaitEvent(&Event);
+                    ProcessEvent(Event);
+                }
+            }
+        }
     }
 }
 
@@ -124,113 +128,140 @@ int globalwindowhandler::ReadKey()
 {
   SDL_Event Event;
 
-  if(SDL_GetAppState() & SDL_APPACTIVE)
+  if(graphics::IsActive())
   {
     while(SDL_PollEvent(&Event))
-      ProcessMessage(&Event);
+      ProcessEvent(Event);
   }
   else
   {
     SDL_WaitEvent(&Event);
-    ProcessMessage(&Event);
+    ProcessEvent(Event);
   }
 
   return KeyBuffer.size() ? GetKey(false) : 0;
 }
 
-void globalwindowhandler::ProcessMessage(SDL_Event* Event)
+void globalwindowhandler::ProcessWindowEvent(const SDL_WindowEvent& event)
 {
-  int KeyPressed;
+	switch (event.type)
+	{
+	case SDL_WINDOWEVENT_EXPOSED:
+		graphics::BlitDBToScreen();
+		break;
+	default:
+		break;
+	}
+}
 
-  switch(Event->active.type)
-  {
-   case SDL_VIDEOEXPOSE:
-    graphics::BlitDBToScreen();
-    break;
-   case SDL_QUIT:
-    if(!QuitMessageHandler || QuitMessageHandler())
-      exit(0);
+void globalwindowhandler::ProcessQuitEvent(const SDL_QuitEvent& event)
+{
+	if (!QuitMessageHandler || QuitMessageHandler())
+	{
+		exit(0);
+	}
+}
 
-    return;
-   case SDL_KEYDOWN:
-    switch(Event->key.keysym.sym)
-    {
-     case SDLK_RETURN:
-     case SDLK_KP_ENTER:
-      if(Event->key.keysym.mod & KMOD_ALT)
-      {
-	graphics::SwitchMode();
-	return;
-      }
-      else
-	KeyPressed = KEY_ENTER; //Event->key.keysym.unicode;
+void globalwindowhandler::ProcessKeyEvent(const SDL_KeyboardEvent& event)
+{
+	if (event.type == SDL_KEYDOWN)
+	{
+		int KeyPressed;
 
-      break;
-     case SDLK_DOWN:
-     case SDLK_KP2:
-      KeyPressed = KEY_DOWN + 0xE000;
-      break;
-     case SDLK_UP:
-     case SDLK_KP8:
-      KeyPressed = KEY_UP + 0xE000;
-      break;
-     case SDLK_RIGHT:
-     case SDLK_KP6:
-      KeyPressed = KEY_RIGHT + 0xE000;
-      break;
-     case SDLK_LEFT:
-     case SDLK_KP4:
-      KeyPressed = KEY_LEFT + 0xE000;
-      break;
-     case SDLK_HOME:
-     case SDLK_KP7:
-      KeyPressed = KEY_HOME + 0xE000;
-      break;
-     case SDLK_END:
-     case SDLK_KP1:
-      KeyPressed = KEY_END + 0xE000;
-      break;
-     case SDLK_PAGEUP:
-     case SDLK_KP9:
-      KeyPressed = KEY_PAGE_UP + 0xE000;
-      break;
-     case SDLK_KP3:
-     case SDLK_PAGEDOWN:
-      KeyPressed = KEY_PAGE_DOWN + 0xE000;
-      break;
-     case SDLK_KP5:
-      KeyPressed = '.';
-      break;
-     case SDLK_SYSREQ:
-     case SDLK_PRINT:
+		switch (event.keysym.sym)
+		{
+		case SDLK_RETURN:
+		case SDLK_KP_ENTER:
+			if (event.keysym.mod & KMOD_ALT)
+			{
+				graphics::SwitchMode();
+				return;
+			}
+			else
+			{
+				KeyPressed = KEY_ENTER; // Event->key.keysym.unicode;
+			}
+
+			break;
+		case SDLK_DOWN:
+		case SDLK_KP_2:
+			KeyPressed = KEY_DOWN + 0xE000;
+			break;
+		case SDLK_UP:
+		case SDLK_KP_8:
+			KeyPressed = KEY_UP + 0xE000;
+			break;
+		case SDLK_RIGHT:
+		case SDLK_KP_6:
+			KeyPressed = KEY_RIGHT + 0xE000;
+			break;
+		case SDLK_LEFT:
+		case SDLK_KP_4:
+			KeyPressed = KEY_LEFT + 0xE000;
+			break;
+		case SDLK_HOME:
+		case SDLK_KP_7:
+			KeyPressed = KEY_HOME + 0xE000;
+			break;
+		case SDLK_END:
+		case SDLK_KP_1:
+			KeyPressed = KEY_END + 0xE000;
+			break;
+		case SDLK_PAGEUP:
+		case SDLK_KP_9:
+			KeyPressed = KEY_PAGE_UP + 0xE000;
+			break;
+		case SDLK_KP_3:
+		case SDLK_PAGEDOWN:
+			KeyPressed = KEY_PAGE_DOWN + 0xE000;
+			break;
+		case SDLK_KP_5:
+			KeyPressed = '.';
+			break;
+		case SDLK_SYSREQ:
+		case SDLK_PRINTSCREEN:
 #ifdef WIN32
-      DOUBLE_BUFFER->Save("Scrshot.bmp");
+			DOUBLE_BUFFER->Save("Scrshot.bmp");
 #else
-      DOUBLE_BUFFER->Save(festring(getenv("HOME")) + "/Scrshot.bmp");
+			DOUBLE_BUFFER->Save(festring(getenv("HOME")) + "/Scrshot.bmp");
 #endif
+			return;
+		case SDLK_e:
+			if (event.keysym.mod & KMOD_ALT &&
+				(event.keysym.mod & KMOD_LCTRL || event.keysym.mod & KMOD_RCTRL))
+			{
+				KeyPressed = '\177';
+				break;
+			}
+		default:
+			//KeyPressed = event.keysym.unicode;
+
+			/*if (!KeyPressed)*/
+				return;
+		}
+
+		if (std::find(KeyBuffer.begin(), KeyBuffer.end(), KeyPressed) == KeyBuffer.end())
+			KeyBuffer.push_back(KeyPressed);
+	}
+}
+
+void globalwindowhandler::ProcessEvent(const SDL_Event& event)
+{
+  switch (event.type)
+  {
+    case SDL_WINDOWEVENT:
+      ProcessWindowEvent(event.window);
+      break;
+	case SDL_QUIT:
+      ProcessQuitEvent(event.quit);
       return;
-     case SDLK_e:
-      if(Event->key.keysym.mod & KMOD_ALT
-	 && (Event->key.keysym.mod & KMOD_LCTRL
-	     || Event->key.keysym.mod & KMOD_RCTRL))
-      {
-	KeyPressed = '\177';
-	break;
-      }
-     default:
-      KeyPressed = Event->key.keysym.unicode;
-
-      if(!KeyPressed)
-	return;
-    }
-
-    if(std::find(KeyBuffer.begin(), KeyBuffer.end(), KeyPressed)
-       == KeyBuffer.end())
-      KeyBuffer.push_back(KeyPressed);
-
-    break;
+	case SDL_KEYDOWN:
+	case SDL_KEYUP:
+	  ProcessKeyEvent(event.key);
+	  break;
+	default:
+		break;
   }
 }
 
-#endif
 

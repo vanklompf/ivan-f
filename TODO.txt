@@ -1,0 +1,4 @@
+ - remove cpp inclusion
+ - change random generator in femath to C++11
+ - add coding rules from visual
+ - rework allocation of 2d framebuffer

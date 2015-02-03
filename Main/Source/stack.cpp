@@ -10,7 +10,20 @@
  *
  */
 
-/* Compiled through slotset.cpp */
+#include <algorithm>
+
+#include "iconf.h"
+#include "char.h"
+#include "stack.h"
+#include "message.h"
+#include "felist.h"
+#include "room.h"
+#include "game.h"
+#include "bitmap.h"
+#include "proto.h"
+#include "action.h"
+#include "save.h"
+#include "materias.h"
 
 /* If REMEMBER_SELECTED flag is used, DrawContents() will use this to determine
    the initial selected item */

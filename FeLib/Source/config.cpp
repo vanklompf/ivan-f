@@ -217,13 +217,22 @@ void stringoption::LoadValue(inputfile& SaveFile)
   SaveFile.ReadWord(Value);
 }
 
-/* ??? */
-
 void numberoption::SaveValue(std::ofstream& SaveFile) const
-{ SaveFile << Value; }
+{
+  SaveFile << Value;
+}
+
 void numberoption::LoadValue(inputfile& SaveFile)
-{ Value = SaveFile.ReadNumber(); }
+{
+  Value = SaveFile.ReadNumber();
+}
+
 void truthoption::SaveValue(std::ofstream& SaveFile) const
-{ SaveFile << Value; }
+{
+  SaveFile << Value;
+}
+
 void truthoption::LoadValue(inputfile& SaveFile)
-{ Value = SaveFile.ReadNumber(); }
+{
+  Value = SaveFile.ReadNumber();
+}

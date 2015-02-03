@@ -51,8 +51,6 @@ void graphics::DeInit()
   SDL_Quit();
 }
 
-#ifdef USE_SDL
-
 void graphics::SetMode(const char* Title, const char* IconName,
 		       v2 NewRes, bool FullScreen)
 {
@@ -83,7 +81,7 @@ void graphics::SetMode(const char* Title, const char* IconName,
   SDL_RenderPresent(Renderer);
 
   Texture =
-      SDL_CreateTexture(Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, NewRes.X, NewRes.Y);
+      SDL_CreateTexture(Renderer, SDL_PIXELFORMAT_RGB565, SDL_TEXTUREACCESS_STREAMING, NewRes.X, NewRes.Y);
 
   if(!Screen)
     ABORT("Couldn't set video mode.");
@@ -110,7 +108,7 @@ void graphics::BlitDBToScreen()
   /* if (SDL_MUSTLOCK(Screen)) SDL_UnlockSurface(Screen); */
 
 
-  SDL_UpdateTexture(Texture, NULL, s_doubleBuffer, Res.Y);
+  SDL_UpdateTexture(Texture, NULL, s_doubleBuffer->GetImage()+Res.Y, Res.X * sizeof(packcol16));
   SDL_RenderClear(Renderer);
   SDL_RenderCopy(Renderer, Texture, NULL, NULL);
   SDL_RenderPresent(Renderer);
@@ -142,8 +140,6 @@ void graphics::SwitchMode()
 
   BlitDBToScreen();
 }
-
-#endif
 
 void graphics::LoadDefaultFont(const festring& FileName)
 {

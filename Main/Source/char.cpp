@@ -10,8 +10,6 @@
  *
  */
 
-/* Compiled through charset.cpp */
-
 /* These statedata structs contain functions and values used for handling
  * states. Remember to update them. All normal states must have
  * PrintBeginMessage and PrintEndMessage functions and a Description string.
@@ -22,6 +20,51 @@
  * control whether the state can be randomly activated in certain situations.
  * These flags can be found in ivandef.h. RANDOMIZABLE sets all source
  * & duration flags at once. */
+
+#define __FILE_OF_STATIC_CHARACTER_PROTOTYPE_DEFINITIONS__
+
+#include "proto.h"
+#include "char.h"
+#include "database.h"
+
+EXTENDED_SYSTEM_SPECIALIZATIONS(character)(0, 0, 0, "character");
+
+#include "human.h"
+#include "nonhuman.h"
+
+#undef __FILE_OF_STATIC_CHARACTER_PROTOTYPE_DEFINITIONS__
+
+#include <algorithm>
+#include <queue>
+#include <cctype>
+
+#include "team.h"
+#include "error.h"
+#include "game.h"
+#include "message.h"
+#include "save.h"
+#include "stack.h"
+#include "wsquare.h"
+#include "actions.h"
+#include "iconf.h"
+#include "whandler.h"
+#include "hscore.h"
+#include "god.h"
+#include "command.h"
+#include "materias.h"
+#include "room.h"
+#include "felist.h"
+#include "graphics.h"
+#include "bitmap.h"
+#include "rawbit.h"
+#include "miscitem.h"
+#include "confdef.h"
+#include "traps.h"
+#include "iloops.h"
+#include "balance.h"
+
+/* TODO: resolve this include hell */
+#include "team.cpp"
 
 struct statedata
 {

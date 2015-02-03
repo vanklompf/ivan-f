@@ -10,7 +10,15 @@
  *
  */
 
-/* Compiled through areaset.cpp */
+#include "allocate.h"
+#include "char.h"
+#include "game.h"
+#include "graphics.h"
+#include "bitmap.h"
+#include "terra.h"
+#include "proto.h"
+#include "save.h"
+#include "team.h"
 
 area::area() { }
 

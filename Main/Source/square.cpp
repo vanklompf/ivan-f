@@ -10,7 +10,15 @@
  *
  */
 
-/* Compiled through areaset.cpp */
+#include "allocate.h"
+#include "char.h"
+#include "game.h"
+#include "graphics.h"
+#include "bitmap.h"
+#include "terra.h"
+#include "proto.h"
+#include "save.h"
+#include "team.h"
 
 square::square(area* AreaUnder, v2 Pos) : AreaUnder(AreaUnder), Character(0), Pos(Pos), Luminance(0), Flags(IS_TRANSPARENT|MEMORIZED_UPDATE_REQUEST|DESCRIPTION_CHANGE), StaticAnimatedEntities(0), AnimatedEntities(0), LastSeen(0) { }
 

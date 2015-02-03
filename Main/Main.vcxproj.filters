@@ -197,19 +197,10 @@
     <ClCompile Include="Source\area.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\areaset.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\bodypart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\char.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\charset.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\charsset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\command.cpp">
@@ -329,9 +320,6 @@
     <ClCompile Include="Source\slot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\slotset.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\smoke.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -389,7 +377,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\.clang-format" />
     <None Include="..\Script\char.dat">
       <Filter>Resource Files\scripts</Filter>
     </None>
@@ -410,6 +397,9 @@
     </None>
     <None Include="..\Script\olterra.dat">
       <Filter>Resource Files\scripts</Filter>
+    </None>
+    <None Include="ivan.cfg">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

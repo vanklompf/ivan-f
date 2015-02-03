@@ -10,8 +10,6 @@
  *
  */
 
-/* Compiled through charset.cpp */
-
 team::team() : Leader(0) { }
 team::team(ulong ID) : Leader(0), ID(ID), KillEvilness(0) { }
 std::list<character*>::iterator team::Add(character* Char) { return Member.insert(Member.end(), Char); }

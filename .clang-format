@@ -5,3 +5,4 @@ BreakBeforeBraces: Allman
 DerivePointerBinding: false
 PointerBindsToType: true
 AlwaysBreakTemplateDeclarations: true
+AllowShortFunctionsOnASingleLine: Inline

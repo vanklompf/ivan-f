@@ -10,7 +10,31 @@
  *
  */
 
-/* Compiled through charsset.cpp */
+#include "stack.h"
+#include "message.h"
+#include "actions.h"
+#include "wterras.h"
+#include "rawbit.h"
+#include "team.h"
+#include "iconf.h"
+#include "god.h"
+#include "felist.h"
+#include "miscitem.h"
+#include "gear.h"
+#include "confdef.h"
+#include "room.h"
+#include "game.h"
+#include "graphics.h"
+#include "materias.h"
+#include "bitmap.h"
+#include "lterras.h"
+#include "save.h"
+#include "traps.h"
+#include "iloops.h"
+#include "balance.h"
+#include "human.h"
+#include "database.h"
+#include "nonhuman.h"
 
 const int humanoid::DrawOrder[] = { TORSO_INDEX, GROIN_INDEX, RIGHT_LEG_INDEX, LEFT_LEG_INDEX, RIGHT_ARM_INDEX, LEFT_ARM_INDEX, HEAD_INDEX };
 

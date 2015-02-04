@@ -191,8 +191,6 @@ inline int GetMinColor24(col24 Color)
 #define ZERO_POOLS 1
 #define RAND_ALLOC 2
 
-#define REFS(ptr) reinterpret_cast<ulong*>(ptr)[-1]
-
 #define SKIP_FIRST 1
 #define ALLOW_END_FAILURE 2
 

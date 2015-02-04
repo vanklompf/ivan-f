@@ -17,6 +17,7 @@
 #include <ctime>
 
 #include "festring.h"
+#include "felibdef.h"
 
 #ifdef _WIN32
 #define HIGH_SCORE_FILENAME CONST_S("HScore.dat")

@@ -23,6 +23,7 @@
 #include "error.h"
 #include "festring.h"
 #include "fearray.h"
+#include "femath.h"
 
 typedef std::map<festring, long> valuemap;
 

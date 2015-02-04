@@ -13,7 +13,9 @@
 #ifndef __FEARRAY_H__
 #define __FEARRAY_H__
 
-#include "femath.h"
+#include "femath.h" //RAND_N
+
+#define REFS(ptr) reinterpret_cast<uint32_t*>(ptr)[-1]
 
 template <class type> struct fearray
 {

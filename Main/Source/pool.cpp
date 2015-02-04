@@ -10,7 +10,9 @@
  *
  */
 
-/* Compiled through coreset.cpp */
+#include "entity.h"
+#include "pool.h"
+#include "v2.h"
 
 entity* pool::FirstEntity = 0;
 entity* pool::LastEntity = 0;

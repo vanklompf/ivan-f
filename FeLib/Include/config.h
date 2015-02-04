@@ -16,6 +16,7 @@
 #include <fstream>
 
 #include "festring.h"
+#include "felibdef.h"
 
 class inputfile;
 class felist;

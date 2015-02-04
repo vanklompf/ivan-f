@@ -10,7 +10,9 @@
  *
  */
 
-/* Compiled through coreset.cpp */
+#include "entity.h"
+#include "pool.h"
+#include "v2.h"
 
 bool entity::TryToUnStick(character*, v2) { return false; }
 

@@ -10,7 +10,14 @@
  *
  */
 
-/* Compiled through dataset.cpp */
+#include "char.h"
+#include "proto.h"
+#include "game.h"
+#include "materia.h"
+#include "message.h"
+#include "database.h"
+#include "save.h"
+#include "god.h"
 
 itemdatabase** protosystem::ItemConfigData;
 int protosystem::ItemConfigDataSize;

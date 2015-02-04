@@ -35,9 +35,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Common.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Common.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
     <NuGetPackageImportStamp>390f9b9f</NuGetPackageImportStamp>
@@ -59,7 +61,7 @@
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;USE_SDL</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>true</BrowseInformation>
-      <AdditionalIncludeDirectories>Include;..\FeLib\Include;..\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Include;..\FeLib\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -84,7 +86,7 @@ xcopy $(ProjectDir)ivan.cfg $(SolutionDir)\$(Configuration) /d/y</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;USE_SDL</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>Include;..\FeLib\Include;..\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Include;..\FeLib\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

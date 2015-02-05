@@ -81,15 +81,24 @@ class inputfile
  * An inputfile template member function would be far more elegant,
  * but VC doesn't seem to understand it. */
 
-template <class type> inline type ReadType(inputfile& SaveFile)
+template <class type>
+inline type ReadType(inputfile& SaveFile)
 {
   type Variable;
   SaveFile >> Variable;
   return Variable;
 }
 
+/* TODO: this probably could be template, but I am not good enough in nested templates...
+template<typename Type>
+inline void ReadData(Type& data, inputfile& SaveFile)
+{ 
+  data = (Type)SaveFile.ReadNumber(); 
+}
+*/
+
 inline void ReadData(char& Type, inputfile& SaveFile)
-{ Type = SaveFile.ReadNumber(); }
+{Type = SaveFile.ReadNumber();}
 inline void ReadData(uchar& Type, inputfile& SaveFile)
 { Type = SaveFile.ReadNumber(); }
 inline void ReadData(short& Type, inputfile& SaveFile)
@@ -104,12 +113,15 @@ inline void ReadData(int& Type, inputfile& SaveFile)
 { Type = SaveFile.ReadNumber(); }
 inline void ReadData(bool& Type, inputfile& SaveFile)
 { Type = SaveFile.ReadNumber(); }
+
 inline void ReadData(packv2& Type, inputfile& SaveFile)
 { Type = SaveFile.ReadVector2d(); }
 inline void ReadData(v2& Type, inputfile& SaveFile)
 { Type = SaveFile.ReadVector2d(); }
 inline void ReadData(rect& Type, inputfile& SaveFile)
 { Type = SaveFile.ReadRect(); }
+
+
 void ReadData(festring&, inputfile&);
 void ReadData(fearray<long>&, inputfile&);
 void ReadData(fearray<festring>&, inputfile&);

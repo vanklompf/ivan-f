@@ -114,7 +114,8 @@ template <class type> inline scriptmember<type>& scriptmember<type>::operator=(c
 #pragma pack(1)
 #endif
 
-template <class type> struct fastscriptmember : public scriptmemberbase
+template <class type> 
+struct fastscriptmember : public scriptmemberbase
 {
   fastscriptmember() { }
   fastscriptmember(type Member) : Member(Member) { }

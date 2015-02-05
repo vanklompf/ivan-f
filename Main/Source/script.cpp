@@ -104,23 +104,27 @@ INST_SCRIPT_MEMBER(glterraincontentmap);
 INST_SCRIPT_MEMBER(olterraincontentmap);
 INST_SCRIPT_MEMBER(fearray<packv2>);
 
-template <class type> void fastscriptmember<type>::ReadFrom(inputfile& SaveFile)
+template <class type> 
+void fastscriptmember<type>::ReadFrom(inputfile& SaveFile)
 {
-  ReadData(*&Member, SaveFile); // gcc 3.4.1 sucks
+  ReadData(Member, SaveFile); // gcc 3.4.1 sucks
 }
 
-template <class type> void fastscriptmember<type>::Replace(scriptmemberbase& Base)
+template <class type> 
+void fastscriptmember<type>::Replace(scriptmemberbase& Base)
 {
   fastscriptmember<type>& Data = static_cast<fastscriptmember<type>&>(Base);
   Member = Data.Member;
 }
 
-template <class type> void fastscriptmember<type>::Save(outputfile& SaveFile) const
+template <class type> 
+void fastscriptmember<type>::Save(outputfile& SaveFile) const
 {
   SaveFile << Member;
 }
 
-template <class type> void fastscriptmember<type>::Load(inputfile& SaveFile)
+template <class type> 
+void fastscriptmember<type>::Load(inputfile& SaveFile)
 {
   SaveFile >> *&Member; // gcc 3.4.1 sucks
 }

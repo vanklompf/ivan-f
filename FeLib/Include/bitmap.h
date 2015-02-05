@@ -93,7 +93,7 @@ class bitmap
   void MaskedPriorityBlit(const blitdata&) const;
   void AlphaPriorityBlit(const blitdata&) const;
   void FastBlitAndCopyAlpha(bitmap*) const;
-  v2 GetSize() const { return Size; }
+  v2 GetSize() const { return m_size; }
   void DrawPolygon(int, int, int, int, col16, bool = true, bool = false, double = 0);
   void CreateAlphaMap(alpha);
   bool Fade(long&, packalpha&, int);
@@ -104,8 +104,8 @@ class bitmap
   void Outline(col16, alpha, priority);
   void FadeToScreen(bitmapeditor = 0);
   void CreateFlames(rawbitmap*, v2, ulong, int);
-  bool IsValidPos(v2 What) const { return What.X >= 0 && What.Y >= 0 && What.X < Size.X && What.Y < Size.Y; }
-  bool IsValidPos(int X, int Y) const { return X >= 0 && Y >= 0 && X < Size.X && Y < Size.Y; }
+  bool IsValidPos(v2 What) const { return What.X >= 0 && What.Y >= 0 && What.X < m_size.X && What.Y < m_size.Y; }
+  bool IsValidPos(int X, int Y) const { return X >= 0 && Y >= 0 && X < m_size.X && Y < m_size.Y; }
   void CreateSparkle(v2, int);
   void CreateFlies(ulong, int, int);
   void CreateLightning(ulong, col16);
@@ -133,7 +133,7 @@ class bitmap
   void MoveLineHorizontally(int, int);
   void InterLace();
  protected:
-  v2 Size;
+  v2 m_size;
   ulong XSizeTimesYSize : 31;
   ulong FastFlag : 1;
   packcol16** Image;
@@ -145,7 +145,7 @@ class bitmap
 inline void bitmap::SafeUpdateRandMap(v2 Pos, bool What)
 {
   if(RandMap)
-    UpdateRandMap(Pos.Y * Size.X + Pos.X, What);
+    UpdateRandMap(Pos.Y * m_size.X + Pos.X, What);
 }
 
 inline void bitmap::SafeSetPriority(int x, int y, priority What)
@@ -163,8 +163,8 @@ inline void bitmap::FastBlit(bitmap* Bitmap, v2 Pos) const
 {
   packcol16** SrcImage = Image;
   packcol16** DestImage = Bitmap->Image;
-  const int Bytes = Size.X * sizeof(packcol16);
-  const int Height = Size.Y;
+  const int Bytes = m_size.X * sizeof(packcol16);
+  const int Height = m_size.Y;
 
   for(int y = 0; y < Height; ++y)
     memcpy(&DestImage[Pos.Y + y][Pos.X], SrcImage[y], Bytes);
@@ -175,7 +175,7 @@ inline void bitmap::NormalBlit(bitmap* Bitmap, int Flags) const
   blitdata B = { Bitmap,
 		 { 0, 0 },
 		 { 0, 0 },
-		 { Size.X, Size.Y },
+		 { m_size.X, m_size.Y },
 		 { Flags },
 		 0,
 		 0 };

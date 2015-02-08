@@ -75,7 +75,7 @@ long femath::mti = N1+1; /* mti==N+1 means mt[N] is not initialized */
 ulong femath::mtb[N1];
 long femath::mtib;
 
-void femath::SetSeed(ulong Seed)
+void femath::SetSeed(uint32_t Seed)
 {
   /* setting initial seeds to mt[N] using         */
   /* the generator Line 25 of Table 1 in          */
@@ -152,23 +152,33 @@ int femath::WeightedRand(const std::vector<long>& Possibility,
   }
 }
 
-double femath::CalculateAngle(v2 Direction)
+double femath::CalculateAngle(int X, int Y)
 {
-  if(Direction.X < 0)
-    return atan(double(Direction.Y) / Direction.X) + FPI;
-  else if(Direction.X > 0)
+  if (X < 0)
   {
-    if(Direction.Y < 0)
-      return atan(double(Direction.Y) / Direction.X) + 2 * FPI;
+    return atan(double(Y) / X) + FPI;
+  }
+  else if (X > 0)
+  {
+    if (Y < 0)
+    {
+      return atan(double(Y) / X) + 2 * FPI;
+    }
     else
-      return atan(double(Direction.Y) / Direction.X);
+    {
+      return atan(double(Y) / X);
+    }
   }
   else
   {
-    if(Direction.Y < 0)
+    if (Y < 0)
+    {
       return 3 * FPI / 2;
-    else if(Direction.Y > 0)
+    }
+    else if (Y > 0)
+    {
       return FPI / 2;
+    }
     else
     {
       ABORT("Illegal direction (0, 0) passed to femath::CalculateAngle()!");
@@ -179,7 +189,7 @@ double femath::CalculateAngle(v2 Direction)
 
 void femath::CalculateEnvironmentRectangle(rect& Rect,
 					   const rect& MotherRect,
-					   v2 Origo, int Radius)
+					   v2& Origo, int Radius)
 {
   Rect.X1 = Origo.X - Radius;
   Rect.Y1 = Origo.Y - Radius;

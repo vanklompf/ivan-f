@@ -2086,7 +2086,7 @@ void character::HasBeenHitByItem(character* Thrower, item* Thingy, int Damage, d
   else if(CanBeSeenByPlayer())
     ADD_MESSAGE("%s hits %s.", Thingy->CHAR_NAME(DEFINITE), CHAR_NAME(DEFINITE));
 
-  int BodyPart = ChooseBodyPartToReceiveHit(ToHitValue, DodgeValue);
+  int BodyPart = ChooseBodyPartToReceiveHit(ToHitValue, GetDodgeValue());
   int WeaponSkillHits = CalculateWeaponSkillHits(Thrower);
   int DoneDamage = ReceiveBodyPartDamage(Thrower, Damage, PHYSICAL_DAMAGE, BodyPart, Direction);
   bool Succeeded = (GetBodyPart(BodyPart) && HitEffect(Thrower, Thingy, Thingy->GetPos(), THROW_ATTACK, BodyPart, Direction, !DoneDamage)) || DoneDamage;
@@ -2107,7 +2107,7 @@ void character::HasBeenHitByItem(character* Thrower, item* Thingy, int Damage, d
 
 bool character::DodgesFlyingItem(item* Item, double ToHitValue)
 {
-  return !Item->EffectIsGood() && RAND() % int(100 + ToHitValue / DodgeValue * 100) < 100;
+  return !Item->EffectIsGood() && RAND() % int(100 + ToHitValue / GetDodgeValue() * 100) < 100;
 }
 
 void character::GetPlayerCommand()
@@ -4304,13 +4304,13 @@ void character::DrawPanel(bool AnimationDraw) const
 
 void character::CalculateDodgeValue()
 {
-  DodgeValue = 0.05 * GetMoveEase() * GetAttribute(AGILITY) / sqrt(GetSize());
+  m_dodgeValue = 0.05 * GetMoveEase() * GetAttribute(AGILITY) / sqrt(GetSize());
 
   if(IsFlying())
-    DodgeValue *= 2;
+	  m_dodgeValue *= 2;
 
-  if(DodgeValue < 1)
-    DodgeValue = 1;
+  if(m_dodgeValue < 1)
+	  m_dodgeValue = 1;
 }
 
 bool character::DamageTypeAffectsInventory(int Type)

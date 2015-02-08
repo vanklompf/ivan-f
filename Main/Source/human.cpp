@@ -2725,20 +2725,20 @@ void smith::BeTalkedTo()
 
 void humanoid::CalculateDodgeValue()
 {
-  DodgeValue = 0.05 * GetMoveEase() * GetAttribute(AGILITY) / sqrt(GetSize());
+  m_dodgeValue = 0.05 * GetMoveEase() * GetAttribute(AGILITY) / sqrt(GetSize());
 
-  if(IsFlying())
-    DodgeValue *= 2;
+  if (IsFlying())
+    m_dodgeValue *= 2;
   else
   {
-    if(!HasAUsableLeg())
-      DodgeValue *= 0.50;
-    if(!HasTwoUsableLegs())
-      DodgeValue *= 0.75;
+    if (!HasAUsableLeg())
+      m_dodgeValue *= 0.50;
+    if (!HasTwoUsableLegs())
+      m_dodgeValue *= 0.75;
   }
 
-  if(DodgeValue < 1)
-    DodgeValue = 1;
+  if (m_dodgeValue < 1)
+    m_dodgeValue = 1;
 }
 
 bool humanoid::CheckZap()

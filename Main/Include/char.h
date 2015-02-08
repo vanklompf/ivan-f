@@ -324,7 +324,7 @@ class character : public entity, public id
   void SetTeam(team*);
   void ChangeTeam(team*);
   virtual int GetMoveEase() const;
-  double GetDodgeValue() const { return DodgeValue; }
+  double GetDodgeValue() const { return m_dodgeValue; }
   long GetMoney() const { return Money; }
   void SetMoney(long What) { Money = What; }
   void EditMoney(long What) { Money += What; }
@@ -1108,7 +1108,7 @@ class character : public entity, public id
   int HP;
   int MaxHP;
   int BurdenState;
-  double DodgeValue;
+  double m_dodgeValue;
   int AllowedWeaponSkillCategories;
   int BodyParts;
   long RegenerationCounter;

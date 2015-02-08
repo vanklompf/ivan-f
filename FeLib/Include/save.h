@@ -24,6 +24,7 @@
 #include "festring.h"
 #include "fearray.h"
 #include "femath.h"
+#include "rect.h"
 
 typedef std::map<festring, long> valuemap;
 

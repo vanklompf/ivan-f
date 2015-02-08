@@ -39,8 +39,8 @@ void unconsciousness::Handle()
     Terminate(true);
   else
   {
-    Actor->EditExperience(ARM_STRENGTH, -50, 1 << 2);
-    Actor->EditExperience(LEG_STRENGTH, -50, 1 << 2);
+	GetActor()->EditExperience(ARM_STRENGTH, -50, 1 << 2);
+	GetActor()->EditExperience(LEG_STRENGTH, -50, 1 << 2);
   }
 }
 
@@ -75,7 +75,7 @@ void consume::Handle()
 {
   item* Consuming = game::SearchItem(ConsumingID);
 
-  if(!Consuming || !Consuming->Exists() || !Actor->IsOver(Consuming))
+  if(!Consuming || !Consuming->Exists() || !GetActor()->IsOver(Consuming))
   {
     Terminate(false);
     return;
@@ -320,7 +320,7 @@ void study::Handle()
 {
   item* Literature = game::SearchItem(LiteratureID);
 
-  if(!Literature || !Literature->Exists() || !Actor->IsOver(Literature))
+  if(!Literature || !Literature->Exists() || !GetActor()->IsOver(Literature))
   {
     Terminate(false);
     return;

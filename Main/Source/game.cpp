@@ -1672,7 +1672,7 @@ int game::CalculateRoughDirection(v2 Vector)
   if(!Vector.X && !Vector.Y)
     return YOURSELF;
 
-  double Angle = femath::CalculateAngle(Vector);
+  double Angle = femath::CalculateAngle(Vector.X, Vector.Y);
 
   if(Angle < FPI / 8)
     return 4;

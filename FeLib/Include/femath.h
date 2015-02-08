@@ -17,7 +17,9 @@
 #include <cmath>
 
 #include "v2.h"
-#include "rect.h"
+
+struct rect;
+struct v2;
 
 #define RAND femath::Rand
 #define RAND_N femath::RandN
@@ -39,14 +41,14 @@ class femath
 {
  public:
   static long Rand();
-  static void SetSeed(ulong);
+  static void SetSeed(uint32_t);
   static long RandN(long N) { return Rand() % N; }
   static long RandGood(long N)
   { return long(double(N) * Rand() / 0x80000000); }
   static int WeightedRand(long*, long);
   static int WeightedRand(const std::vector<long>&, long);
-  static double CalculateAngle(v2);
-  static void CalculateEnvironmentRectangle(rect&, const rect&, v2, int);
+  static double CalculateAngle(int, int);
+  static void CalculateEnvironmentRectangle(rect&, const rect&, v2&, int);
   static bool Clip(int&, int&, int&, int&, int&, int&, int, int, int, int);
   static void SaveSeed();
   static void LoadSeed();
@@ -54,26 +56,30 @@ class femath
   static int LoopRoll(int, int);
   static void GenerateFractalMap(int**, int, int, int);
  protected:
-  static ulong mt[];
+  static uint32_t mt[];
   static long mti;
-  static ulong mtb[];
+  static uint32_t mtb[];
   static long mtib;
 };
 
+
 struct interval
 {
-  long Randomize() const
-  { return Min < Max ? Min + RAND() % (Max - Min + 1) : Min; }
-  long Min;
-  long Max;
+	long Randomize() const
+	{
+		return Min < Max ? Min + RAND() % (Max - Min + 1) : Min;
+	}
+	long Min;
+	long Max;
 };
 
 struct region
 {
-  v2 Randomize() const { return v2(X.Randomize(), Y.Randomize()); }
-  interval X;
-  interval Y;
+	v2 Randomize() const { return v2(X.Randomize(), Y.Randomize()); }
+	interval X;
+	interval Y;
 };
+
 
 void ReadData(interval&, inputfile&);
 void ReadData(region&, inputfile&);

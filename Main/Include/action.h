@@ -40,16 +40,16 @@ class action
 {
  public:
   typedef actionprototype prototype;
-  action()  : Actor(0), Flags(0) { }
+  action()  : m_actor(0), Flags(0) { }
   virtual ~action() { }
   virtual void Handle() = 0;
   virtual void Terminate(bool);
-  character* GetActor() const { return Actor; }
-  void SetActor(character* What) { Actor = What; }
+  character* GetActor() const { return m_actor; }
+  void SetActor(character* What) { m_actor = What; }
   virtual bool IsVoluntary() const { return true; }
   virtual bool AllowUnconsciousness() const { return true; }
   virtual bool AllowFoodConsumption() const { return true; }
-  virtual bool TryDisplace() { return true; }
+  virtual bool TryDisplace() const { return true; }
   virtual void Save(outputfile&) const;
   virtual void Load(inputfile&);
   virtual bool IsRest() const { return false; }
@@ -63,8 +63,9 @@ class action
   virtual bool CanBeTalkedTo() const { return true; }
   virtual bool IsUnconsciousness() const { return false; }
  protected:
-  character* Actor;
   ulong Flags;
+private:
+  character* m_actor;
 };
 
 template <class type, class base>
@@ -75,7 +76,7 @@ class actionsysbase : public base
   static type* Spawn(character* Actor)
   {
     type* T = new type;
-    T->Actor = Actor;
+    T->SetActor(Actor);
     return T;
   }
   virtual const actionprototype* GetProtoType() const { return &ProtoType; }

@@ -21,31 +21,27 @@
 struct rect;
 struct v2;
 
-#define RAND femath::Rand
-#define RAND_N femath::RandN
-#define RAND_2 (femath::Rand() & 1)
-#define RAND_4 (femath::Rand() & 3)
-#define RAND_8 (femath::Rand() & 7)
-#define RAND_16 (femath::Rand() & 15)
-#define RAND_32 (femath::Rand() & 31)
-#define RAND_64 (femath::Rand() & 63)
-#define RAND_128 (femath::Rand() & 127)
-#define RAND_256 (femath::Rand() & 255)
-#define RAND_GOOD femath::RandGood
-
 class outputfile;
 class inputfile;
 template <class type> struct fearray;
 
 class femath
 {
- public:
+public:
   static long Rand();
   static void SetSeed(uint32_t);
   static long RandN(long N) { return Rand() % N; }
-  static long RandGood(long N)
-  { return long(double(N) * Rand() / 0x80000000); }
-  static int WeightedRand(long*, long);
+  static long RandGood(long N) { return long(double(N) * Rand() / 0x80000000); }
+
+  template <uint32_t mod>
+  static long RandT()
+  {
+    return (Rand() & (mod - 1));
+  }
+
+  static long Rand2() { return (Rand() & 1); }
+  static long Rand16() { return (Rand16() & 15); }
+  static int WeightedRand(const long*, long);
   static int WeightedRand(const std::vector<long>&, long);
   static double CalculateAngle(int, int);
   static void CalculateEnvironmentRectangle(rect&, const rect&, v2&, int);
@@ -55,13 +51,24 @@ class femath
   static long SumArray(const fearray<long>&);
   static int LoopRoll(int, int);
   static void GenerateFractalMap(int**, int, int, int);
- protected:
+
+private:
   static uint32_t mt[];
   static long mti;
   static uint32_t mtb[];
   static long mtib;
 };
 
+#define RAND femath::Rand
+#define RAND_N femath::RandN
+
+/* TODO: fix () for RAND_2 */
+#define RAND_2 (femath::RandT<2>())
+#define RAND_4 (femath::RandT<4>)
+#define RAND_8 (femath::RandT<8>)
+#define RAND_16 (femath::RandT<16>)
+#define RAND_32 (femath::RandT<32>)
+#define RAND_GOOD femath::RandGood
 
 struct interval
 {

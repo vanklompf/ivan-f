@@ -1996,10 +1996,10 @@ void level::GenerateLeafyForest()
       Map[x][y] = new lsquare(this, v2(x, y));
       olterrain* OLTerrain;
 
-      switch(RAND_4)
+      switch(RAND_4())
       {
        case 0:
-	if(RAND_8)
+	if(RAND_8())
 	  OLTerrain = decoration::Spawn(OAK);
 	else
 	  OLTerrain = decoration::Spawn(TEAK);
@@ -2009,10 +2009,10 @@ void level::GenerateLeafyForest()
 	break;
        case 2:
 	OLTerrain = 0;
-	if(!RAND_4)
+	if(!RAND_4())
 	  OLTerrain = boulder::Spawn(1 + RAND_2);
 
-	if(!RAND_4)
+	if(!RAND_4())
 	  OLTerrain = boulder::Spawn(3);
 	break;
        default:
@@ -2031,7 +2031,7 @@ void level::GenerateEvergreenForest()
       Map[x][y] = new lsquare(this, v2(x, y));
       olterrain* OLTerrain = 0;
 
-      switch(RAND_4)
+      switch(RAND_4())
       {
        case 0:
 	if(RAND_2)
@@ -2041,10 +2041,10 @@ void level::GenerateEvergreenForest()
 	OLTerrain = decoration::Spawn(FIR);
 	break;
        case 2:
-	if(!RAND_4)
+	if(!RAND_4())
 	  OLTerrain = boulder::Spawn(1 + RAND_2);
 
-	if(!RAND_4)
+	if(!RAND_4())
 	  OLTerrain = boulder::Spawn(3);
 	break;
       }

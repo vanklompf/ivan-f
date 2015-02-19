@@ -1363,14 +1363,14 @@ void bitmap::CreateFlames(rawbitmap* RawBitmap, v2 RawPos, ulong SeedNFlags, int
       {
 	if(1 << RawBitmap->GetMaterialColorIndex(RawPos.X + x, RawPos.Y + y) & SeedNFlags)
 	{
-	  FlamePhase[x] = RAND_16;
+	  FlamePhase[x] = RAND_16();
 
 	  if(y > 1)
 	  {
 	    FlameBottom[x] = y - 1;
 
 	    if(y >= 5)
-	      FlameTop[x] = (y - (RAND_32 * y >> 5)) >> 1;
+	      FlameTop[x] = (y - (RAND_32() * y >> 5)) >> 1;
 	    else
 	      FlameTop[x] = 0;
 	  }
@@ -2102,7 +2102,7 @@ void bitmap::MoveLineVertically(int X, int Delta)
     for(y = 0; y < m_size.Y + Delta; ++y)
       PowerPutPixel(X, y, GetPixel(X, y - Delta), AlphaMap ? GetAlpha(X, y - Delta) : 255, AVERAGE_PRIORITY);
 
-    for(int y = -1; y >= Delta; --y)
+    for(y = -1; y >= Delta; --y)
       PowerPutPixel(X, m_size.Y + y, TRANSPARENT_COLOR, 255, AVERAGE_PRIORITY);
   }
   else if(Delta > 0)

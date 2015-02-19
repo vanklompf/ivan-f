@@ -56,7 +56,7 @@ MATERIAL(liquid, material)
   void TouchEffect(item*, const festring&);
   void TouchEffect(character*, int);
   void TouchEffect(lterrain*);
-  liquid* SpawnMoreLiquid(long Volume) const { return static_cast<liquid*>(SpawnMore(Volume)); }
+  liquid* SpawnMoreLiquid(long Volume_) const { return static_cast<liquid*>(SpawnMore(Volume_)); }
 };
 
 MATERIAL(flesh, organic)

@@ -11,6 +11,7 @@
  */
 
 #include <cmath>
+#include <random>
 
 #include "femath.h"
 #include "error.h"
@@ -77,15 +78,13 @@ long femath::mtib;
 
 void femath::SetSeed(uint32_t Seed)
 {
-  /* setting initial seeds to mt[N] using         */
-  /* the generator Line 25 of Table 1 in          */
-  /* [KNUTH 1981, The Art of Computer Programming */
-  /*    Vol. 2 (2nd Ed.), pp102]                  */
+  /* seeds set as STL Marsenne-Twister */
+  mt[0] = Seed;
 
-  mt[0] = Seed & 0xffffffff;
-
-  for (mti=1; mti<N1; mti++)
-    mt[mti] = (69069 * mt[mti-1]) & 0xffffffff;
+  for (mti = 1; mti < N1; mti++)
+  {
+	  mt[mti] = mti + 1812433253 * (mt[mti - 1] ^ (mt[mti - 1] >> 30));
+  }
 }
 
 long femath::Rand()
@@ -124,7 +123,7 @@ long femath::Rand()
   return y & 0x7FFFFFFF;
 }
 
-int femath::WeightedRand(long* Possibility, long TotalPossibility)
+int femath::WeightedRand(const long* Possibility, long TotalPossibility)
 {
   long Rand = RAND() % TotalPossibility, PartialSum = 0;
 

@@ -366,7 +366,7 @@ bool fountain::Drink(character* Drinker)
 	  ADD_MESSAGE("The water is contaminated!");
 	  Drinker->EditNP(100);
 
-	  if(!RAND_4)
+	  if(!RAND_4())
 	    Drinker->PolymorphRandomly(0, 1000000, 2500 + RAND() % 2500);
 	  else
 	    Drinker->ChangeRandomAttribute(-1);
@@ -425,7 +425,7 @@ bool fountain::Drink(character* Drinker)
 	   case 2:
 	    Spawner = (characterspawner)(&spider::Spawn);
 
-	    if(RAND_4)
+	    if(RAND_4())
 	    {
 	      Config = LARGE;
 	      AddChance = 90;

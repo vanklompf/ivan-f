@@ -685,9 +685,10 @@ void squarescript::ReadFrom(inputfile& SaveFile)
 
 template <class type, class contenttype> contentmap<type, contenttype>::contentmap() : ContentMap(0) { }
 
-template <class type, class contenttype> contentmap<type, contenttype>::~contentmap<type, contenttype>()
+template <class type, class contenttype>
+contentmap<type, contenttype>::~contentmap()
 {
-  delete [] ContentMap;
+  delete[] ContentMap;
 }
 
 template <class type, class contenttype> void contentmap<type, contenttype>::InitDataMap()

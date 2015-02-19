@@ -2124,7 +2124,7 @@ void mysticfrog::GetAICommand()
     NearestEnemy = 0;
   }
 
-  if(GetRelation(PLAYER) == HOSTILE && PLAYER->CanBeSeenBy(this) && !RAND_4)
+  if(GetRelation(PLAYER) == HOSTILE && PLAYER->CanBeSeenBy(this) && !RAND_4())
     NearestEnemy = PLAYER;
 
   beamdata Beam

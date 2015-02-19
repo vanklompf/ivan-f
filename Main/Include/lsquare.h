@@ -159,7 +159,7 @@ class lsquare : public square
   void DrawMemorizedCharacter(blitdata&) const;
   void SendMemorizedUpdateRequest();
   lsquare* GetNeighbourLSquare(int) const;
-  lsquare* GetNearLSquare(v2 Pos) const { return static_cast<lsquare*>(AreaUnder->GetSquare(Pos)); }
+  lsquare* GetNearLSquare(v2 Pos_) const { return static_cast<lsquare*>(AreaUnder->GetSquare(Pos_)); }
   bool IsDangerous(const character*) const;
   bool IsScary(const character*) const;
   stack* GetStackOfAdjacentSquare(int) const;

@@ -170,7 +170,7 @@ struct v2
     bool Is0() const { return X == 0 && Y == 0; }
     operator packv2() const
     {
-        packv2 V = { X, Y };
+        packv2 V = { (int16_t)X, (int16_t)Y};
         return V;
     }
     operator podv2() const
